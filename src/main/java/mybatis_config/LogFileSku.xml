@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<!-- 直邮保证金 -->
+<mapper namespace="com.what21.model.LogFileSku">
+	<resultMap type="com.what21.model.LogFileSku" id="LogFileSkuMap">
+			<id property="id" column="id"/>
+		<result property="companybm" column="companybm"/>
+		<result property="creatTime" column="creatTime"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="bondManey" column="bondManey"/>
+		<result property="payMamey" column="payMamey"/>
+		<result property="syMamey" column="syMamey"/>
+		<result property="upMamey" column="upMamey"/>
+	</resultMap>
+	
+	<!-- 保存直邮明细 -->
+	<insert id="saveLog"  parameterType="com.what21.model.LogFileSku">
+		insert into Log_FileSku(companybm,creatTime,txLogisticID,mailNo,bondManey,payMamey,syMamey,upMamey) 
+		values(#{companybm},#{creatTime},#{txLogisticID},#{mailNo},#{bondManey},#{payMamey},#{syMamey},#{upMamey})
+	</insert>
+	
+	<!-- 查询制定公司的明细 -->
+	<select id="findAll" resultType="com.what21.model.LogFileSku" parameterType="java.util.Map">
+		SELECT *FROM Log_FileSku 
+		where companybm=#{companybm} ORDER BY creatTime DESC
+				  LIMIT #{pStart},#{pEnd} 
+	</select>
+	<!-- 分页用 -->
+	<select id="countLogSku" resultType="java.lang.Integer"  parameterType="java.util.Map">
+		select  count(1)  from Log_FileSku 
+		<where>
+				1=1
+			<if test="companybm != null and companybm !=''">
+				and companybm like '%${companybm}%'
+		    </if>
+		</where>
+	</select>
+	
+	<!--删除指定公司的明细 -->
+	<delete id="deleteSku"  parameterType="string">
+		DELETE FROM Log_FileSku WHERE companybm = #{companybm}
+	</delete>
+	
+	<!-- 查询订单是否已审核 -->
+	<select id="findTxId" resultType="com.what21.model.LogFileSku" parameterType="string">
+		SELECT *FROM Log_FileSku where txLogisticID=#{txLogisticID}
+	</select>
+	
+	<!--  -->
+	<select id="findSkuCom" resultType="com.what21.model.LogFileSku" parameterType="string">
+		SELECT *FROM Log_FileSku 
+		where companybm=#{companybm} 
+	</select>
+
+</mapper>

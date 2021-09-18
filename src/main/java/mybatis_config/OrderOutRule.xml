@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderOutRuleDao">
+
+<sql id="query_orderOutRule_where">
+		<if test="orderOutRule!=null">
+			<where>
+				<if test="orderOutRule.hscode !=null">
+					and hscode like '%${orderOutRule.hscode}%'
+				</if>
+				<if test="orderOutRule.goodsname !=null">
+					and goodsname like '%${orderOutRule.goodsname}%'
+				</if>
+
+			</where>
+		</if>
+	</sql>
+	
+	<select id="find" resultType="com.what21.model.OrderOutRule" parameterType="com.what21.model.OrderOutRuleQueryVo">
+		select * from t_order_out_rule
+		<include refid="query_orderOutRule_where"></include>
+		order by hscode desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.OrderOutRuleQueryVo">
+		select count(1) from t_order_out_rule
+		<include refid="query_orderOutRule_where"></include>
+	</select>
+
+	<select id="findByGoodsname" resultType="com.what21.model.OrderOutRule" parameterType="string">
+		select * from t_order_out_rule where goodsname like '%${value}%' 
+	</select>
+	
+	 <insert id="insert" parameterType="com.what21.model.OrderOutRule" >
+    insert into t_order_out_rule (id, hscode, goodsName
+      )
+    values (#{id,jdbcType=INTEGER}, #{hscode,jdbcType=VARCHAR}, #{goodsname,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+    <update id="update" parameterType="com.what21.model.OrderOutRule" >
+        update t_order_out_rule
+    set hscode = #{hscode,jdbcType=VARCHAR},
+      goodsName = #{goodsname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <select id="findById" resultType="com.what21.model.OrderOutRule" parameterType="java.lang.Integer" >
+    select *
+    from t_order_out_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <delete id="deleteByIds">
+  	delete from t_order_out_rule where id in
+  	<foreach collection="array" open="(" close=")" separator="," item="item">
+  			${item}
+  	</foreach>
+  	</delete>
+  	
+<!--   	<insert id="insertBatch">
+	    insert into t_order_out_rule (id, hscode, goodsName
+      )
+    values
+    <foreach collection="list" separator="," item="item">
+     (#{id,jdbcType=INTEGER}, #{hscode,jdbcType=VARCHAR}, #{goodsname,jdbcType=VARCHAR}
+      )
+      </foreach>
+	</insert> -->
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.CountRule">
+	<resultMap type="com.what21.model.CountRule" id="CountRuleMap">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="code" column="code"/>
+		<result property="zgf" column="zgf"/>
+		<result property="qgf" column="qgf"/>
+		<result property="czf" column="czf"/>
+		<result property="ptf" column="ptf"/>
+		<result property="tallage" column="tallage"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="com.what21.model.CountRule" parameterType="java.util.Map">
+		SELECT * FROM t_countRule   LIMIT #{pstart},#{pend}
+	</select>
+		
+	<select id="count" resultType="int" parameterType="java.util.Map">
+		select count(*) from t_countRule
+	</select>
+		
+	<insert id="add" parameterType="com.what21.model.CountRule">
+		insert into t_countRule(name,code,zgf,qgf,czf,ptf,tallage) 
+		values(#{name},#{code},#{zgf},#{qgf},#{czf},#{ptf},#{tallage})
+	</insert>
+
+	<update id="update" parameterType="com.what21.model.CountRule">
+		UPDATE t_countRule SET 
+		name = #{name},code = #{code},zgf = #{zgf} ,
+		qgf = #{qgf},czf = #{czf},ptf = #{ptf} ,tallage = #{tallage}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="datele" parameterType="string">
+		DELETE FROM t_countRule WHERE 
+			id IN
+		<foreach collection="array" close=")" item="id" open="(" separator=",">
+			 #{id}
+		</foreach>
+	</delete>
+	
+	<select id="findCombobox" resultType="com.what21.model.CountRule" parameterType="java.lang.Integer">
+		SELECT * FROM t_countRule  
+		<if test="_parameter!=null">
+			where id =#{_parameter}
+		</if>
+	</select>
+	
+</mapper>

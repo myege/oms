@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.AddressDao">
+    
+    <!-- 增加 不包含id主键字段 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="Id" parameterType="Address">
+	    INSERT into address (
+	    <if test="parent_id!=null and parent_id!=''">
+	    parent_id,
+	    </if>
+	    name
+	    <if test="priority!=null and priority!=''">
+	    ,priority
+	    </if>
+	    ) values(
+	    <if test="parent_id!=null and parent_id!=''">
+	    #{parent_id},
+	    </if>
+	    #{name}
+	    <if test="priority!=null and priority!=''">
+	    ,#{priority}
+	    </if>
+		)
+    </insert>
+    
+    <!-- 删除 -->
+    <delete id="delete" parameterType="java.lang.Long" >
+        DELETE from address where id =#{id}
+    </delete>
+    
+    <!-- 查询 -->
+    <select id="getOneOrAll" resultType="Address" parameterType="java.lang.Long">
+        SELECT * from address where 
+        <choose>
+        <when test="id!=null and id!=''">
+        id=#{id}
+        </when>
+        <otherwise>
+        1=1
+        </otherwise>
+        </choose>
+        
+    </select>
+    
+    <!-- 修改 -->
+    <update id="update" parameterType="Address">
+    	UPDATE address 
+    	<set>
+    	 <if test="parent_id!=null and parent_id!=''">
+    	 parent_id=#{parent_id},
+    	 </if>
+    	 <if test="name!=null and name!=''">
+    	 name=#{name},
+    	 </if>
+    	 <if test="priority!=null and priority!=''">
+    	 priority=#{priority}
+    	 </if>
+    	 </set>
+    	  where id =#{id}
+    </update>
+    
+    <!-- 1：获取所有省    或者   2：获取当前地址的子集（市县乡）-->
+    <select id="getProvincesOrChildren" resultType="Address" parameterType="java.lang.Long">
+    	SELECT * from address where 
+    	<choose>
+    		<when test="id!=null and id!=''">
+    		parent_id= #{id}   
+    		</when>
+    		<otherwise>
+    		parent_id is null
+    		</otherwise>
+    	</choose>
+    </select>
+    
+    <!-- 检查子节点个数 -->
+    <select id="findChild" resultType="java.lang.Integer" parameterType="java.lang.Long">
+    SELECT count(*) from address where parent_id =#{id}
+    </select>
+    
+</mapper>

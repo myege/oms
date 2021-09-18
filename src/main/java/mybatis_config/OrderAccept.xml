@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderAcceptDao">
+	<resultMap type="OrderAccept" id="orderResultMap">
+		<id property="id" column="id"/>
+		<result property="orderNumber" column="orderNumber"/>
+		<result property="expressCode" column="expressCode"/>
+		<result property="expressNumber" column="expressNumber"/>
+		<result property="buyerNickName" column="buyerNickName"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="buyerIdCard" column="buyerIdCard"/>
+		<result property="buyerProvince" column="buyerProvince"/>
+		<result property="buyerCity" column="buyerCity"/>
+		<result property="buyerArea" column="buyerArea"/>
+		<result property="buyerAddress" column="buyerAddress"/>
+		<result property="buyerPostCode" column="buyerPostCode"/>
+		<result property="buyerCountry" column="buyerCountry"/>
+		<result property="buyerTel" column="buyerTel"/>
+		<result property="printType" column="printType"/>
+		<result property="zyName" column="zyName"/>
+		<result property="zyNumber" column="zyNumber"/>
+		<result property="sender" column="sender"/>
+		<result property="senderTel" column="senderTel"/>
+		<result property="senderAddress" column="senderAddress"/>
+		<result property="isDeleted" column="isDeleted"/>
+		<result property="userId" column="userId"/>
+		
+	</resultMap>
+	<insert id="insert" parameterType="OrderAccept">
+		INSERT INTO t_order_accept (orderNumber, expressCode, expressNumber, buyerNickName, 
+		buyerName, buyerIdCard, buyerProvince, buyerCity, buyerArea, buyerAddress, 
+		buyerPostCode, buyerCountry, buyerTel, printType, zyName, zyNumber, 
+		sender, senderTel, senderAddress,userId) 
+		VALUES (#{orderNumber}, #{expressCode}, #{expressNumber}, #{buyerNickName}, 
+		#{buyerName}, #{buyerIdCard},#{buyerProvince},#{buyerCity},#{buyerArea}, 
+		#{buyerAddress}, #{buyerPostCode}, #{buyerCountry}, #{buyerTel}, #{printType}, 
+		#{zyName}, #{zyNumber}, #{sender}, #{senderTel}, #{senderAddress},#{userId})
+	</insert>
+	<select id="findByExpressNumber" resultMap="orderResultMap" parameterType="String">
+		select * from t_order_accept where expressNumber = #{expressNumber} 
+	</select>
+	<select id="findById" resultMap="orderResultMap" parameterType="Integer">
+		select * from t_order_accept where id = #{id} 
+	</select>
+	<select id="findByOrderNumber" resultMap="orderResultMap" parameterType="String">
+	  select * from t_order_accept where ordernumber=#{txLogisticID}
+	</select>
+	<select id="findAll" resultMap="orderResultMap" parameterType="java.util.Map">
+		select * from t_order_accept where isDeleted != 1 and printType=${printType}
+		<if test="userId != null and userId != 0">
+		 	and userId = #{userId} 
+		</if>
+		order by printType,  expressnumber 
+		LIMIT #{startPage},#{endPage} 
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_order_accept 
+		<where>
+			1=1 and isDeleted != 1 
+			<if test="userId != null and userId != 0">
+	              and userId=#{userId} 
+	        </if>
+			<if test="type == 1">
+				and orderNumber like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and expressNumber like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and printType like '%${paramValue}%'
+			</if>
+		</where>
+		        and printType=${printType}
+	</select>
+	<update id="update" parameterType="String">
+		update t_order_accept set printType=1 where expressNumber = #{expressNumber}
+	</update>
+	<update id="updatePrintType" parameterType="Integer">
+		update t_order_accept set printType=1 where id = #{id}
+	</update>
+	
+	<select id="findExpressNumber" resultMap="orderResultMap" parameterType="java.util.Map">
+		select * from t_order_accept where isDeleted != 1 and printType=${printType}
+		<if test="userId != null and userId != 0">
+              and userId=#{userId} 
+        </if>
+		<if test="type == 1">
+			and orderNumber like '%${paramValue}%'
+		</if>
+		<if test="type == 2">
+			and expressNumber like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and printType like '%${paramValue}%'
+		</if>
+		order by printType, orderNumber 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<delete id ="updates" parameterType="String">
+		DELETE 	FROM t_order_accept WHERE id = #{id}
+	</delete>
+	<update id="updateExpressM" parameterType="OrderAccept">
+		update t_order_accept set expressNumber = #{expressNumber}
+		where id = #{id} 
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_accept 
+		where expressNumber in 
+		<foreach collection="array" item="expressNumbers" open="(" separator="," close=")">
+			#{expressNumbers}
+		</foreach>
+	</delete>
+</mapper>

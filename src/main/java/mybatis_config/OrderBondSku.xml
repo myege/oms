@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- 具体方法请看OrderBondDao -->
+	
+	<!-- 保税保证金 -->
+<mapper namespace="com.what21.model.OrderBondSku">
+	<resultMap type="com.what21.model.OrderBondSku" id="OrderBondSkuMap">
+		<id property="id" column="id"/>
+		<result property="companybm" column="companybm"/>
+		<result property="creatTime" column="creatTime"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="bondManey" column="bondManey"/>
+		<result property="payMamey" column="payMamey"/>
+		<result property="syMamey" column="syMamey"/>
+		<result property="upMamey" column="upMamey"/>
+	</resultMap>
+		
+	<insert id="saveBm"  parameterType="com.what21.model.OrderBondSku">
+		insert into t_order_bondmoney_sku(companybm,creatTime,txLogisticID,mailNo,bondManey,payMamey,syMamey,upMamey) 
+		values(#{companybm},#{creatTime},#{txLogisticID},#{mailNo},#{bondManey},#{payMamey},#{syMamey},#{upMamey})
+	</insert>
+	
+	<delete id="deleteBm" parameterType="string">
+		DELETE FROM t_order_bondmoney_sku WHERE companybm = #{companybm}
+	</delete>
+	
+	
+	
+	<!-- 修改金额 -->
+	<update id="updateBm"  parameterType="com.what21.model.OrderBondSku">
+		update  t_order_bondmoney_sku set bondManey=#{bondManey},surplusMamey=#{surplusMamey} where id=#{id}
+	</update>
+	
+	
+	
+	<select id="findBm" resultType="com.what21.model.OrderBondSku" parameterType="java.util.Map">
+		SELECT *FROM t_order_bondmoney_sku 
+		where companybm=#{companybm} ORDER BY creatTime DESC
+				  LIMIT #{pStart},#{pEnd} 
+	</select>
+	
+	
+		
+	<select id="countBm" resultType="java.lang.Integer"  parameterType="java.util.Map">
+		select  count(1)  from t_order_bondmoney_sku 
+		<where>
+				1=1
+			<if test="companybm != null and companybm !=''">
+				and companybm like '%${companybm}%'
+		    </if>
+		</where>
+	</select>
+	
+	<select id="findMailNo" resultType="com.what21.model.OrderBondSku" parameterType="string">
+		SELECT *FROM t_order_bondmoney_sku where txLogisticID=#{txLogisticID}
+	</select>
+	
+	
+	
+</mapper>

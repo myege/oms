@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.AnnotationSkuDao">
+	
+	<resultMap type="AnnotationSku" id="AnnotationSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="jobFormId" column="jobFormId"/>
+		<result property="flag" column="flag"/>
+		<result property="datatime" column="datatime"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="AnnotationSkuResultMap" parameterType="java.util.Map">
+		select * from wms_actual_receive order by datatime desc LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_actual_receive 
+		<where>
+		1=1
+		<if test="type == 1 ">
+			and jobFormId like '%${paramValue}%'
+		</if>
+		
+		</where>
+	</select>
+	
+	<select id="findact" resultMap="AnnotationSkuResultMap" parameterType="java.util.Map">
+		select * from wms_actual_receive where 1=1
+		<if test="type == 1 ">
+			and jobFormId like '%${paramValue}%'
+		</if>
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<insert id="insert" parameterType="AnnotationSku">
+		INSERT INTO annotation_sku (jobFormId,mailno,createtime)
+		VALUES(#{jobFormId},#{mailno},#{createtime});
+	</insert>
+	
+	<select id="findByA" resultType="AnnotationSku">
+		select * from wms_actual_receive where  jobFormId= #{id}
+	</select>
+	
+	<delete id = "actdelete" parameterType="String">
+		DELETE wms_actual_receive ,wms_actual_receive_sku from wms_actual_receive 
+		
+		LEFT JOIN wms_actual_receive_sku ON wms_actual_receive.jobFormId=wms_actual_receive_sku.jobFormId
+		
+		WHERE wms_actual_receive.jobFormId=#{jobFormId}
+	</delete>
+	
+	<update id="aflag" parameterType="AnnotationSku">
+		update wms_actual_receive set flag = #{flag}   where jobFormId = #{jobFormId}
+	</update>
+	
+</mapper>

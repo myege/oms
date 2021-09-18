@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ChangeOddDao">
+	<resultMap type="ChangeOdd" id="changeOddResultMap">
+		<id property="id" column="id"/>
+		<result property="orderNumber" column="orderNumber"/>
+		<result property="expressCode" column="expressCode"/>
+		<result property="expressNumber" column="expressNumber"/>
+		<result property="buyerNickName" column="buyerNickName"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="buyerIdCard" column="buyerIdCard"/>
+		<result property="buyerProvince" column="buyerProvince"/>
+		<result property="buyerCity" column="buyerCity"/>
+		<result property="buyerArea" column="buyerArea"/>
+		<result property="buyerAddress" column="buyerAddress"/>
+		<result property="buyerPostCode" column="buyerPostCode"/>
+		<result property="buyerCountry" column="buyerCountry"/>
+		<result property="buyerTel" column="buyerTel"/>
+		<result property="printType" column="printType"/>
+		<result property="zyName" column="zyName"/>
+		<result property="zyNumber" column="zyNumber"/>
+		<result property="sender" column="sender"/>
+		<result property="senderTel" column="senderTel"/>
+		<result property="senderAddress" column="senderAddress"/>
+		<result property="isDeleted" column="isDeleted"/>
+		<result property="userId" column="userId"/>
+		<result property="newnum" column="newnum"/>
+		<result property="pnname" column="pnname"/>
+		<result property="nweight" column="nweight"/>
+		<result property="weight" column="weight"/>
+		<result property="pname" column="pname"/>
+		<result property="num" column="num"/>
+		
+	</resultMap>
+	<insert id="insert" parameterType="ChangeOdd">
+		INSERT INTO changeOdd (orderNumber, expressNumber, expressCode,buyerName, buyerProvince,buyerCity, buyerArea, 
+		buyerAddress, buyerTel,sender,senderTel, senderAddress,newexpressNumber,printType,userId) 
+		VALUES (#{orderNumber},#{expressNumber}, #{expressCode}, #{buyerName}, #{buyerProvince},  #{buyerCity},
+		 #{buyerArea}, #{buyerAddress},#{buyerTel},
+		 #{sender},#{senderTel}, #{senderAddress},#{newexpressNumber}, #{printType},#{userId})
+	</insert>
+	
+	<insert id="insert_int" parameterType="ChangeOdd">
+		INSERT INTO changeOdd (orderNumber, expressNumber, expressCode,buyerName, buyerProvince,buyerCity, buyerArea, 
+		buyerAddress, buyerTel,sender,senderTel,senderAddress,newexpressNumber,printType,userId,zyNumber,buyerCountry) 
+		VALUES (#{orderNumber},#{expressNumber}, #{expressCode}, #{buyerName}, #{buyerProvince}, #{buyerCity},
+		 #{buyerArea}, #{buyerAddress},#{buyerTel},
+		 #{sender},#{senderTel}, #{senderAddress},#{newexpressNumber}, #{printType},#{userId},#{zyNumber},#{buyerCountry})
+	</insert>
+	
+	<insert id="inserts">
+		insert into changeOdd (orderNumber, expressNumber, expressCode,buyerName, buyerProvince,buyerCity, buyerArea, 
+		buyerAddress, buyerTel,sender,senderTel,senderAddress,newexpressNumber,printType,userId,zyNumber,buyerCountry) values 
+			<foreach collection="list" item="changOdd" separator=",">
+				(#{changOdd.orderNumber},#{changOdd.expressNumber}, #{changOdd.expressCode}, #{changOdd.buyerName}, #{changOdd.buyerProvince}, #{changOdd.buyerCity},
+		 #{changOdd.buyerArea}, #{changOdd.buyerAddress},#{changOdd.buyerTel},
+		 #{changOdd.sender},#{changOdd.senderTel}, #{changOdd.senderAddress},#{changOdd.newexpressNumber}, #{changOdd.printType},#{changOdd.userId},#{changOdd.zyNumber},#{changOdd.buyerCountry})
+			</foreach>
+		
+	</insert>
+	
+	<select id="findByExpressNumber" resultMap="changeOddResultMap" parameterType="String">
+		select * from changeOdd where expressNumber =#{expressNumber}
+	</select>
+	
+	<select id="findByExpressNumberForAlls" resultMap="changeOddResultMap">
+		select * from changeOdd where expressNumber in 
+		(
+		    <foreach collection="list" item="changeOdd" separator=",">
+		    	#{changeOdd.expressNumber}
+		    </foreach>
+		)
+	</select>
+	
+	<select id="findByExpressNumberCount" resultMap="changeOddResultMap">
+		select * from changeOdd where expressNumber in(
+			<foreach collection="list" item="OrderMail" separator=",">
+				'${OrderMail.txLogisticID}'
+			</foreach>
+		)
+	</select>
+	
+	<select id="findById" resultMap="changeOddResultMap" parameterType="Integer">
+		select * from changeOdd where id = #{id}
+	</select>
+	<select id="findAll" resultMap="changeOddResultMap" parameterType="java.util.Map">
+		select * from changeOdd where 1=1
+		<if test="userId != null">
+				and userId = ${userId}
+		</if>
+		  order by printType,id desc LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from changeOdd 
+		<where>
+			1=1
+			<if test="type == 1">
+				and expressNumber like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and newexpressNumber like '%${paramValue}%'
+			</if>
+			<if test="userId != null">
+				and userId = ${userId}
+			</if>
+		</where>
+	</select>
+	<update id="update" parameterType="String">
+		update changeOdd set printType=1 where expressNumber = #{expressNumber}
+	</update>
+	<update id="updatePrintType" parameterType="string">
+		update changeOdd set printType=1 where id = #{id}
+	</update>
+	
+	<select id="findExpressNumber" resultMap="changeOddResultMap" >
+		select * from changeOdd  where expressCode = #{expressCode}
+	</select>
+	<update id="updates" parameterType="String" >
+		update changeOdd set isDeleted=1 where expressNumber = #{expressNumber}
+	</update>
+	<!-- <update id="updateepn" parameterType="ChangeOdd" >
+		update changeOdd set printType=1,newexpressNumber=#{newexpressNumber} where id=#{id}
+	</update> -->
+	
+	<select id="updateepn" resultMap="changeOddResultMap" parameterType="String">
+	SELECT c.zyNumber,c.zyName,c.orderNumber,c.expressCode,c.expressNumber,c.newexpressNumber,c.buyerName,c.buyerProvince,c.buyerCity,c.buyerArea,c.buyerAddress,c.buyerTel,c.sender,c.senderTel,c.senderAddress,
+	group_concat(distinct g.pnname SEPARATOR ',') as pname,sum(g.newnum) as num,sum(g.nweight) as weight from changeodd c
+	INNER JOIN goods_changeodd g on c.expressNumber =g.expressNumber WHERE g.expressNumber =#{expressNumber}
+		<!-- select * from changeOdd  where expressNumber=#{expressNumber} -->
+	</select>
+	
+	 
+	
+	  <select id="findexpn" resultMap="changeOddResultMap" parameterType="java.util.Map">
+		select * from changeOdd where 1=1
+			<if test="type == 1">
+				and expressNumber like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and newexpressNumber like '%${paramValue}%'
+			</if>
+			<if test="userId != null">
+				and userId = ${userId}
+			</if>
+		order by printType,id desc
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="allfind" resultMap="changeOddResultMap">
+		select * from changeOdd  
+	</select>
+	
+	
+	<update id="updatechangeodd" parameterType="ChangeOdd" >
+		update changeOdd set newnum = #{newnum}, nweight = #{nweight} where id = #{id}
+	</update>
+	
+	<delete id="deleteByIds">
+		delete from changeOdd where id in 
+		<foreach collection="array" close=")" open="(" item="id" separator=",">
+			${id}
+		</foreach>
+		
+	</delete>
+	
+	<delete id="deleteById">
+		delete from changeOdd where id = #{id}
+		
+	</delete>
+	
+	<select id="exportByIds" resultType="com.what21.model.ExportChangeOdd">
+		select t2.pnname,t2.nweight,t2.newnum,t1.* from changeodd t1,goods_changeodd t2 where t1.id in
+		<foreach collection="array" close=")" open="(" item="id" separator=",">
+			${id}
+		</foreach>
+		and t1.id = t2.changeoId
+	</select>
+	
+	<select id="exportByCons" resultType="com.what21.model.ExportChangeOdd" parameterType="com.what21.model.ExportChangeOdd">
+		select t2.pnname,t2.nweight,t2.newnum,t1.* from changeodd t1,goods_changeodd t2 where
+		 t1.id = t2.changeoId
+		<if test="expressNumber!=null and expressNumber!=''">
+			and t1.expressNumber = #{expressNumber} 
+		</if>
+	</select>
+</mapper>

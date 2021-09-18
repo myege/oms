@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.YTOBillSkuDao">
+	<resultMap type="YTOBillSku" id="YtoBillSkuMap">
+		<id property="id" column="id"/>
+		<result property="waybillNo" column="waybillNo"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="eventCode" column="eventCode"/>
+		<result property="eventDetail" column="eventDetail"/>
+		<result property="eventLocation" column="eventLocation"/>
+		<result property="eventOperater" column="eventOperater"/>
+		<result property="eventOperaterPhone" column="eventOperaterPhone"/>
+		<result property="city" column="city"/>
+		<result property="nextCity" column="nextCity"/>
+		<result property="eventTime" column="eventTime"/>
+		<result property="createTime" column="createTime"/>
+		<result property="isPushed" column="isPushed"/>
+	</resultMap>
+	<select id="findByWaybillNo" resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku 	where waybillNo = #{waybillNo}
+		order by orderNo
+		LIMIT 
+		#{startPage},#{endPage}
+	</select>
+
+	<select id="findAll" resultMap="YtoBillSkuMap">
+		select * from t_ytogj_tracking_sku where isPushed = 0
+	</select>
+
+	<select id="findByWaybillNoAndOrderNo" resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku  where waybillNo = #{waybillNo}	and orderNo = #{orderNo}
+	</select>
+
+	<select id="findbyId" resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku where id = #{id}
+	</select>
+
+	<select id="findByOrderNo"  resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku where orderNo = #{orderNo}
+	</select>
+
+	<select id="findByWailNoFor" resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku  where waybillNo = #{waybillNo} ORDER BY eventTime asc
+	</select>
+
+	<select id="odmTax" resultMap="YtoBillSkuMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking_sku where id = #{id}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from t_ytogj_tracking_sku where waybillNo = #{waybillNo}
+		<if test="orderNo!=null and orderNo!=''">
+			and orderNo = #{orderNo}
+		</if>
+	</select>
+	
+	<delete id="delete">
+		delete from t_ytogj_tracking_sku where  waybillNo in
+		(select waybillNo from t_ytogj_tracking where id in
+		<foreach collection="array"  item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+		)
+	</delete>
+	
+	<select id="findByIds" resultMap="YtoBillSkuMap">
+		select * from t_ytogj_tracking_sku where id in
+		<foreach collection="array"  item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</select>
+	
+	<delete id="delete_1">
+		delete from t_ytogj_tracking_sku where  id in
+		<foreach collection="array"  item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</delete>
+
+	<delete id="deleteAll">
+		delete from t_ytogj_tracking_sku
+	</delete>
+	
+	
+	<update id="updateById">
+		update t_ytogj_tracking_sku set
+		  eventCode = #{eventCode},
+		  eventDetail = #{eventDetail},
+		  eventLocation = #{eventLocation},
+		  eventOperater = #{eventOperater},
+		  eventOperaterPhone = #{eventOperaterPhone},
+		  city = #{city},
+		  nextCity = #{nextCity},
+		  eventTime = #{eventTime}
+		  where id=#{id}
+	</update>
+	
+	<update id="updateByIds">
+		update t_ytogj_tracking_sku set isPushed = 1 where id in
+		<foreach collection="array"  item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</update>
+	
+	<update id="updateByWayBillNos">
+		update t_ytogj_tracking_sku set isPushed = 1 where waybillNo in (
+		<foreach collection="list" item="YtoBillSku"  separator=",">
+			'${YtoBillSku.waybillNo}'
+		</foreach>
+		)
+	</update>
+	
+	<update id="updateAOP">
+		update t_ytogj_tracking_sku set isPushed = 1
+	</update>
+	
+	<update id="updateByWayBillNo">
+		update t_ytogj_tracking_sku set isPushed = 1
+		<if test="#{waybillNo}!=null and #{waybillNo}!=''">
+			 where	 waybillNo = #{waybillNo}
+		</if>
+	</update>
+	
+	<insert id="insertSkuBatch">
+		insert into t_ytogj_tracking_sku
+		(waybillNo,orderNo,isPushed,createTime,eventCode,eventDetail,eventLocation,eventOperater,eventOperaterPhone,city,nextCity,eventTime)
+		values
+		<foreach collection="list" separator="," item="YTOBillSku">
+		(   #{YTOBillSku.waybillNo,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.orderNo,jdbcType=VARCHAR}
+		<if test="#{YTOBillSku.isPushed} == null and #{YTOBillSku.isPushed} == ''">
+			,0
+		</if>
+		<if test="#{YTOBillSku.isPushed} != null and #{YTOBillSku.isPushed} != ''">
+			,#{YTOBillSku.isPushed},
+		</if>
+			#{YTOBillSku.createTime,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventCode,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventDetail,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventLocation,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventOperater,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventOperaterPhone,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.city,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.nextCity,jdbcType=VARCHAR}
+		   ,#{YTOBillSku.eventTime,jdbcType=VARCHAR})
+		
+		</foreach>
+	</insert>
+	
+	
+	
+	
+	<insert id="insertYTO" parameterType="YTOBillSku">
+		insert into t_ytogj_tracking_sku
+		(waybillNo,orderNo,isPushed,createTime,eventCode,eventDetail,eventLocation,eventOperater,eventOperaterPhone,city,nextCity,eventTime)
+		values
+		(#{waybillNo},#{orderNo}
+		<if test="#{isPushed} == null and #{isPushed} == ''">
+			,0,
+		</if>
+		<if test="#{isPushed} != null and #{isPushed} != ''">
+			,#{isPushed},
+		</if>
+		#{createTime},
+		#{eventCode},#{eventDetail},#{eventLocation},#{eventOperater},#{eventOperaterPhone},#{city},#{nextCity},#{eventTime})
+	</insert>
+</mapper>

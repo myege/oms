@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.JjUserDao">
+	<!-- <sql id="whereJjPickingSku"> where 1=1 <if test="jjPickingSkuCustom!=null"> 
+		<if test="jjPickingSkuCustom.pick!=null"> and pick=#{jjPickingSkuCustom.pick} 
+		</if> </if> </sql> -->
+	<select id="findAll" parameterType="com.what21.model.JjUserVo"
+		resultType="com.what21.model.JjUser">
+		select * from jj_user
+		<!-- <include refid="whereJjPickingSku" /> -->
+		<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count" parameterType="com.what21.model.JjUserVo"
+		resultType="int">
+		select count(id) from jj_user
+		<!-- <include refid="whereJjPickingSku" /> -->
+	</select>
+	<insert id="save" parameterType="com.what21.model.JjUser">
+		INSERT INTO jj_user (name, type) VALUES (#{name},#{type})
+	</insert>
+	<update id="updateById" parameterType="com.what21.model.JjUser">
+		UPDATE jj_user SET name=#{name}, type=#{type} WHERE id =#{id}
+	</update>
+	<select id="findById" parameterType="Integer"
+		resultType="com.what21.model.JjUser">
+		select * from jj_user where id=#{value}
+	</select>
+	<delete id="deleteByIds" parameterType="String">
+		DELETE FROM jj_user WHERE id in (
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
+	<select id="findJjUser" resultType="com.what21.model.JjUser">
+	select name from jj_user
+	</select>
+</mapper>

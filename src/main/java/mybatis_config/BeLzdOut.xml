@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeLzdOutDao">
+	<sql id="query_beLzdOut_where">
+		<if test="beLzdOutCustom!=null">
+			<where>
+				<if test="beLzdOutCustom.tdh !=null">
+					and tdh like '%${beLzdOutCustom.tdh}%'
+				</if>
+				<if test="beLzdOutCustom.khmc !=null">
+					and khmc like '%${beLzdOutCustom.khmc}%'
+				</if>
+				<if test="beLzdOutCustom.sbqy !=null">
+					and sbqy like '%${beLzdOutCustom.sbqy}%'
+				</if>
+				<if test="beLzdOutCustom.fhr !=null">
+					and fhr like '%${beLzdOutCustom.fhr}%'
+				</if>
+				<if test="beLzdOutCustom.czrq !=null">
+					and czrq like '%${beLzdOutCustom.czrq}%'
+				</if>
+				<if test="beLzdOutCustom.sbqy !=null">
+					and sbqy like '%${beLzdOutCustom.sbqy}%'
+				</if>
+				<if test="beLzdOutCustom.czrqStart !=null">
+					and czrq &gt;= #{beLzdOutCustom.czrqStart}
+				</if>
+				<if test="beLzdOutCustom.czrqEnd !=null">
+					and czrq  &lt;= #{beLzdOutCustom.czrqEnd}
+				</if>
+			</where>
+		</if>
+	</sql>
+	<sql id="query_countBeLzdOut_where">
+			<where>
+				<if test="khmc !=null">
+					and khmc = #{khmc}
+				</if>
+				<if test="sbqy !=null">
+					and sbqy = #{sbqy}
+				</if>
+				<if test="dhsjStartCount != null ">
+					and czrq &gt;= #{dhsjStartCount}
+				</if>
+				<if test="dhsjEndCount != null">
+					and czrq &lt;= #{dhsjEndCount}
+				</if>
+			</where>
+	</sql>
+
+
+	
+	<select id="findAll" resultType="com.what21.model.BeLzdOut" parameterType="com.what21.model.BeLzdOutQueryVo">
+		select * from be_lzd_out
+		<include refid="query_beLzdOut_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="countAll" resultType="java.lang.Integer" parameterType="com.what21.model.BeLzdOutQueryVo">
+		select count(1) from be_lzd_out
+		<include refid="query_beLzdOut_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.BeLzdOut" >
+    insert into be_lzd_out (id, khmc, dhrq, 
+      czrq, jcdl, hbh, hbrq, 
+      mdd, tdjs, mdjs, zl, 
+      tdbg, qdbg, tdh, createTime, 
+      sbqy, fhr, shr, cb, 
+      sj,sbje,bz)
+    values (#{id,jdbcType=INTEGER}, #{khmc,jdbcType=VARCHAR}, #{dhrq,jdbcType=VARCHAR}, 
+      #{czrq,jdbcType=VARCHAR}, #{jcdl,jdbcType=VARCHAR}, #{hbh,jdbcType=VARCHAR}, #{hbrq,jdbcType=VARCHAR}, 
+      #{mdd,jdbcType=VARCHAR}, #{tdjs,jdbcType=INTEGER}, #{mdjs,jdbcType=INTEGER}, #{zl,jdbcType=VARCHAR}, 
+      #{tdbg,jdbcType=INTEGER}, #{qdbg,jdbcType=INTEGER}, #{tdh,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{sbqy,jdbcType=VARCHAR}, #{fhr,jdbcType=VARCHAR}, #{shr,jdbcType=VARCHAR}, #{cb,jdbcType=VARCHAR}, 
+      #{sj,jdbcType=VARCHAR},#{sbje,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR})
+  	</insert>
+
+	<delete id="deleteByIds" >
+		delete from be_lzd_out where id in
+		<foreach collection="array" close=")" open="(" separator="," item="item">
+		 ${item}
+		</foreach>		
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.what21.model.BeLzdOut">
+		select * from be_lzd_out where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="com.what21.model.BeLzdOut">
+  update be_lzd_out
+    set khmc = #{khmc,jdbcType=VARCHAR},
+      dhrq = #{dhrq,jdbcType=VARCHAR},
+      czrq = #{czrq,jdbcType=VARCHAR},
+      jcdl = #{jcdl,jdbcType=VARCHAR},
+      hbh = #{hbh,jdbcType=VARCHAR},
+      hbrq = #{hbrq,jdbcType=VARCHAR},
+      mdd = #{mdd,jdbcType=VARCHAR},
+      tdjs = #{tdjs,jdbcType=INTEGER},
+      mdjs = #{mdjs,jdbcType=INTEGER},
+      zl = #{zl,jdbcType=VARCHAR},
+      tdbg = #{tdbg,jdbcType=INTEGER},
+      qdbg = #{qdbg,jdbcType=INTEGER},
+      tdh = #{tdh,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      sbqy = #{sbqy,jdbcType=VARCHAR},
+      fhr = #{fhr,jdbcType=VARCHAR},
+      shr = #{shr,jdbcType=VARCHAR},
+      cb = #{cb,jdbcType=VARCHAR},
+      sj = #{sj,jdbcType=VARCHAR},
+      sbje = #{sbje,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  	<select id="findByTydh" parameterType="string" resultType="com.what21.model.BeLzdOut">
+		select * from be_lzd_out where tdh = #{string}	
+	</select>
+
+
+  	<select id="count" parameterType="com.what21.model.BeLzdOutCustom" resultType="com.what21.model.CountBeLzdOut">
+		select sum(tdjs) zjs,sum(zl) zzl,count(id) zps,sum(sbje) zje from be_lzd_out 
+		<include refid="query_countBeLzdOut_where"></include>
+	</select>
+	
+	<insert id="insertBatch" >
+    insert into be_lzd_out (id, khmc, dhrq, 
+      czrq, jcdl, hbh, hbrq, 
+      mdd, tdjs, mdjs, zl, 
+      tdbg, qdbg, tdh, createTime, 
+      sbqy, fhr, shr, cb, 
+      sj,sbje,bz)
+    values
+    <foreach collection="list" item="item" separator=",">
+     (#{item.id,jdbcType=INTEGER}, #{item.khmc,jdbcType=VARCHAR}, #{item.dhrq,jdbcType=VARCHAR}, 
+      #{item.czrq,jdbcType=VARCHAR}, #{item.jcdl,jdbcType=VARCHAR}, #{item.hbh,jdbcType=VARCHAR}, #{item.hbrq,jdbcType=VARCHAR}, 
+      #{item.mdd,jdbcType=VARCHAR}, #{item.tdjs,jdbcType=INTEGER}, #{item.mdjs,jdbcType=INTEGER}, #{item.zl,jdbcType=VARCHAR}, 
+      #{item.tdbg,jdbcType=INTEGER}, #{item.qdbg,jdbcType=INTEGER}, #{item.tdh,jdbcType=VARCHAR}, #{item.createtime,jdbcType=TIMESTAMP}, 
+      #{item.sbqy,jdbcType=VARCHAR}, #{item.fhr,jdbcType=VARCHAR}, #{item.shr,jdbcType=VARCHAR}, #{item.cb,jdbcType=VARCHAR}, 
+      #{item.sj,jdbcType=VARCHAR},#{item.sbje,jdbcType=VARCHAR},#{item.bz,jdbcType=VARCHAR})
+      </foreach>
+  	</insert>
+  	
+  	  
+  	<select id="findByTdhs" resultType="string">
+		select tdh from be_lzd_out where tdh in
+		<foreach collection="array" close=")" open="(" separator="," item="item">
+		 #{item}
+		</foreach>
+			
+	</select>
+
+	<select id="findByIds" resultType="com.what21.model.BeLzdOut">
+		select * from be_lzd_out where id in
+		<foreach collection="array" close=")" open="(" item="item" separator=",">
+			${item}
+		</foreach>
+	</select>
+  	
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.GylFinanceDao">
+	<resultMap type="GylFinance" id="GylFinanceResultMap">
+		<result property="id" column="id"/>
+		<result property="gylFinanceNumber" column="gylFinanceNumber"/>
+		<result property="totalWorth" column="totalWorth"/>
+		<result property="totalNum" column="totalNum"/>
+		<result property="merchant" column="merchant"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="createTime" column="createTime"/>
+		<result property="confirmStatus" column="confirmStatus"/>
+		<result property="confirmUser" column="confirmUser"/>
+		<result property="confirmTime" column="confirmTime"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<resultMap type="OrderBonded" id="OrderBondedResultMap">
+		<id property="id" column="id"/>
+		<result property="gylFinanceNumber" column="gylFinanceNumber"/>
+		<result property="receiveMan" column="receiveMan"/>
+		<result property="receiveManPhone" column="receiveManPhone"/>
+		<result property="receiveManAddress" column="receiveManAddress"/>
+		<result property="receiveProvince" column="receiveProvince"/>
+		<result property="receiveCity" column="receiveCity"/>
+		<result property="receiveCounty" column="receiveCounty"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="carrier" column="carrier"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="markDestination" column="markDestination"/>
+		<result property="billProvideSiteName" column="billProvideSiteName"/>
+		<result property="billProvideSiteCode" column="billProvideSiteCode"/>
+		<result property="worth" column="worth"/>
+		<result property="preEntryNumber" column="preEntryNumber"/>
+		<result property="tradeCountry" column="tradeCountry"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="feeAmount" column="feeAmount"/>
+		<result property="insureAmount" column="insureAmount"/>
+		<result property="payNumber" column="payNumber"/>
+		<result property="ordercode" column="ordercode"/>
+		<result property="pc" column="pc"/>
+		<result property="userId" column="userId"/>
+		<result property="sendWarehouse" column="sendWarehouse"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="createTime" column="createTime"/> 
+	</resultMap>
+	
+	<resultMap type="OrderBondedSku" id="OrderBondedSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="gylFinanceNumber" column="gylFinanceNumber"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="unitPrice" column="unitPrice"/>
+		<result property="allPrice" column="allPrice"/>
+		<result property="hz" column="hz"/>
+		<result property="internalNumber" column="internalNumber"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="GylFinanceResultMap" parameterType="java.util.Map">
+		select * from gyl_finance where 1=1
+		<if test="confirmStatus != null">
+			and confirmStatus = #{confirmStatus}
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+		<if test="startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test="endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+		order by createTime desc 
+		LIMIT ${startPage},${endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from gyl_finance where 1=1
+		<if test="confirmStatus != null">
+			and confirmStatus = #{confirmStatus}
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+		<if test="startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test="endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+	</select>
+	
+	<select id="findOrderByNumber" resultMap="OrderBondedResultMap" parameterType="java.util.Map">
+		select * from gyl_finance_order where gylFinanceNumber = #{gylFinanceNumber}
+		LIMIT ${startPage},${endPage}
+	</select>
+	
+	<select id="countByNumber" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from gyl_finance_order where gylFinanceNumber = #{gylFinanceNumber}
+	</select>
+	
+	<insert id="insert" parameterType="GylFinance">
+		INSERT INTO gyl_finance (gylFinanceNumber,totalWorth,totalNum,
+			merchant,merchantNum,createTime,userId)
+		VALUES(#{gylFinanceNumber},#{totalWorth},#{totalNum},
+			#{merchant},#{merchantNum},now(),#{userId});
+	</insert>
+	<insert id="batchInsertOrder" parameterType="OrderBonded">
+		INSERT INTO gyl_finance_order (gylFinanceNumber,receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payNumber,ordercode,pc,userId,sendWarehouse,merchantNum,createTime)
+		VALUES
+		<foreach collection="array" item="orderBonded" separator="," >
+  		(
+			#{orderBonded.gylFinanceNumber},#{orderBonded.receiveMan},#{orderBonded.receiveManPhone},
+			#{orderBonded.receiveManAddress},#{orderBonded.receiveProvince},#{orderBonded.receiveCity},
+			#{orderBonded.receiveCounty},#{orderBonded.txLogisticID},#{orderBonded.itemName},
+			#{orderBonded.itemWeight},#{orderBonded.itemCount},#{orderBonded.carrier},#{orderBonded.mailNo},
+			#{orderBonded.markDestination},#{orderBonded.billProvideSiteName},#{orderBonded.billProvideSiteCode},
+			#{orderBonded.worth},#{orderBonded.preEntryNumber},#{orderBonded.tradeCountry},
+			#{orderBonded.buyerIdNumber},#{orderBonded.buyerName},#{orderBonded.feeAmount},
+			#{orderBonded.insureAmount},#{orderBonded.payNumber},#{orderBonded.ordercode},#{orderBonded.pc},
+			#{orderBonded.userId},#{orderBonded.sendWarehouse},#{orderBonded.merchantNum},now()
+		)
+  		</foreach>
+	</insert>
+	<insert id="batchInsertOrderSku" parameterType="OrderBondedSku">
+		INSERT INTO gyl_finance_order_sku (gylFinanceNumber, txLogisticID, itemsku, itemName, 
+			itemWeight, itemCount, unitPrice, allPrice, hz)
+		VALUES
+		<foreach collection="list" item="orderBondedSku" separator="," >
+  		(
+  			#{orderBondedSku.gylFinanceNumber}, 
+			#{orderBondedSku.txLogisticID}, #{orderBondedSku.itemsku}, 
+			#{orderBondedSku.itemName}, #{orderBondedSku.itemWeight}, 
+			#{orderBondedSku.itemCount}, #{orderBondedSku.unitPrice}, 
+			#{orderBondedSku.allPrice}, #{orderBondedSku.hz} 
+		)
+  		</foreach>
+	</insert>
+	
+	<select id="findByObArr" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		select txLogisticID, mailNo from gyl_finance_order 
+		where txLogisticID in 
+		<foreach collection="array" item="orderBonded" open="(" separator="," close=")">
+			#{orderBonded.txLogisticID}
+		</foreach>
+	</select>
+	
+	<update id="updateConfirmStatus" parameterType="GylFinance">
+		<foreach collection="list" item="gylFinance" open="" separator=";" close="">
+			update gyl_finance set 
+				confirmStatus = #{gylFinance.confirmStatus}, 
+				confirmUser = #{gylFinance.confirmUser}, 
+				confirmTime = now() 
+			where gylFinanceNumber = #{gylFinance.gylFinanceNumber} 
+		</foreach>
+	</update>
+	
+	<select id="findOrder" resultMap="OrderBondedResultMap" parameterType="GylFinance">
+		select * from gyl_finance_order 
+		where gylFinanceNumber in 
+		<foreach collection="list" item="gylFinance" open="(" separator="," close=")">
+			#{gylFinance.gylFinanceNumber}
+		</foreach>
+	</select>
+	
+	<select id="findOrderSku" resultMap="OrderBondedSkuResultMap" parameterType="GylFinance">
+		select * from gyl_finance_order_sku 
+		where gylFinanceNumber in 
+		<foreach collection="list" item="gylFinance" open="(" separator="," close=")">
+			#{gylFinance.gylFinanceNumber}
+		</foreach>
+	</select>
+	
+	
+	<insert id="batchInsertToOrderBonded" parameterType="OrderBonded">
+		INSERT INTO t_order_bonded (receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payNumber,ordercode,pc,userId,sendWarehouse,merchantNum,createTime)
+		VALUES
+		<foreach collection="list" item="orderBonded" separator="," >
+  		(
+			#{orderBonded.receiveMan},#{orderBonded.receiveManPhone},
+			#{orderBonded.receiveManAddress},#{orderBonded.receiveProvince},#{orderBonded.receiveCity},
+			#{orderBonded.receiveCounty},#{orderBonded.txLogisticID},#{orderBonded.itemName},
+			#{orderBonded.itemWeight},#{orderBonded.itemCount},#{orderBonded.carrier},#{orderBonded.mailNo},
+			#{orderBonded.markDestination},#{orderBonded.billProvideSiteName},#{orderBonded.billProvideSiteCode},
+			#{orderBonded.worth},#{orderBonded.preEntryNumber},#{orderBonded.tradeCountry},
+			#{orderBonded.buyerIdNumber},#{orderBonded.buyerName},#{orderBonded.feeAmount},
+			#{orderBonded.insureAmount},#{orderBonded.payNumber},#{orderBonded.ordercode},#{orderBonded.pc},
+			#{orderBonded.userId},#{orderBonded.sendWarehouse},#{orderBonded.merchantNum},now()
+		)
+  		</foreach>
+	</insert>
+	<insert id="batchInsertToOrderBondedSku" parameterType="OrderBondedSku">
+		INSERT INTO t_order_bonded_sku (txLogisticID, itemsku, itemName, 
+			itemWeight, itemCount, unitPrice, allPrice, hz)
+		VALUES
+		<foreach collection="list" item="orderBondedSku" separator="," >
+  		(
+			#{orderBondedSku.txLogisticID}, #{orderBondedSku.itemsku}, 
+			#{orderBondedSku.itemName}, #{orderBondedSku.itemWeight}, 
+			#{orderBondedSku.itemCount}, #{orderBondedSku.unitPrice}, 
+			#{orderBondedSku.allPrice}, #{orderBondedSku.hz} 
+		)
+  		</foreach>
+	</insert>
+</mapper>

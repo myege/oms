@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.MaterielDao">
+	<resultMap type="Materiel" id="MaterielResultMap">
+		<id property="id" column="id"/>
+		<result property="materielsku" column="materielsku"/>
+		<result property="materielName" column="materielName"/>
+		<result property="totality" column="totality"/>
+		<result property="usedInventory" column="usedInventory"/>
+		<result property="preUsedInventory" column="preUsedInventory"/>
+		<result property="surplusInventory" column="surplusInventory"/>
+		<result property="pc" column="pc"/>
+		<result property="date" column="date"/>
+		<result property="merchant" column="merchant"/>
+		<result property="userId" column="userId"/>
+		<result property="createDate" column="createDate"/>
+	</resultMap>
+	<resultMap type="OrderCommoditie" id="OrderCommoditieResultMap">
+		<id property="id" column="id"/>
+		<result property="expressNum" column="expressNum"/>
+		<result property="commoditieCode" column="commoditieCode"/>
+		<result property="commoditieName" column="commoditieName"/>
+		<result property="commoditieNum" column="commoditieNum"/>
+		<result property="createTime" column="createTime"/>
+	</resultMap>
+	
+	<insert id="insertOrderCommoditie" parameterType="OrderCommoditie">
+		INSERT INTO t_order_commoditie(expressNum, commoditieCode, commoditieName, 
+			commoditieNum, createTime)
+  		VALUES
+  		<foreach collection="list" item="orderCommoditie" separator="," >
+  		(
+  			#{orderCommoditie.expressNum},#{orderCommoditie.commoditieCode},#{orderCommoditie.commoditieName},
+  			#{orderCommoditie.commoditieNum},#{orderCommoditie.createTime}
+  		)
+  		</foreach>
+  	</insert>
+  	
+	<select id="findAll" resultMap="MaterielResultMap" parameterType="java.util.Map">
+		select * from t_materiel LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findInventory" resultMap="OrderCommoditieResultMap">
+		SELECT commoditieCode,SUM(commoditieNum) as commoditieNum FROM `t_order_commoditie` GROUP BY commoditieCode
+	</select>
+	
+	<update id="updateInventory" parameterType="OrderCommoditie">
+		update t_materiel set 
+		usedInventory = #{commoditieNum}, 
+		surplusInventory = totality -#{commoditieNum} 
+		where materielsku = #{commoditieCode}
+	</update>
+	
+	<update id="updateTotality" parameterType="Materiel">
+		update t_materiel set 
+		totality = totality + #{totality}, 
+		surplusInventory = surplusInventory + #{totality} 
+		where id = #{id}
+	</update>
+	
+	<insert id="Mateadd" parameterType="Materiel">
+		INSERT INTO t_materiel (materielsku,materielName,merchant,userId,date,pc,totality,surplusInventory) VALUES (#{materielsku},#{materielName},#{merchant},#{userId},#{date},#{pc},#{totality},#{surplusInventory})
+	</insert>
+	
+	<delete id = "Matedelete" parameterType="String">
+		DELETE FROM t_materiel WHERE id = #{id}
+	</delete>
+	
+	<select id="inquiry" resultMap="MaterielResultMap" parameterType="java.util.Map">
+		select * from t_materiel where 1=1
+		<if test="type == 1 ">
+			and materielsku like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and materielName like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and merchant like '%${paramValue}%'
+		</if>
+		order by merchant, materielsku 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_materiel 
+		<where>
+			1=1
+			<if test="type == 1">
+				and materielsku like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and materielName like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and merchant like '%${paramValue}%'
+			</if>
+			 
+		</where>
+	</select>
+	<select id="mTime" resultMap="MaterielResultMap" parameterType="java.util.Map">
+			SELECT * from t_materiel where 1=1
+			<if test=" paramValue!=null and paramValue!=''">
+			    <if test="paramName == 1"> and materielsku  like '%${paramValue}%' </if>
+			    <if test="paramName == 2">and materielname like '%${paramValue}%' </if>
+			    <if test="paramName == 3">and merchant like '%${paramValue}%' </if>
+			</if>
+		    <if test=" tea !='' and tea != null and  (teb =='' or teb ==null)">
+	   			and date &gt;='${tea}'
+	  		</if> 
+	     	<if test="teb !='' and teb != null and (tea =='' or tea ==null)">
+	    		and date &lt;='${teb}'
+	    	</if>
+			<if test=" tea !='' and tea != null and  teb !='' and teb !=null">
+				and date &gt;='${tea}' and date &lt;='${teb}'
+			</if>
+			
+			order by surplusInventory desc, materielsku,merchant
+			LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="validate" resultMap="MaterielResultMap"  parameterType="java.util.Map">
+		select * from t_materiel where materielsku = #{materielsku}
+	</select>
+	<select id="findByIdMateriel" resultMap="MaterielResultMap" parameterType="Object">
+	     select * from t_materiel where id = #{id}
+	</select>
+	<select id="port" resultMap="MaterielResultMap" parameterType="java.util.Map">
+			SELECT * from t_materiel  where 1=1
+			<if test=" value !='' and value !=null">
+			    <if test="name == 1">and materielsku like '%${value}%' </if>
+			    <if test="name == 2">and materielname like '%${value}%' </if>
+			    <if test="name == 3">and merchant like '%${value}%' </if>
+		 	</if>
+		 	<if test="tea1 !='' and tea1 != null and (teb1 =='' or teb1 ==null)">
+	   			and date &gt;='${tea1}'
+	  		</if> 
+	     	<if test="teb1 !='' and teb1 != null and (tea1 =='' or tea1 ==null)">
+	    		and date &lt;='${teb1}'
+	    	</if>
+			<if test="tea1 !='' and tea1 != null and  teb1 !='' and teb1 !=null">
+				and date &gt;='${tea1}' and date &lt;='${teb1}'
+			</if>
+				
+				order by preUsedInventory desc, materielsku,merchant
+	</select>
+	
+</mapper>

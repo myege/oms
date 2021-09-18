@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.BondDao">
+	<resultMap type="Bond" id="BondResultMap">
+		<id property="id" column="id"/>
+		<result property="bondMoney" column="bondMoney"/>
+		<result property="companybm" column="companybm"/>
+		<result property="companyName" column="companyName"/>
+		<result property="userId" column="userId"/>
+		<result property="res" column="res"/>
+		<result property="se" column="se"/>
+	</resultMap>
+
+	<select id="findAll" resultMap="BondResultMap" parameterType="java.util.Map">
+		SELECT b.bondMoney,b.companybm,b.companyName,l.residualMargin AS res,l.usedMargin AS se FROM bond b  INNER JOIN log_file l ON l.companybm = b.companybm  LIMIT #{startPage},#{endPage} 
+	</select>
+		
+	<select id="count" resultType="java.lang.Integer"  parameterType="java.util.Map">
+		select  count(1)  from bond 
+		<where>
+				1=1
+			<if test="companybm != null and companybm !=''">
+				and companybm like '%${companybm}%'
+		    </if>
+		    <if test="companyName != null and companyName !=''">
+				and companyName like '%${companyName}%'
+		    </if>
+		</where>
+	</select>
+	
+	<select id="findBond" resultType="Bond"> 
+		select * from bond 
+	</select>
+	
+<!-- 	<select id="getTax" resultType="Bond" parameterType="Bond"> 
+		<if test="userId != null and userId != 0">
+	 	select * from bond 	and userId = #{userId} 
+	    </if>
+	</select> -->
+	
+	
+	
+	<select id="findbond" resultMap="BondResultMap" parameterType="java.util.Map">
+		select * from bond where 1=1
+		<if test="type == 1 ">
+			and companybm like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and companyName like '%${paramValue}%'
+		</if>
+		order by companybm, companyName 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<delete id = "bonddelete" parameterType="String">
+		DELETE FROM bond WHERE id = #{id}
+	</delete>
+	
+	<update id="bondedit" parameterType="Bond">
+			update  bond set bondMoney=#{bondMoney},companybm=#{companybm},companyName=#{companyName} where id=#{id}
+	</update>
+	
+	
+	<insert id="addbond" parameterType="Bond">
+		INSERT INTO bond (bondMoney, companybm, companyName) 
+		VALUES (#{bondMoney},#{companybm}, #{companyName})
+	</insert>
+	
+</mapper>

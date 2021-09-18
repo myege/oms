@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.TCountorder">
+	<resultMap type="com.what21.model.TCountorder" id="TCountorderMap">
+		<id property="id" column="id"/>
+		<result property="startdate" column="startdate"/>
+		<result property="businessno" column="businessno"/>
+		<result property="allmailno" column="allmailno"/>
+		<result property="mailno" column="mailno"/>
+		<result property="origin" column="origin"/>
+		<result property="flow" column="flow"/>
+		<result property="sum" column="sum"/>
+		<result property="weigth" column="weigth"/>
+		<result property="bulk" column="bulk"/>
+		<result property="beizu" column="beizu"/>
+		<result property="paydate" column="paydate"/>
+		<result property="company" column="company"/>
+		<result property="state" column="state"/>
+		<result property="createData" column="createData"/>
+	</resultMap>
+	
+	<insert id="add" parameterType="com.what21.model.TCountorder">
+		insert into t_countorder(startdate,businessno,mailno,origin,flow,sum,weigth,bulk,beizu,company,createData,state,allmailno) 
+		values(#{startdate},#{businessno},#{mailno},#{origin},#{flow},#{sum},#{weigth},#{bulk},#{beizu},#{company},#{createData},#{state},#{allmailno})
+	</insert>
+	
+	
+	<sql id="findBy">
+		<where>
+		<if test="company!=null and company!=''">
+			  company like'%${company}%'
+		</if>
+		<if test="allmailno!=null and allmailno!=''"> 
+			  allmailno like '%${allmailno}%'
+		</if>
+		<if test="state!=null and state!=''"> 
+			  state like '%${state}%'
+		</if>
+		</where>
+	</sql>
+	
+	
+	<select id="findAll" resultType="com.what21.model.TCountorder" parameterType="com.what21.model.TCountorder">
+		select * from t_countorder
+		<include refid="findBy"></include>
+		ORDER BY startdate DESC LIMIT #{mailno},#{sum}
+	</select>
+	
+	<select id="count" resultType="int" parameterType="com.what21.model.TCountorder">
+		select count(*) from t_countorder
+		<include refid="findBy"></include>
+	</select>
+	
+	<select id="findMailNo" parameterType="string" resultType="com.what21.model.TCountorder">
+		select allmailno,sum,weigth,id,state from t_countorder where allmailno = #{_parameter}
+	</select>
+	
+	<select id="findMailNoOne" parameterType="string" resultType="com.what21.model.TCountorder">
+		select * from t_countorder where allmailno = #{_parameter}
+	</select>
+	
+	<update id="updateState" parameterType="com.what21.model.TCountorder" >
+	  <foreach collection="list" item="list"  separator=";">
+	UPDATE t_countorder 
+	set state = 1 ,paydate = #{list.paydate}
+	WHERE id =
+		#{list.id}
+	</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="String">
+	DELETE FROM t_countorder WHERE allmailno in 
+	<foreach collection="array" item="item" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</delete>
+	
+</mapper>

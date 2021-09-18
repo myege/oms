@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.TinventoryDao">
+	<resultMap type="Tinventory" id="TinventorResultMap">
+		<id property="id" column="id"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="itemName" column="itemName"/>
+		<result property="totality" column="totality"/>
+		<result property="usedInventory" column="usedInventory"/>
+		<result property="preUsedInventory" column="preUsedInventory"/>
+		<result property="surplusInventory" column="surplusInventory"/>
+		<result property="warningInventory" column="warningInventory"/>
+		<result property="pc" column="pc"/>
+		<result property="date" column="date"/>
+		<result property="merchant" column="merchant"/>
+		<result property="overduedate" column="overduedate"/>
+		<result property="createDate" column="createDate"/>
+		<result property="dateOfExpiration" column="dateOfExpiration"/>
+		<result property="userId" column="userId"/>
+		<result property="storage" column="storage"/>
+	</resultMap>
+	
+	<update id="makeOver" parameterType="Tinventory">
+		update t_inventory set merchant=#{merchant} where itemsku=#{itemsku}
+	</update>
+	<select id="findSkuAndCode" resultMap="TinventorResultMap" parameterType="java.util.Map">
+		SELECT * from t_inventory where itemsku = #{itemsku} and merchant =#{merchant} and pc=#{pc}
+	</select>
+	<update id="upSurplus" parameterType="Tinventory">
+		update t_inventory set surplusInventory=#{surplusInventory},totality=#{totality} where id=#{id}
+	</update>
+	<!-- <insert id="addMakeOver" parameterType="Tinventory">
+		INSERT INTO  t_inventory (itemsku,itemName,surplusInventory,merchant) 
+		VALUES (#{itemsku}, #{itemName},#{surplusInventory},#{merchant}) 
+	</insert> -->
+	
+	
+	
+	<select id="findAll" resultMap="TinventorResultMap" parameterType="java.util.Map">
+			SELECT * from t_inventory
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text1 != null and text1 !=''">
+				and itemName like '%${text1}%'
+		    </if>
+		    <if test="text2 != null and text2 !=''">
+				and merchant like '%${text2}%'
+		    </if>
+		     <if test="findsku != null and findsku !=''">
+				and itemsku like '%${findsku}%'
+		    </if>
+		   <if test=" time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	   			and date &gt;='${time1}'
+	  		</if> 
+	  			
+	     	<if test="time2 !='' and time2 != null and (time1 =='' or time1 ==null)">
+	    		and date &lt;='${time2}'
+	    	</if>
+		    
+			<if test=" time1 !='' and time1 != null and  time2 !='' and time2 !=null">
+				and date &gt;='${time1}' and date &lt;='${time2}'
+			</if> 
+			<if test="overdue != null and overdue !=''">
+				and datediff(overduedate,SYSDATE()) &lt;='${overdue}' 
+		    </if>
+		</where>
+			order by warningInventory-surplusInventory desc, itemsku,merchant
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from t_inventory
+			<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text1 != null and text1 !=''">
+				and itemName like '%${text1}%'
+		    </if>
+		    <if test="text2 != null and text2 !=''">
+				and merchant like '%${text2}%'
+		    </if>
+		    
+		    <if test="findsku != null and findsku !=''">
+				and itemsku like '%${findsku}%'
+			</if>	
+		     <if test=" time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	   			and date &gt;='${time1}'
+	  		</if> 
+	  			
+	     	<if test="time2 !='' and time2 != null and (time1 =='' or time1 ==null)">
+	    		and date &lt;='${time2}'
+	    	</if> 
+			<if test=" time1 !='' and time1 != null and  time2 !='' and time2 !=null">
+				and date &gt;='${time1}' and date &lt;='${time2}'
+			</if> 
+			<if test="overdue != null and overdue !=''">
+				and datediff(overduedate,SYSDATE()) &lt;='${overdue}'
+		    </if>
+		</where>
+	</select>
+	
+	<select id="dateTime" resultMap="TinventorResultMap" parameterType="java.util.Map">
+			SELECT * from t_inventory
+			<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text1 != null and text1 !=''">
+				and itemName like '%${text1}%'
+		    </if>
+		    <if test="text2 != null and text2 !=''">
+				and merchant like '%${text2}%'
+		    </if>
+		    <if test="findsku != null and findsku !=''">
+				and itemsku like '%${findsku}%'
+		    </if>
+		    
+		    <if test="overdue != null and overdue !=''">
+				and datediff(overduedate,SYSDATE()) &lt;='${overdue}'
+		    </if>
+		    
+		    <if test=" time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	   			and date &gt;='${time1}'
+	  		</if> 
+	     	<if test="time2 !='' and time2 != null and (time1 =='' or time1 ==null)">
+	    		and date &lt;='${time2}'
+	    	</if>
+	    	
+			<if test=" time1 !='' and time1 != null and  time2 !='' and time2 !=null">
+				and date &gt;='${time1}' and date &lt;='${time2}'
+			</if> 
+		</where>
+			order by warningInventory-surplusInventory desc, itemsku,merchant
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<update id="updateTotality" parameterType="Tinventory">
+	 
+	 update  t_inventory set preUsedInventory=#{preUsedInventory},surplusInventory=#{surplusInventory} 
+	 
+	 where itemsku=#{itemsku} and merchant=#{merchant} and pc=#{pc}
+	 
+	</update>
+	
+	<select id="findBySku"  resultMap="TinventorResultMap"  parameterType="Tinventory">
+		<![CDATA[select * from t_inventory where itemsku=#{itemsku}  and merchant=#{merchant} and surplusInventory>0
+		order by pc]]>
+	</select>
+	
+	<select id="findeXport" resultMap="TinventorResultMap" parameterType="java.util.Map">
+			SELECT * from t_inventory 
+			<where>
+					1=1
+				<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text1 != null and text1 !=''">
+				and itemName like '%${text1}%'
+		    </if>
+		    <if test="text2 != null and text2 !=''">
+				and merchant like '%${text2}%'
+		    </if>
+		    <if test="findsku != null and findsku !=''">
+				and itemsku like '%${findsku}%'
+		    </if>
+		     <if test="overdue != null and overdue !=''">
+				and datediff(overduedate,SYSDATE()) &lt;='${overdue}'
+		    </if>
+		    <if test=" time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	   			and date &gt;='${time1}'
+	  		</if> 
+	     	<if test="time2 !='' and time2 != null and (time1 =='' or time1 ==null)">
+	    		and date &lt;='${time2}'
+	    	</if>
+		    
+			<if test=" time1 !='' and time1 != null and  time2 !='' and time2 !=null">
+				and date &gt;='${time1}' and date &lt;='${time2}'
+			</if>
+			<if test="startPage !=null and startPage !='' and endPage !=null and endPage !=''">  
+				LIMIT #{startPage},#{endPage}
+			</if>
+			</where> 
+				order by warningInventory-surplusInventory desc, itemsku,merchant
+	</select>
+	
+	<select id="findByIdTinventory" resultMap="TinventorResultMap">
+	     select * from t_inventory where id = #{id}
+	</select>
+	
+	<update id="updateTinventory"  parameterType="Tinventory">
+	 		update  t_inventory set warningInventory=#{warningInventory} where id=#{id}
+	</update>
+	
+	<select id="findLR" resultType="Tinventory" >
+	     select * from t_inventory  where itemsku=#{itemsku} and merchant=#{merchant} and pc=#{pc}
+	</select>
+	
+	<update id="updateLR" parameterType="Tinventory">
+	 
+	 update  t_inventory set usedInventory=#{usedInventory},surplusInventory=#{surplusInventory} 
+	 
+	 where itemsku=#{itemsku} and merchant=#{merchant} and pc=#{pc}
+	 
+	</update>
+	
+	<insert id="addTinventory" parameterType="Tinventory">
+		INSERT INTO  t_inventory (itemsku,itemName,totality,usedInventory,preUsedInventory,surplusInventory,
+		warningInventory,pc,date,userId,merchant,overduedate,createDate) 
+		VALUES (#{itemsku}, #{itemName}, #{totality},#{usedInventory},#{preUsedInventory},#{surplusInventory},
+		#{warningInventory}, #{pc}, #{date},#{userId},#{merchant},#{overduedate},#{createDate}) 
+	</insert>
+	
+	<select id="getAll" resultMap="TinventorResultMap" parameterType="java.util.Map">
+			SELECT * from t_inventory where merchant =#{merchant}
+	</select>
+	
+	
+	<select id="findSumBySku"  resultType="int"  parameterType="Tinventory">
+		select sum(surplusInventory) from t_inventory where itemsku=#{itemsku}  and merchant=#{merchant}
+	</select>
+	
+	<update id="updatePreUsed"  parameterType="Tinventory">
+		update  t_inventory set preUsedInventory=#{preUsedInventory}  where itemsku=#{itemsku} and merchant=#{merchant} and pc=#{pc}
+	</update>
+	
+	<!-- 批量 -->
+	<insert id="addBig">
+		INSERT INTO  t_inventory (itemsku,itemName,totality,preUsedInventory,surplusInventory,
+		usedInventory,pc,date,merchant,createDate,storage) 
+		VALUES 
+		<foreach collection="list" item="item"  separator=",">
+			(#{item.itemsku}, #{item.itemName}, #{item.totality},#{item.preUsedInventory},#{item.surplusInventory},
+			#{item.usedInventory}, #{item.pc}, #{item.date},#{item.merchant},#{item.createDate},#{item.storage})
+		</foreach>
+	</insert>
+	<update id="updateBig">
+		<foreach collection="list" item="item"  separator=";">
+			update t_inventory set surplusInventory=#{item.surplusInventory} ,preUsedInventory=#{item.preUsedInventory}
+			where merchant = #{item.merchant} and itemsku=#{item.itemsku} and storage=#{item.storage}
+		</foreach>
+	</update>
+	
+	<select id="findOms" parameterType="Tinventory" resultType="Tinventory">
+		select * from t_inventory where merchant = #{merchant} and itemName=#{itemName} and itemsku=#{itemsku} and storage=#{storage}
+	</select>
+	
+	<select id="findStroage" parameterType="string" resultType="int">
+		select count(id) FROM t_inventory where storage = #{0}
+	</select>
+	
+	<select id="findInventory" resultMap="TinventorResultMap" >
+		SELECT * from t_inventory where merchant =#{0} and itemsku = #{1} order by pc desc limit 0,1
+	</select>
+	
+	<update id="updateInventory" parameterType="Tinventory">	 
+	 update  t_inventory set preUsedInventory=#{preUsedInventory},surplusInventory=#{surplusInventory} 	 
+	 where id = ${id}
+	</update>
+	
+</mapper>

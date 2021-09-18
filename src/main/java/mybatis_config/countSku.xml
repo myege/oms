@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.TCountsku">
+	<resultMap type="com.what21.model.TCountsku" id="CountskuMap">
+		<id property="id" column="id"/>
+		<result property="ruleid" column="ruleid"/>
+		<result property="worthsum" column="worthsum"/>
+		<result property="zgfw" column="zgfw"/>
+		<result property="qgfw" column="qgfw"/>
+		<result property="czfw" column="czfw"/>
+		<result property="ptfw" column="ptfw"/>
+		<result property="tallagew" column="tallagew"/>
+		<result property="weigthsum" column="weigthsum"/>
+		<result property="countsum" column="countsum"/>
+		<result property="allMaillno" column="allmaillno"/>
+		<result property="zgf" column="zgf"/>
+		<result property="qgf" column="qgf"/>
+		<result property="czf" column="czf"/>
+		<result property="ptf" column="ptf"/>
+		<result property="sui" column="sui"/>
+		<result property="zong" column="zong"/>
+		
+	</resultMap>
+	
+	
+	<insert id="addSku" parameterType="com.what21.model.TCountsku">
+       insert into t_countsku (  ruleid,worthSum,
+      zgfw, qgfw, czfw, ptfw, 
+      tallagew, weigthSum, countSum, 
+      allMaillNo, zgf, czf, 
+      qgf, sui, ptf, zong
+      )values
+    <foreach collection="list" item="list"  separator="," index="index">
+     (   #{list.ruleid,jdbcType=VARCHAR},#{list.worthsum,jdbcType=VARCHAR}, 
+      #{list.zgfw,jdbcType=VARCHAR}, #{list.qgfw,jdbcType=VARCHAR}, #{list.czfw,jdbcType=VARCHAR}, #{list.ptfw,jdbcType=VARCHAR}, 
+      #{list.tallagew,jdbcType=VARCHAR}, #{list.weigthsum,jdbcType=VARCHAR}, #{list.countsum,jdbcType=INTEGER}, 
+      #{list.allmaillno,jdbcType=VARCHAR}, #{list.zgf,jdbcType=VARCHAR}, #{list.czf,jdbcType=VARCHAR}, 
+      #{list.qgf,jdbcType=VARCHAR}, #{list.sui,jdbcType=VARCHAR}, #{list.ptf,jdbcType=VARCHAR}, #{list.zong,jdbcType=VARCHAR}
+      )
+      </foreach>
+	</insert>
+	
+	<select id="findMailNo" parameterType="string" resultType="com.what21.model.TCountsku">
+	 SELECT t.*    FROM t_countsku t WHERE t.allMaillNo = #{_parameter}
+	</select>
+	
+	<delete id="delete" parameterType="String" >
+	DELETE FROM t_countsku WHERE allmaillno in 
+	<foreach collection="array" item="item" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</delete>
+
+	
+</mapper>

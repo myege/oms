@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderPhSkuDao">
+	<resultMap type="OrderPhSku" id="OrderPhSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="unitPrice" column="unitPrice"/>
+		<result property="allPrice" column="allPrice"/>
+		<result property="hz" column="hz"/>
+		<result property="internalNumber" column="internalNumber"/>
+	</resultMap>
+	<resultMap type="OrderPhPushSku" id="OrderPhPushSkuResultMap">
+		<result property="goodsNumber" column="itemCount"/>
+		<result property="goodsPrice" column="unitPrice"/>
+		<result property="goodsSn" column="itemsku"/>
+	</resultMap>
+	
+	<resultMap type="Item" id="ItemResultMap">
+		<id property="id" column="id"/>
+		<result property="itemSKU" column="itemSKU"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemSpec" column="itemSpec"/>
+		<result property="unitWeight" column="unitWeight"/>
+		<result property="unitDesc" column="unitDesc"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="hscode" column="hscode"/>
+		<result property="oneUnitDesc" column="oneUnitDesc"/>
+		<result property="twoUnitDesc" column="twoUnitDesc"/>
+		<result property="country" column="country"/>
+		<result property="countryOfOrigin" column="countryOfOrigin"/>
+		<result property="listPrice" column="listPrice"/>
+		<result property="costPrice" column="costPrice"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="vendorItemCode" column="vendorItemCode"/>
+		<result property="remark" column="remark"/>
+		<result property="xz" column="xz"/>
+		<result property="xh" column="xh"/>
+		<result property="userId" column="userId"/>
+		<result property="internalNumber" column="internalNumber"/>
+		<result property="taxRate" column="taxRate"/>
+		<result property="firstCount" column="firstCount"/>
+		<result property="secondCount" column="secondCount"/>
+		<result property="productRecordNo" column="productRecordNo"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="OrderPhSku">
+		INSERT INTO t_order_ph_sku (txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz)
+		VALUES(#{txLogisticID},#{itemsku},#{itemName},#{itemWeight},#{itemCount},#{unitPrice},#{allPrice},#{hz});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="OrderPhSku">
+		INSERT INTO t_order_ph_sku (txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz)
+		VALUES
+		<foreach collection="list" item="OrderPhSku" separator="," >
+  		(
+			#{OrderPhSku.txLogisticID},#{OrderPhSku.itemsku},#{OrderPhSku.itemName},#{OrderPhSku.itemWeight},
+			#{OrderPhSku.itemCount},#{OrderPhSku.unitPrice},#{OrderPhSku.allPrice},#{OrderPhSku.hz}
+		)
+  		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_ph_sku WHERE txLogisticID = #{txLogisticID}
+	</delete>
+	
+	<select id="findByTxLogisticID" resultMap="OrderPhPushSkuResultMap" parameterType="String">
+		select * from t_order_ph_sku where txLogisticID = #{txLogisticID}
+	</select>
+		
+	<select id="findById" resultMap="OrderPhSkuResultMap" parameterType="String">
+		select * from t_order_ph_sku where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<select id="Detailed" resultMap="OrderPhSkuResultMap" parameterType="java.util.Map">
+		select * FROM t_order_ph_sku WHERE txLogisticID = #{txLogisticID} LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from t_order_ph_sku where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<update id="update"  parameterType="OrderPhSku">
+		update t_order_ph_sku set internalNumber=#{internalNumber} where itemsku = #{itemsku}
+	</update>
+	
+	<select id="findItem" resultMap="ItemResultMap" parameterType="String">
+	     select * from item where itemSKU=#{itemSku}
+	</select>
+	
+	
+	<select id="skuupd" resultMap="OrderPhSkuResultMap"  parameterType="OrderPhSku">
+		select id from t_order_ph_sku where txLogisticID =#{txLogisticID}
+	</select>
+	<update id="updods"  parameterType="OrderPhSku">
+		update t_order_ph_sku set txLogisticID=#{txLogisticID} where id =#{id}
+	</update>
+</mapper> 

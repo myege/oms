@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ActualreceiveDao">
+	<resultMap type="Actualreceive" id="ActualreceiveResultMap">
+		<id property="id" column="id"/>
+		<result property="jobFormId" column="jobFormId"/>
+		<result property="sourceNo" column="sourceNo"/>
+		<result property="itemNo" column="itemNo"/>
+		<result property="itemType" column="itemType"/>
+		<result property="receiveAmount" column="receiveAmount"/>
+		<result property="flag" column="flag"/>
+		<result property="datatime" column="datatime"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="ActualreceiveResultMap" parameterType="java.util.Map">
+		select * from wms_actual_receive_sku where jobFormId = #{jobFormId} LIMIT #{startPage},#{endPage}
+	</select>
+	<!-- <delete id = "actdelete" parameterType="String">
+		DELETE FROM wms_actual_receive_sku WHERE id = #{id}
+	</delete> -->
+	<!-- <select id="findact" resultMap="ActualreceiveResultMap" parameterType="java.util.Map">
+		select * from wms_actual_receive_sku where 1=1
+		<if test="type == 1 ">
+			and jobFormId like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and itemType like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and sourceNo like '%${paramValue}%'
+		</if>
+		order by sourceNo, jobFormId 
+		LIMIT #{startPage},#{endPage}
+	</select> -->
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_actual_receive_sku where jobFormId = #{jobFormId} 
+		
+	</select>
+	
+	<!-- <select id="findByA" resultType="Actualreceive">
+		select * from wms_actual_receive_sku where id = #{id}
+	</select> -->
+	<insert id="aInserta" parameterType="Actualreceive">
+		INSERT INTO wms_actual_receive_sku (jobFormId,sourceNo,itemNo,itemType,receiveAmount)
+		VALUES
+		<foreach collection="list" item="actualreceive" separator="," >
+  		(
+			#{actualreceive.jobFormId},#{actualreceive.sourceNo},#{actualreceive.itemNo},#{actualreceive.itemType},
+			#{actualreceive.receiveAmount}
+		)
+  		</foreach>
+  		
+	</insert>
+	
+	<select id="actadd"  resultMap="ActualreceiveResultMap" parameterType="java.util.Map">
+	 	select * from wms_actual_receive_sku where jobFormId = #{JobFormId} 
+		
+		<!-- select * from wms_actual_receive_sku where jobFormId in (#{ids}) -->
+	</select>
+	
+	
+	<!-- <update id="aflag" parameterType="Actualreceive">
+		update wms_actual_receive_sku set flag = #{flag}   where jobFormId = #{jobFormId}
+	</update> -->
+	
+	<select id="findacId" resultType="Actualreceive">
+		select * from wms_actual_receive_sku where jobFormId = #{jobFormId}
+	</select>
+	<sql id="whereActu">
+	<where>
+		1=1
+		<if test="actualreceiveCustom.jobFormId !=null and actualreceiveCustom.jobFormId!='' ">
+			and jobFormId like '%${actualreceiveCustom.jobFormId}%'
+		</if>
+		</where>
+	</sql>
+	
+	<select id="findAll2" parameterType="com.what21.model.ActualreceiveCustom" resultType="com.what21.model.ActualreceiveCustom">
+	select * from wms_actual_receive 
+	<include refid="whereActu"></include>
+	order by datatime desc
+	 <if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count2" parameterType="com.what21.model.ActualreceiveCustom" resultType="int">
+	select count(1) from wms_actual_receive 
+	<include refid="whereActu"></include>
+	</select>
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.what21.model.Outshipto" >
+  <resultMap id="BaseResultMap" type="com.what21.model.Outshipto" >
+   <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="appType" property="apptype" jdbcType="VARCHAR" />
+    <result column="appStatus" property="appstatus" jdbcType="VARCHAR" />
+    <result column="customsCode" property="customscode" jdbcType="VARCHAR" />
+    <result column="copNo" property="copno" jdbcType="VARCHAR" />
+    <result column="operatorCode" property="operatorcode" jdbcType="VARCHAR" />
+    <result column="operatorName" property="operatorname" jdbcType="VARCHAR" />
+    <result column="loctNo" property="loctno" jdbcType="VARCHAR" />
+    <result column="ieFlag" property="ieflag" jdbcType="VARCHAR" />
+    <result column="trafMode" property="trafmode" jdbcType="VARCHAR" />
+    <result column="billNo" property="billno" jdbcType="VARCHAR" />
+    <result column="domesticTrafNo" property="domestictrafno" jdbcType="VARCHAR" />
+    <result column="logisticsCode" property="logisticscode" jdbcType="VARCHAR" />
+    <result column="logisticsName" property="logisticsname" jdbcType="VARCHAR" />
+    <result column="msgCount" property="msgcount" jdbcType="VARCHAR" />
+    <result column="msgSeqNo" property="msgseqno" jdbcType="INTEGER" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="copCode" property="copcode" jdbcType="VARCHAR" />
+    <result column="copName" property="copname" jdbcType="VARCHAR" />
+    <result column="dxpMode" property="dxpmode" jdbcType="VARCHAR" />
+    <result column="dxpId" property="dxpid" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="huiz" property="huiz" jdbcType="VARCHAR" />
+     <result column="logisticsNo" property="logisticsNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="whereOutshipto">
+  	<where>
+  		<if test="operatorcode != null and operatorcode != ''">
+         		and operatorCode = #{operatorcode} 
+      	</if>
+		<if test="operatorname != null and operatorname!=''">
+			and operatorName like '%${operatorname}%'
+	    </if>
+	    <if test="billno != null and billno!=''">
+			and billNo like '%${billno}%'
+	    </if>
+	    <if test="logisticscode != null and logisticscode!=''">
+			and logisticsCode like '%${logisticscode}%'
+	    </if>
+  	 	<if test="logisticsname != null and logisticsname!=''">
+			and logisticsName like '%${logisticsname}%'
+	    </if>
+	    <if test="type != null and type!=''">
+			and type like '%${type}%'
+	    </if>
+  	</where>
+  
+  </sql>
+  
+  
+  <select id="findAll" parameterType="com.what21.model.Outshipto" resultType="com.what21.model.Outshipto">
+  	select * from outshipto <include refid="whereOutshipto"></include>
+  	LIMIT #{page},#{rows}
+  </select>
+   <select id="findCount" parameterType="com.what21.model.Outshipto" resultType="int">
+  	select count(*) from outshipto <include refid="whereOutshipto"></include>
+  </select>
+  
+  <insert id="insertShiPto" parameterType="com.what21.model.Outshipto">
+   insert into outshipto ( appType, appStatus,  customsCode, copNo, operatorCode, 
+      operatorName, loctNo, ieFlag, trafMode, billNo, domesticTrafNo, logisticsCode, logisticsName, msgCount, 
+      msgSeqNo, note, copCode, copName, dxpMode, dxpId, type, huiz,logisticsNo)
+    values 
+    <foreach collection="list" separator="," item="item" >
+    (#{item.apptype,jdbcType=VARCHAR}, #{item.appstatus,jdbcType=VARCHAR}, 
+      #{item.customscode,jdbcType=VARCHAR}, #{item.copno,jdbcType=VARCHAR}, #{item.operatorcode,jdbcType=VARCHAR}, 
+      #{item.operatorname,jdbcType=VARCHAR}, #{item.loctno,jdbcType=VARCHAR}, #{item.ieflag,jdbcType=VARCHAR}, 
+      #{item.trafmode,jdbcType=VARCHAR}, #{item.billno,jdbcType=VARCHAR}, #{item.domestictrafno,jdbcType=VARCHAR}, 
+      #{item.logisticscode,jdbcType=VARCHAR}, #{item.logisticsname,jdbcType=VARCHAR}, #{item.msgcount,jdbcType=VARCHAR}, 
+      #{item.msgseqno,jdbcType=INTEGER}, #{item.note,jdbcType=VARCHAR}, #{item.copcode,jdbcType=VARCHAR}, 
+      #{item.copname,jdbcType=VARCHAR}, #{item.dxpmode,jdbcType=VARCHAR}, #{item.dxpid,jdbcType=VARCHAR}, 
+      #{item.type,jdbcType=INTEGER}, #{item.huiz,jdbcType=VARCHAR}, #{item.logisticsNo,jdbcType=VARCHAR})
+  </foreach>
+  </insert>
+  
+  <select id="findId" parameterType="string" resultType="com.what21.model.Outshipto">
+  select * from outshipto where id in (${value})
+  </select>
+  
+  <select id="findLogisticsNo" parameterType="map" resultType="string">
+  select logisticsNo from outshipto where logisticsNo in  (${logisticsNo})
+  </select>
+    <select id="findBillNo" parameterType="map" resultType="string">
+  select billNo from  outshipto where billNo in(${billNo})
+  </select>
+  
+  
+  <delete id="delete">
+  	delete from outshipto where id in (${value})
+  </delete>
+  <delete id="deleteSku"></delete>
+  
+   
+  <update id="updateXqin" parameterType="com.what21.model.Outshipto">
+  	 update outshipto
+    set copNo = #{copno},
+  operatorcode = #{operatorcode},
+  operatorname = #{operatorname},
+  loctNo = #{operatorcode},
+  billNo = #{billno},
+  domestictrafno = #{domestictrafno},
+  logisticscode = #{logisticscode},
+  logisticsname = #{logisticsname}
+  where id = ${id}
+  </update>
+  
+  <update id="updateType" parameterType="string">
+   update outshipto
+    set type  = 558
+    where id in (${value})
+  </update>
+  
+   <update id="huizUpdate">
+    update outshipto
+    set type = #{type},
+    huiz =  #{huiz}
+    where billNo = #{billno} and 
+    type !=2
+   </update>
+  
+  
+ </mapper>

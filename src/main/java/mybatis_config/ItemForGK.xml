@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ItemForGKDao">
+	<resultMap type="ItemForGk" id="itemForGkMap">
+		<id property="id" column="id"/>
+		<result property="itemSku" column="itemSku"/>
+		<result property="price" column="price"/>
+		<result property="weight" column="weight"/>
+		<result property="hsCode" column="hsCode"/>
+		<result property="itemCode" column="itemCode"/>
+		<result property="createTime" column="createTime"/>
+		<result property="itemClass" column="itemClass"/>
+		<result property="standard" column="standard"/>
+		<result property="itemName" column="itemName"/>
+		<result property="unitName" column="unitName"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="itemForGkMap">
+		select * from item_control where 1=1
+		<if test="Sku !=null and Sku != ''">
+			and itemSku like '%${Sku}%'
+		</if>
+		<if test="lhyid !=null and lhyid != ''">
+		 	and id = #{lhyid}
+		</if>
+		order by createTime desc,itemSku
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findAllByEx" resultMap="itemForGkMap">
+		select * from item_control
+	</select>
+	
+	<select id="findByIDS" resultMap="itemForGkMap">
+		select * from item_control where id in
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</select>
+	
+	<select id="count"  resultType="java.lang.Integer">
+		select count(*) from item_control where 1=1
+		order by createTime desc,itemSku
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findByItemSku" resultType="java.lang.Integer">
+		select count(*) from item_control where itemSku = #{itemSku}
+	</select>
+	
+	<update id="updateForItem">
+		update item_control set unitName=#{unitName}, standard=#{standard} ,itemClass=#{itemClass}, itemName=#{itemName} ,itemSku = #{itemSku} ,price = #{price} ,weight = #{weight} ,hsCode = #{hsCode} ,itemCode = #{itemCode} where id=#{id}
+	</update>
+	
+	
+	<delete id="deleteItem">
+		delete from item_control where id in
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<insert id="insertItem">
+		insert into item_control (itemSku,price,weight,hsCode
+								 ,itemCode,createTime,itemName
+								 ,itemClass,standard,unitName) 
+						 values
+								 (#{itemSku},#{price},#{weight}
+								 ,#{hsCode},#{itemCode},#{createTime}
+								 ,#{itemName},#{itemClass},#{standard},#{unitName})
+	</insert>
+	
+	<insert id="insertItems">
+	insert into item_control (itemSku,price,weight,hsCode,itemCode,createTime,itemName,itemClass,standard,unitName) values
+		<foreach collection="list" item="Item" separator=",">
+			(
+				#{Item.itemSku,jdbcType=VARCHAR},#{Item.price,jdbcType=VARCHAR},#{Item.weight,jdbcType=VARCHAR},#{Item.hsCode,jdbcType=VARCHAR},#{Item.itemCode,jdbcType=VARCHAR}
+				,#{Item.createTime,jdbcType=VARCHAR},#{Item.itemName,jdbcType=VARCHAR},#{Item.itemClass,jdbcType=VARCHAR},#{Item.standard,jdbcType=VARCHAR},#{Item.unitName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+</mapper>

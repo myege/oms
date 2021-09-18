@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CirculaTionDao">
+	<resultMap type="CirculaTion" id="CirculaTionResultMap">
+		<id property="id" column="id"/>
+		<result property="notice" column="notice"/>
+		<result property="barter" column="barter"/>
+		<result property="transit" column="transit"/>
+		<result property="consumer" column="consumer"/>
+		<result property="ware" column="ware"/>
+		<result property="dnumber" column="dnumber"/>
+		<result property="aport" column="aport"/>
+		<result property="trmode" column="trmode"/>
+		<result property="wnumber" column="wnumber"/>
+		<result property="number" column="number"/>
+		<result property="weight" column="weight"/>
+		<result property="packing" column="packing"/>
+		<result property="vehicletype" column="vehicletype"/>
+		<result property="afleet" column="afleet"/>
+		<result property="lockzg" column="lockzg"/>
+		<result property="skunumber" column="skunumber"/>
+		<result property="inout_jh" column="inout_jh"/>
+		<result property="list_zh" column="list_zh"/>
+		<result property="remark" column="remark"/>
+		<result property="bg_preEntry" column="bg_preEntry"/>
+		<result property="sj_preEntry" column="sj_preEntry"/>
+		<result property="bg_cargo" column="bg_cargo"/>
+		<result property="sj_pass" column="sj_pass"/>
+		<result property="bg_tally" column="bg_tally"/>
+		<result property="bg_sbjd" column="bg_sbjd"/>
+		<result property="bg_pass" column="bg_pass"/>
+		<result property="ago" column="ago"/>
+		<result property="after" column="after"/>
+		<result property="arrange" column="arrange"/>
+		<result property="auditstatus" column="auditstatus"/>
+		<result property="auditsa" column="auditsa"/>
+		<result property="userId" column="userId"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="CirculaTionResultMap" parameterType="java.util.Map">
+			SELECT * from circulation where 1=1
+				<if test="auditstatus == 9">
+			 		and auditstatus =9
+			    </if>
+			    <if test="auditstatus != 9">
+			 		and auditstatus !=9
+			    </if>
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from circulation where 1=1
+				<if test="auditstatus == 9">
+			 		and auditstatus =9
+			    </if>
+			    <if test="auditstatus != 9">
+			 		and auditstatus !=9
+			    </if>
+				 
+	</select>
+	<insert id="inserta" parameterType="CirculaTion">
+		INSERT INTO circulation (notice,barter,wnumber,consumer,ware,packing,number,trmode,weight,skunumber,inout_jh,ago,auditsa,auditstatus)
+		VALUES (#{notice},#{barter},#{wnumber},#{consumer},#{ware},#{packing},#{number},#{trmode},#{weight},#{skunumber},#{inout_jh},#{ago},'1','9')
+	</insert>
+	<insert id="insertaa" parameterType="CirculaTion">
+		INSERT INTO circulation (notice,barter,wnumber,consumer,ware,packing,number,trmode,weight,skunumber,inout_jh,ago,auditsa,auditstatus)
+		VALUES (#{notice},#{barter},#{wnumber},#{consumer},#{ware},#{packing},#{number},#{trmode},#{weight},#{skunumber},#{inout_jh},#{ago},'1','0')
+	</insert>
+	<update id="upcirsb" parameterType="CirculaTion">
+		update circulation set notice=#{notice},barter=#{barter},wnumber=#{wnumber},consumer=#{consumer},ware=#{ware}, number=#{number},weight=#{weight},auditsa='6'
+		where id = #{id}
+	</update>  
+	<update id="insertb" parameterType="CirculaTion">
+		update circulation set aport=#{aport},vehicletype=#{vehicletype},afleet=#{afleet},
+		transit=#{transit},
+		lockzg=#{lockzg},list_zh=#{list_zh},arrange=#{arrange},auditsa='2'
+		where id = #{id}
+	</update>  
+	<update id="insertc" parameterType="CirculaTion">
+		update circulation set 
+		bg_preEntry=#{bg_preEntry},sj_preEntry=#{sj_preEntry},bg_cargo=#{bg_cargo},bg_sbjd=#{bg_sbjd},bg_pass=#{bg_pass},remark=#{remark},dnumber=#{dnumber},after=#{after},auditsa='3'
+		where id = #{id}
+	</update>
+	<update id="insciraa" parameterType="CirculaTion">
+		update circulation set 
+		bg_preEntry=#{bg_preEntry},sj_preEntry=#{sj_preEntry},bg_cargo=#{bg_cargo},bg_sbjd=#{bg_sbjd},bg_pass=#{bg_pass},remark=#{remark},dnumber=#{dnumber},after=#{after},auditsa='6'
+		where id = #{id}
+	</update>
+	<update id="insertall" parameterType="String">
+		update circulation set notice=#{notice},barter=#{bater},wnumber=#{wnumber},consumer=#{consumer},ware=#{ware},packing=#{paking},number=#{number},trmode=#{trmode},weight=#{weight},skunumber=#{skunumber},inout_jh=#{inout_jh},
+		aport=#{aport},vehicletype=#{vehicletype},afleet=#{afleet},transit=#{transit},lock=#{lock},list_zh=#{list_zh},
+		bg_preEntry=#{bg_preEntry},sj_preEntry=#{sj_preEntry},bg_cargo=#{bg_cargo},bg_sbjd=#{bg_sbjd},bg_pass=#{bg_pass},remark=#{remark},dnumber=#{dnumber},ago=#{ago},after=#{after},arrange=#{arrange},
+		auditstatus='6', where id = #{id}
+	</update>
+	<delete id ="deletecir" parameterType="String">
+		DELETE 	FROM circulation WHERE id = #{id}
+	</delete>
+	
+	<select id="findByBill" resultMap="CirculaTionResultMap" parameterType="String">
+		select * from circulation where id = #{id}
+	</select>
+	
+</mapper>

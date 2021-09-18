@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeCategoryDao">
+	
+	<select id="findQzddjByName" resultType="string" parameterType="string">
+		select value from be_category where categoryName ='气柱袋' and name =#{value}
+	</select>
+	
+	<select id="findZxggdjByName" resultType="string" parameterType="string">
+		select value from be_category where categoryName ='纸箱规格' and name =#{value}
+	</select>
+	
+	<select id="findQpmdj" resultType="string" >
+		select value from be_category where categoryName ='气泡膜' 
+	</select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.SzqgWlgjDao">
+	<resultMap type="SzqgWlgj" id="SzqgWlgjResultMap">
+		<id property="id" column="id"/>
+		<result property="logisticsCode" column="logisticsCode"/>
+		<result property="logisticsName" column="logisticsName"/>
+		<result property="billNo" column="billNo"/>
+		<result property="logisticsNo" column="logisticsNo"/>
+		<result property="logisticsLinkCode" column="logisticsLinkCode"/>
+		<result property="logisticsLinkName" column="logisticsLinkName"/>
+		<result property="logisticsTrajectory" column="logisticsTrajectory"/>
+		<result property="generateTime" column="generateTime"/>
+		<result property="note" column="note"/>
+		<result property="status" column="status"/>
+		<result property="createDateTime" column="createDateTime"/>
+		
+		
+	</resultMap>
+	
+	<select id="findgjz" resultMap="SzqgWlgjResultMap" parameterType="java.util.Map">
+			SELECT * from szqg_wlgj where ${gjz} 
+
+	</select>
+	
+
+</mapper>

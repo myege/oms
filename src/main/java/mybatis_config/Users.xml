@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.UserDao">
+	<resultMap type="Users" id="usersResultMap">
+		<id property="id" column="id"/>
+		<result property="userName" column="userName"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="age" column="age"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="changOdd" column="changOdd"/>
+	</resultMap>
+	<select id="findAll" resultMap="usersResultMap" parameterType="java.util.Map">
+		select * from t_users LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findAll_1" resultMap="usersResultMap" parameterType="java.util.Map">
+		select * from t_users where changOdd = #{changOdd}
+	</select>
+	
+	<select id="countUsers" resultType="java.lang.Integer">
+		select count(1) from t_users
+	</select>
+	<insert id="addUsers" parameterType="Users">
+		INSERT INTO t_users (userName,name,email,phone,age,password) VALUES (#{userName},#{name},#{email},#{phone},#{age},#{password})
+	</insert>
+	<update id="updateUsers" parameterType="Users">
+		UPDATE t_users SET password=#{password} WHERE id =#{id}
+	</update>
+	<delete id="deleteUsers" parameterType="String">
+		DELETE FROM t_users WHERE id = #{id}
+	</delete>
+	<select id="findUser" resultMap="usersResultMap" parameterType="Users">
+		select * from t_users where userName = #{userName} and password = #{password}
+	</select>
+	<update  id="power" parameterType="Users">
+		UPDATE t_users SET userRole = #{userRole} WHERE id =#{id}
+	</update>
+	<update  id="cleanPower" parameterType="Users">
+		UPDATE t_users SET userRole = null WHERE id =#{id}
+	</update>
+	  <select id="query" resultMap="usersResultMap" parameterType="java.util.Map">
+		select * from t_users where 1=1
+		<if test="type == 1 ">
+			and userName like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and name like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and email like '%${paramValue}%'
+		</if>
+		order by email, userName 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_users 
+		<where>
+			1=1
+			<if test="type == 1">
+				and userName like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and name like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and email like '%${paramValue}%'
+			</if>
+		</where>
+	</select>
+	<select id="uname" resultMap="usersResultMap"  parameterType="java.util.Map">
+		select * from t_users where userName = #{userName} or email = #{email} or phone = #{phone}
+	</select>
+	<select id="fingUserId" resultMap="usersResultMap">
+		select t_users.name from t_users
+	</select>
+	
+	<select id="findByUserId" resultMap="usersResultMap">
+		select * from t_users
+	</select>
+	
+	
+</mapper>

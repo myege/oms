@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.SzqgStrategyDao">
+	<resultMap type="SzqgStrategy" id="ItemResultMap">
+		<id property="id" column="id"/>
+		<result property="strategy" column="strategy"/>
+		<result property="payCode" column="payCode"/>
+		<result property="payName" column="payName"/>
+		<result property="logisticsCode" column="logisticsCode"/>
+		<result property="logisticsName" column="logisticsName"/>
+		<result property="abroadCo" column="abroadCo"/>
+		<result property="abroadCoName" column="abroadCoName"/>
+		<result property="ebpCode" column="ebpCode"/>
+		<result property="ebpName" column="ebpName"/>
+		<result property="proxyCode" column="proxyCode"/>
+		<result property="proxyName" column="proxyName"/>
+		<result property="assureCode" column="assureCode"/>
+		<result property="customsCode" column="customsCode"/>
+		<result property="portCode" column="portCode"/>
+		<result property="agentCode" column="agentCode"/>
+		<result property="agentName" column="agentName"/>
+		<result property="createDateTime" column="createDateTime"/>
+		
+	</resultMap>
+	
+	<select id="findgjz" resultMap="ItemResultMap" parameterType="java.util.Map">
+			SELECT * from szqg_item where id= '${gjz}' 
+
+	</select>
+	
+	<select id="findBySt" resultMap="ItemResultMap">
+		select * from szqg_strategy where strategy = #{St}
+	</select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.NuclearReleaseDao">
+	<resultMap type="NuclearRelease" id="nuclearReleaseResultMap">
+		<id property="id" column="id"/>
+		<result property="totalMailNo" column="totalMailNo"/>
+		<result property="pc" column="pc"/>
+		<result property="createdatatime" column="createdatatime"/>
+		<result property="username" column="username"/>
+		<result property="userid" column="userid"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="nuclearReleaseResultMap" parameterType="java.util.Map">
+		select * from cz_nuclearrelease LIMIT #{startPage},#{endPage}
+	</select>
+	<insert id="addNu" parameterType="NuclearRelease">
+		INSERT INTO cz_nuclearrelease (totalMailNo,pc,username,userid,createdatatime) VALUES (#{totalMailNo},#{pc},#{username},#{userid},#{createdatatime})
+	</insert>
+	<delete id = "deleteN" parameterType="String">
+		DELETE FROM cz_nuclearrelease WHERE id = #{id}
+	</delete>
+	<select id="countNuclearRelease" resultType="java.lang.Integer">
+		select count(1) from cz_nuclearrelease
+	</select>
+	<select id="find"  resultMap="nuclearReleaseResultMap"  parameterType="java.util.Map">
+		select * from cz_nuclearrelease where 1=1
+		<if test="type == 1 ">
+			and totalMailNo like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and pc like '%${paramValue}%'
+		</if>
+		order by pc, totalMailNo 
+		LIMIT #{startPage},#{endPage} 
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_nuclearrelease 
+		<where>
+			1=1
+			<if test="type == 1">
+				and totalMailNo like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and pc like '%${paramValue}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="findByPc" resultType="NuclearRelease" parameterType="NuclearRelease">
+	
+	select * from cz_nuclearrelease  where totalMailNo=#{totalMailNo} and pc=#{pc}
+	
+	</select>
+	
+	</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.IjdtdDao">
+	<resultMap type="Ijdtd" id="IjdtdResultMap">
+		<id property="id" column="id"/>
+		<result property="poNo" column="poNo"/>
+		<result property="ladNo" column="ladNo"/>
+		<result property="intryWhere" column="intryWhere"/>
+		<result property="intryType" column="intryType"/>
+		<result property="transType" column="transType"/>
+		<result property="billWeight" column="billWeight"/>
+		<result property="interTransName" column="interTransName"/>
+		<result property="notes" column="notes"/>
+		<result property="status" column="status"/>
+		<result property="createtime" column="createtime"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="IjdtdResultMap" parameterType="java.util.Map">
+			SELECT * from ijdtd
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and ladNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and notes like '%${text5}%'
+		    </if>
+			<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createDateTime &gt;='${time3}' and createDateTime &lt;='${time4}'
+			</if>
+		</where>
+			order by status, createtime
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from ijdtd
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+	            and userId=#{userId} 
+	        </if>
+			<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and ladNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and notes like '%${text5}%'
+		    </if>
+			<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createtime &gt;='${time3}' and createtime &lt;='${time4}'
+			</if>
+		</where>
+				 
+	</select>
+	<insert id="insertBatch" >
+		insert into ijdtd (ladNo,poNo,intryWhere,intryType,transType,billWeight,interTransName,createtime)
+		values
+		<foreach collection="list" item="ijdtd" separator=",">		
+		(#{ijdtd.ladNo},#{ijdtd.poNo},#{ijdtd.intryWhere},#{ijdtd.intryType},#{ijdtd.transType},#{ijdtd.billWeight},#{ijdtd.interTransName},#{ijdtd.createtime})
+		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from ijdtd 
+		where ladNo = #{ladNo}  
+	</delete>
+	
+	<select id="findbygjz" resultMap="IjdtdResultMap" parameterType="Ijdtd">
+		SELECT * from ijdtd where ladNo = #{ladNo} 
+	</select>
+	
+	<update id="updatebygjz" parameterType="Ijdtd">
+		update ijdtd set notes = '${notes}' ,status = '${status}'  where ladNo = '${ladNo}'
+	</update>
+	
+	
+	
+</mapper>

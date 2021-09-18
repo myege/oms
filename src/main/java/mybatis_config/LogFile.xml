@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.LogFileDao">
+	<resultMap type="LogFile" id="LogFileResultMap">
+		<id property="id" column="id"/>
+		<result property="residualMargin" column="residualMargin"/>
+		<result property="usedMargin" column="usedMargin"/>
+		<result property="bondMoney" column="bondMoney"/>
+		<result property="companybm" column="companybm"/>
+		<result property="companyName" column="companyName"/>
+		<result property="userId" column="userId"/>
+		<result property="frostMamey" column="frostMamey"/>
+	</resultMap>
+	
+		<select id="findAll" resultMap="LogFileResultMap" parameterType="java.util.Map">
+			 SELECT * from log_file where 1=1
+			 <if test="userId != null and userId != 0">
+	 				and userId = #{userId} 
+	    	 </if>
+	    	 limit ${startPage},${endPage}
+		</select>
+	
+		<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from log_file
+			<where>
+				1=1
+				<if test="userId != null and userId != 0">
+	 				and userId = #{userId} 
+	    		</if>
+			</where>
+		</select>
+		
+		<update id="update" parameterType="LogFile">
+	 		UPDATE log_file SET residualMargin =#{residualMargin},usedMargin=#{usedMargin} WHERE id =#{id}
+		</update> 
+		
+		<select id="findlog"  resultType="LogFile">
+			 SELECT * from log_file
+		</select> 
+		
+		<insert id="addlogf" parameterType="LogFile">
+			INSERT INTO log_file (companyName,companybm,bondMoney,residualMargin,usedMargin,userId,frostMamey) 
+			VALUES (#{companyName},#{companybm}, #{bondMoney},#{residualMargin},#{usedMargin},#{userId},#{frostMamey})
+		</insert>
+	
+		<delete id = "logfdelete" parameterType="String">
+			DELETE FROM log_file WHERE id = #{id}
+		</delete>
+		
+		<update id="logfedit" parameterType="LogFile">
+			update  log_file set bondMoney=#{bondMoney},companybm=#{companybm},companyName=#{companyName},residualMargin=#{residualMargin} where id=#{id}
+		</update>
+		
+		<select id="findAllLogFile" resultType="LogFile"> 
+			select * from log_file  where id=#{id}
+		</select>
+		
+		<select id="getTax" resultType="LogFile"> 
+				SELECT * from log_file 
+			<where>
+				and 1=1
+				<if test="userId != null and userId != 0">
+			 	and	 userId = #{userId} 
+			    </if>
+			 </where>	   
+		</select>
+		
+		<select id="findlogzf"  resultType="LogFile">
+			 SELECT * from log_file l INNER JOIN  cost c ON l.userId = c.userId WHERE c.id =#{id}
+		</select> 
+		
+		<!-- 冻结释放 -->
+		<update id="frostMo" parameterType="LogFile">
+			update  log_file set residualMargin=#{residualMargin},frostMamey=#{frostMamey} where id=#{id}
+		</update>
+		
+		<select id="getUserId" resultType="LogFile" >
+				SELECT * from log_file where userId = #{userId} 
+		</select>
+	
+</mapper>

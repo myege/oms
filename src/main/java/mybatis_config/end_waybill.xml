@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.End_waybill">
+	<resultMap type="com.what21.model.End_waybill" id="End_waybillMap">
+		<id property="id" column="id"/>
+		<result property="company" column="company"/>
+		<result property="sum" column="sum"/>
+		<result property="createdatetime" column="createdatetime"/>
+		<result property="qj" column="qj"/>
+		<result property="allhead" column="allhead"/>
+		<result property="allend" column="allend"/>
+		<result property="startDate" column="startDate"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="com.what21.model.End_waybill">
+		select * from end_waybill_pool_test
+	</select>
+	
+	<!-- 所有的查询都在这里 -->
+	<select id="findCompany" parameterType="map" resultType="com.what21.model.End_waybill">
+		select * from end_waybill_pool_test 
+		 <where>
+			1=1
+			<if test="company!=null and company!=''">
+				and company LIKE #{company}
+			</if>
+			<if test="allhead!=null and allhead!=''">
+				and allhead LIKE #{allhead}
+			</if>
+			<if test="allend!=null and allend!=''">
+				and allend LIKE #{allend} 
+			</if>
+			<if test="id!=null">
+				and id=#{id}
+			</if>	
+		</where>  
+		ORDER BY   SUM DESC ,startDate DESC 
+		LIMIT #{pstart},#{pend}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="addEnd" parameterType="com.what21.model.End_waybill">
+		insert into end_waybill_pool_test(company,sum,startDate,qj,allhead,allend) 
+		values(#{company},#{sum},#{startDate},#{qj},#{allhead},#{allend})
+	</insert>
+	
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from end_waybill_pool_test
+			<where>
+				1=1
+			<if test="company!=null and company!=''">
+				and company LIKE #{company}
+			</if>
+			<if test="allhead!=null and allhead!=''">
+				and allhead LIKE #{allhead}
+			</if>
+			<if test="allend!=null and allend!=''">
+				and allend LIKE #{allend}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findCom" resultType="com.what21.model.EndCompany">
+		select * from end_company_toka
+	</select>
+	
+</mapper>
+	

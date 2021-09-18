@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderBondedDao">
+	<resultMap type="OrderBonded" id="OrderBondedResultMap">
+		<id property="id" column="id"/>
+		<result property="receiveMan" column="receiveMan"/>
+		<result property="receiveManPhone" column="receiveManPhone"/>
+		<result property="receiveManAddress" column="receiveManAddress"/>
+		<result property="receiveProvince" column="receiveProvince"/>
+		<result property="receiveCity" column="receiveCity"/>
+		<result property="receiveCounty" column="receiveCounty"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="carrier" column="carrier"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="markDestination" column="markDestination"/>
+		<result property="billProvideSiteName" column="billProvideSiteName"/>
+		<result property="billProvideSiteCode" column="billProvideSiteCode"/>
+		<result property="worth" column="worth"/>
+		<result property="preEntryNumber" column="preEntryNumber"/>
+		<result property="tradeCountry" column="tradeCountry"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="feeAmount" column="feeAmount"/>
+		<result property="insureAmount" column="insureAmount"/>
+		<result property="payCompany" column="payCompany"/>
+		<result property="payNumber" column="payNumber"/>
+		<result property="ordercode" column="ordercode"/>
+		<result property="pc" column="pc"/>
+		<result property="isPushToWms" column="isPushToWms"/>
+		<result property="ispost" column="ispost"/>
+		<result property="isCustoms" column="isCustoms"/>
+		<result property="auditstatus" column="auditstatus"/>
+		<result property="userId" column="userId"/>
+		<result property="sendWarehouse" column="sendWarehouse"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendTel" column="sendTel"/>
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="area" column="number"/>
+		<result property="isPushDd" column="isPushDd"/>
+		<result property="isPushQd" column="isPushQd"/>
+		<result property="statushc" column="statushc"/>
+		<result property="createTime" column="createTime"/> 
+		<result property="invtNo" column="invtNo"/>
+		<result property="customsTax" column="customsTax"/>
+		<result property="valueAddedTax" column="valueAddedTax"/>
+		<result property="consumptionTax" column="consumptionTax"/>
+		<result property="returncode" column="returncode"/>
+		<result property="returnInfo" column="returnInfo"/>
+		<result property="kucstate" column="kucstate"/>
+		<result property="mark" column="mark"/>
+	<!-- 	<result property="declareAtCustomsLS" column="declareAtCustomsLS"/> -->
+				
+	</resultMap>
+	<resultMap type="OrderBondedPush" id="OrderBondedPushResultMap">
+		<result property="address" column="receiveManAddress"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="company" column="sendWarehouse"/>
+		<result property="consignee" column="receiveMan"/>
+		<result property="invoiceNo" column="mailNo"/>
+		<result property="kdId" column="carrier"/>
+		<result property="ordeAmount" column="worth"/>
+		<result property="orderSn" column="txLogisticID"/>
+		<result property="purchaserTelNumber" column="receiveManPhone"/>
+		<result property="signBuilding" column="buyerIdNumber"/>
+		<result property="tel" column="receiveManPhone"/>
+		<result property="createTime" column="createTime"/> 
+	</resultMap>
+	
+	<select id="findAll" resultMap="OrderBondedResultMap" parameterType="java.util.Map">
+		select * from t_order_bonded where 1=1
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+		<if test="auditstatus == 8">
+			and auditstatus=8
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 8 and auditstatus != 9 and auditstatus != 7">
+			and auditstatus !=9  and auditstatus !=8 and auditstatus != 7
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test="mark != null">
+			and mark = ${mark}
+		</if>
+		<if test="wms != null">
+			and isPushToWms = ${wms}
+		</if>
+		<if test="txLogisticID != null">
+			and txLogisticID  like '%${txLogisticID}%'
+		</if>
+		<if test="receiveMan != null">
+			and receiveMan like '%${receiveMan}%'
+		</if>
+		<if test="pc != null">
+			and pc like '%${pc}%'
+		</if>
+		<if test="itemName != null">
+			and itemName like '%${itemName}%'
+		</if>
+		<if test="mailNo != null">
+			and mailNo like '%${mailNo}%'
+		</if>
+		<if test="payNumber != null">
+			and payNumber like '%${payNumber}%'
+		</if>
+		
+		<if test="merchantNum != null">
+			and merchantNum like '%${merchantNum}%'
+		</if>
+		
+		order by auditstatus,returncode, ispost, isPushToWms, isPushDd, isPushQd, isCustoms, paynumber, createTime desc, txLogisticID  
+		
+		LIMIT ${startPage},${endPage}
+		
+		
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_order_bonded where 1=1
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+		<if test="auditstatus == 8">
+			and auditstatus=8
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 8 and auditstatus != 9 and auditstatus != 7">
+			and auditstatus !=9  and auditstatus !=8 and auditstatus != 7
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createTime &gt;='${time3}' and createTime &lt;='${time4}'
+		</if>
+		<if test="mark != null">
+			and mark = ${mark}
+		</if>
+		<if test="wms != null">
+			and isPushToWms = ${wms}
+		</if>
+		<if test="txLogisticID != null">
+			and txLogisticID  like '%${txLogisticID}%'
+		</if>
+		<if test="receiveMan != null">
+			and receiveMan like '%${receiveMan}%'
+		</if>
+		<if test="pc != null">
+			and pc like '%${pc}%'
+		</if>
+		<if test="itemName != null">
+			and itemName like '%${itemName}%'
+		</if>
+		<if test="mailNo != null">
+			and mailNo like '%${mailNo}%'
+		</if>
+		<if test="payNumber != null">
+			and payNumber like '%${payNumber}%'
+		</if>
+		
+		<if test="merchantNum != null">
+			and merchantNum like '%${merchantNum}%'
+		</if>
+		
+		<if test="paramName == 'merchantNum' and paramValue !='' and paramValue !=null">
+			and merchantNum like '%${paramValue}%'
+		</if>
+	</select>
+	
+	<select id="odbdateTime" resultMap="OrderBondedResultMap" parameterType="java.util.Map">
+	 	SELECT * from t_order_bonded
+	<where>
+			1=1
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+		<if test="auditstatus == 8">
+			and auditstatus=8
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 8 and auditstatus != 9 and auditstatus != 7">
+			and auditstatus !=9  and auditstatus !=8 and auditstatus != 7
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createTime &gt;='${time3}' and createTime &lt;='${time4}'
+		</if>
+		<if test="mark != null">
+			and mark = ${mark}
+		</if>
+		<if test="wms != null">
+			and isPushToWms = ${wms}
+		</if>
+		</where>
+				order by createTime
+				LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findByTxLogisticID" resultType="OrderBonded">
+		select * from t_order_bonded where txLogisticID = #{txLogisticID}
+	</select>
+	
+	
+	<update id="updateSerialNumber">
+		<foreach collection="list" item="item" separator=";">
+			update t_order_bonded
+			set payNumber = #{item.serialNumber} where id = #{item.id}
+		</foreach>
+	</update>
+	
+	
+	
+	<select id="findByMailNo" resultType="OrderBonded">
+		select ob.*, c.sendName, c.sendTel, c.sendAddress 
+		from t_order_bonded ob 
+		left join company c on ob.merchantNum = c.companybm 
+		where mailNo = #{mailNo} 
+	</select>
+	
+	<select id="findById" resultMap="OrderBondedPushResultMap">
+		select * from t_order_bonded where id = #{id}
+	</select>
+	
+	<select id="findByIdToBG" resultMap="OrderBondedResultMap">
+		select * from t_order_bonded where id = #{id}
+	</select>
+	
+	<select id="findByIdToWJ" resultMap="OrderBondedResultMap">
+		select ob.*, c.sendName,c.sendTel,c.sendAddress from t_order_bonded ob
+		left join company c on ob.merchantNum = c.companybm  
+		where ob.id = #{id}
+	</select>
+	
+	<select id="findByIdToWms" resultMap="OrderBondedResultMap">
+		select * from t_order_bonded 
+		where id = #{id}
+	</select>
+	
+	<select id="findAreaByName" resultMap="OrderBondedResultMap">
+		select number from t_dict_area 
+		where name = #{paramName}
+	</select>
+	
+	<select id="findOrderStatus" resultMap="OrderBondedResultMap">
+		select txLogisticID, mailNo, auditstatus from t_order_bonded 
+		where txLogisticID in 
+		<foreach collection="array" item="idArr" open="(" separator="," close=")">
+			#{idArr}
+		</foreach>
+	</select>
+	
+	<select id="findByObArr" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		select txLogisticID, mailNo from t_order_bonded 
+		where txLogisticID in 
+		<foreach collection="array" item="orderBonded" open="(" separator="," close=")">
+			#{orderBonded.txLogisticID}
+		</foreach>
+	</select>
+	
+	<select id="exportOrder" resultType="com.what21.model.OrderBondedForExport" parameterType="java.util.Map">
+	 SELECT *,ts.itemCount itemCount2,ts.itemName itemName2,ts.itemWeight itemWeight2 FROM  t_order_bonded t  INNER JOIN t_order_bonded_sku ts ON t.txLogisticID =ts.txLogisticID
+	where 1=1
+		
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+		<if test="auditstatus == 8">
+			and auditstatus=8
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 8 and auditstatus != 9 and auditstatus != 7">
+			and auditstatus !=9  and auditstatus !=8 and auditstatus != 7
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if> 
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null ">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID'  and paramValue !='' and paramValue !=null">
+			and t.txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and ts.itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and t.mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test="mark != null and mark != '' ">
+			and mark = ${mark}
+		</if>
+		<if test="wms != null and wms != ''">
+			and isPushToWms = ${wms}
+		</if>
+		<if test="time3 !='' and time3 !=null">
+				and t.createTime >= '${time3}'
+		</if>
+		<if test="time4 !='' and time4 !=null">
+				and t.createTime &lt;= '${time4}'
+		</if>
+		
+		 order by auditstatus, ispost, createTime desc, t.txLogisticID  
+		
+		
+		
+		
+		
+	</select>
+	<insert id="insert" parameterType="OrderBonded">
+		INSERT INTO t_order_bonded (receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,sendWarehouse,merchantNum,createTime,mark)
+		VALUES(#{receiveMan},#{receiveManPhone},#{receiveManAddress},#{receiveProvince},
+			#{receiveCity},#{receiveCounty},#{txLogisticID},#{itemName},#{itemWeight},#{itemCount},
+			#{carrier},#{mailNo},#{markDestination},#{billProvideSiteName},#{billProvideSiteCode},
+			#{worth},#{preEntryNumber},#{tradeCountry},#{buyerIdNumber},#{buyerName},#{feeAmount},
+			#{insureAmount},#{payNumber},#{ordercode},#{pc},#{ispost},#{isCustoms},#{auditstatus},
+			#{userId},#{sendWarehouse},#{merchantNum},now(),#{mark});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="OrderBonded">
+		INSERT INTO t_order_bonded (receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payCompany,payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,
+			sendWarehouse,merchantNum,createTime,mark)
+		VALUES
+		<foreach collection="array" item="orderBonded" separator="," >
+  		(
+			#{orderBonded.receiveMan},#{orderBonded.receiveManPhone},#{orderBonded.receiveManAddress},
+			#{orderBonded.receiveProvince},#{orderBonded.receiveCity},#{orderBonded.receiveCounty},
+			#{orderBonded.txLogisticID},#{orderBonded.itemName},#{orderBonded.itemWeight},
+			#{orderBonded.itemCount},#{orderBonded.carrier},#{orderBonded.mailNo},
+			#{orderBonded.markDestination},#{orderBonded.billProvideSiteName},#{orderBonded.billProvideSiteCode},
+			#{orderBonded.worth},#{orderBonded.preEntryNumber},#{orderBonded.tradeCountry},
+			#{orderBonded.buyerIdNumber},#{orderBonded.buyerName},#{orderBonded.feeAmount},
+			#{orderBonded.insureAmount},#{orderBonded.payCompany},#{orderBonded.payNumber},#{orderBonded.ordercode},
+			#{orderBonded.pc},#{orderBonded.ispost},#{orderBonded.isCustoms},#{orderBonded.auditstatus},
+			#{orderBonded.userId},#{orderBonded.sendWarehouse},#{orderBonded.merchantNum},now(),#{orderBonded.mark}
+		)
+  		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete td,ts from t_order_bonded as td LEFT OUTER JOIN t_order_bonded_sku as ts on td.txLogisticID =ts.txLogisticID 
+		where td.id in 
+		<foreach item="ids" collection="array" open="(" separator="," close=")">  
+        	#{ids}  
+        </foreach>
+	</delete>
+	
+	
+	<update id="updateAuditstatus" parameterType="OrderBonded">
+		update t_order_bonded set auditstatus = #{auditstatus} ,kucstate = #{kucstate},preEntryNumber=#{preEntryNumber},returnInfo = #{returnInfo},merchantNum = #{merchantNum}   where id = #{id}
+	</update>
+	
+	<update id="updateAuditstatus2" parameterType="OrderBonded">
+		update t_order_bonded set auditstatus = #{auditstatus},returncode = ${returncode},returnInfo = #{returnInfo} where id = #{id} and auditstatus not in ('9')
+	</update>
+	<update id="updateAuditstatus3" parameterType="OrderBonded">
+		update t_order_bonded set  invtNo = #{invtNo}, auditstatus = #{auditstatus},returncode = ${returncode},returnInfo = #{returnInfo} where preEntryNumber = #{preEntryNumber} and auditstatus not in ('9')
+	</update>
+	
+	<update id="updateIsPushToWms" parameterType="java.lang.String">
+		update t_order_bonded set isPushToWms = 1 , auditstatus = 9 where id in 
+		<foreach item="idArr" collection="array" open="(" separator="," close=")">  
+        	#{idArr}  
+        </foreach>
+	</update>
+	
+	<update id="updateAuditstatusByTxLogisticID" parameterType="OrderBonded">
+		update t_order_bonded set auditstatus = #{auditstatus} where txLogisticID = #{txLogisticID}
+	</update>
+	
+	<update id="updateExpressParam" parameterType="OrderBonded">
+		update t_order_bonded set mailNo = #{mailNo}, markDestination = #{markDestination}, 
+		billProvideSiteName = #{billProvideSiteName}, billProvideSiteCode = #{billProvideSiteCode}, 
+		auditstatus = #{auditstatus} 
+		where id = #{id} 
+	</update>
+	
+	<update id="updateIsPushDd" parameterType="OrderBonded">
+		update t_order_bonded set isPushDd = #{isPushDd} where id = #{id}
+	</update>
+	
+	<update id="updateIsPushQd" parameterType="OrderBonded">
+		update t_order_bonded set isPushQd = #{isPushQd} where id = #{id}
+	</update>
+	
+	<update id="updateIspost" parameterType="OrderBonded">
+		update t_order_bonded set ispost = #{ispost} where id = #{id}
+	</update>
+	
+	<update id="updateIspostForYF" parameterType="OrderBonded">
+		update t_order_bonded set ispost = #{ispost}, payNumber = #{payNumber} where id = #{id}
+	</update>
+			
+	<update id="updateIsCustoms" parameterType="OrderBonded">
+		update t_order_bonded set isCustoms = #{isCustoms} where id = #{id}
+	</update>
+	
+	<update id="updateIsCustomsByTxLogisticID" parameterType="OrderBonded">
+		update t_order_bonded set isCustoms = #{isCustoms} where txLogisticID = #{txLogisticID}
+	</update>
+	
+	<update id="updateCountAndWeight" parameterType="OrderBonded">
+		update t_order_bonded set itemCount = #{itemCount}, itemWeight = #{itemWeight}, worth = #{worth} where id = #{id}
+	</update>
+	
+	<update id="payNumber" parameterType="OrderBonded">
+		update t_order_bonded set 
+		payNumber = #{payNumber}, 
+		buyerName = #{buyerName}, 
+		buyerIdNumber = #{buyerIdNumber}, 
+		receiveManPhone = #{receiveManPhone} 
+		where txLogisticID = #{txLogisticID} 
+	</update>
+	
+	<select id="findTxLogisticID" resultMap="OrderBondedResultMap"  >
+		<![CDATA[select * from t_order_bonded where payNumber is null or payNumber = ""]]>
+	</select>
+	
+	<select id="hyjStatus" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		select txLogisticID,mailNo,merchantNum,auditstatus,status_hc from t_order_bonded where merchantNum = #{merchantNum} and status_hc is null
+	</select>
+	
+	<update id="updateStatus" parameterType="OrderBonded">
+		UPDATE t_order_bonded set  status_hc = 1 where merchantNum = #{merchantNum} and auditstatus = 9 and status_hc is null
+	</update>
+	<select id="findaddress" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		select number,name,shortName from t_dict_area where  LENGTH(number)=6 
+	</select>
+	<update id="updaddress" parameterType="OrderBonded">
+		update t_order_bonded set receiveProvince=#{receiveProvince},receiveCity=#{receiveCity},receiveCounty=#{receiveCounty} where id=#{id}
+	</update>
+	<select id="findCs" resultMap="OrderBondedResultMap"  parameterType="OrderBonded">
+		select itemName,itemWeight,itemCount,worth,txLogisticID  from t_order_bonded where id = #{idd}
+	</select>
+	<update id="upm" parameterType="OrderBonded">
+		UPDATE t_order_bonded set  itemWeight=#{itemWeight},itemCount=#{itemCount},worth=#{worth}  where id=#{id}
+	</update>
+	<select id="findTxId" resultMap="OrderBondedResultMap"  parameterType="OrderBonded">
+		select txLogisticID  from t_order_bonded where id = #{idd}
+	</select>
+	<delete id="deletetx" parameterType="String">
+		delete from t_order_bonded  where id = #{id}
+	</delete>
+	<update id="editodIdN" parameterType="OrderBonded">
+			update  t_order_bonded set buyerIdNumber=#{buyerIdNumber}, buyerName=#{buyerName},receiveMan=#{receiveMan} where id=#{id}
+	</update>
+	<update id="updateInvtno" parameterType="OrderBonded">
+		update t_order_bonded set valueAddedTax = #{valueAddedTax},consumptionTax = #{consumptionTax} where txLogisticID = #{txLogisticID} 
+	</update>
+	<select id="findOneById" parameterType="int" resultType="OrderBonded">
+		select * from t_order_bonded where id= #{id}
+	</select>
+	
+	<select id="countByCollect" parameterType="Collect" resultType="int">
+		select count(1) from t_order_bonded where merchantNum=#{sj2} and createTime between #{kssj} and #{jssj}
+	</select>
+	
+	<select id="findAllByCollect" parameterType="Collect" resultMap="OrderBondedResultMap">
+		select * from t_order_bonded where merchantNum=#{sj2} and createTime between #{kssj} and #{jssj}
+	</select>
+		
+	<select id="findOneByBeSF" parameterType="BeSF" resultType="OrderBonded">
+		select * from t_order_bonded where merchantNum=#{sjbm} and createTime = #{bscjsj}
+	</select>
+	
+	<!-- 修改全部内容 -->
+	<update id="editMatter" parameterType="OrderBonded">
+		update t_order_bonded set
+		receiveProvince = #{receiveProvince},
+		receiveCity = #{receiveCity},
+		receiveCounty = #{receiveCounty},
+		receiveMan = #{receiveMan},
+		receiveManPhone = #{receiveManPhone},
+		receiveManAddress = #{receiveManAddress},
+		itemName = #{itemName},
+		itemCount = #{itemCount},
+		itemWeight = #{itemWeight},
+		feeAmount = #{feeAmount},
+		insureAmount = #{insureAmount},
+		mailNo = #{mailNo},
+		buyerName = #{buyerName},
+		buyerIdNumber = #{buyerIdNumber},
+		payNumber = #{payNumber},
+		carrier = #{carrier},
+		sendWarehouse = #{sendWarehouse},
+		merchantNum = #{merchantNum},
+		pc = #{pc}
+		where txLogisticID = #{txLogisticID}
+	</update>
+	
+	<update id="updateDSHKMailNo" parameterType="OrderBonded">
+		update t_order_bonded set mailNo = #{mailNo} ,auditstatus =${auditstatus} where id = ${id}
+	</update>
+	
+	<select id="checkMailNo" resultType="int" >
+		select count(id) from t_order_bonded where mailNo is not null and id in
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			${id}
+		</foreach>
+	</select>
+	
+	<!--  11111111111111111111  -->
+	<select id="findBystate" parameterType="OrderBonded" resultType="OrderBonded">
+		select * from t_order_bonded where 	auditstatus = #{auditstatus}
+		and merchantNum = #{merchantNum}
+		
+		<if test="auditstatus == 9 ">
+			and kucstate = #{kucstate}
+		</if>
+		<if test="auditstatus == 2 and isPushQd == 0">
+			and ispost = #{ispost}
+		</if>
+		<if test="auditstatus == 0">
+			and	isPushToWms =#{isPushToWms}
+		</if>
+		<if test="auditstatus == 2 and ispost == 1">
+			and	isPushQd = #{isPushQd}
+		</if>
+	</select>
+	
+	<update id="updateIsPushToWmsByTx" parameterType="java.lang.String">
+		update t_order_bonded set isPushToWms = 1 where txLogisticID = #{idArr}  
+       
+	</update>
+
+	<select id="findByIdArr" resultMap="OrderBondedResultMap" parameterType="String">
+		select * from t_order_bonded 
+		where id in 
+		<foreach collection="array" item="idArr" open="(" separator="," close=")">
+			#{idArr}
+		</foreach>
+	</select>
+	
+	<update id="updateByBfb"  parameterType="OrderBonded">
+		update t_order_bonded set payNumber = ${payNumber} where id=${id}
+	</update>
+	
+	<update id="updateAuditstatus0" >
+		update t_order_bonded set auditStatus = 0 ,ispushqd=0 where id in
+		<foreach collection="array" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</update>
+	
+	<update id="updateCarrier" parameterType="OrderBonded">
+		update t_order_bonded set carrier = #{carrier} where id = ${id}
+	</update>
+	
+	<update id="transferExcep" parameterType="int">
+		update t_order_bonded set auditstatus = 7 where id = ${value}
+	</update>
+		
+	<select id="findException" resultType="int">
+		select count(id) from t_order_bonded where auditstatus = 7
+	</select>	
+	
+	<select id="findByIds" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		select * from t_order_bonded 
+		where id in 
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</select>
+	
+	<select id="exportBondedByIds" resultType="com.what21.model.OrderBondedForExport" parameterType="string" >
+            SELECT *,ts.itemCount itemCount2,ts.itemName itemName2,ts.itemWeight itemWeight2 FROM  t_order_bonded t  INNER JOIN t_order_bonded_sku ts ON t.txLogisticID =ts.txLogisticID 
+            where t.id in (${value})
+    </select>
+    
+    <select id="pushBfb" resultType="com.what21.model.BfbModel"  parameterType="string">
+    	select t.buyerName as payerName,
+    		   t.buyerIdNumber as payerNumber,
+    		   t.txLogisticID as subOrderNo,
+    		   t.worth as subRmbPayAmount,
+    		   t.worth  as payGoodsAmt,
+    		   t.tj_sj  as payTaxAmt,
+    		   t.feeAmount  as payFreightAmt,
+    		   c.companyCode as platSupplierNo,
+    		   c.companyName as platSupplierName
+ 			from t_order_bonded t LEFT JOIN companyforzy c 
+  				on
+    				t.merchantNum = c.companybm
+						where t.id = ${value};
+    </select>
+    
+    
+    <update id="payNumber2" parameterType="OrderBonded">
+		update t_order_bonded set 
+		payNumber = #{payNumber}
+		where txLogisticID = #{txLogisticID} 
+	</update>
+	
+	<select id="checkIdCard" resultType="IdCard" parameterType="OrderBonded">
+		select * from t_idCard where userName = #{buyerName} and userId = #{buyerIdNumber}
+	</select>
+	
+	<insert id="insertIdCard" parameterType="IdCard">
+		insert into t_idCard (id,userName,userId,verification,dateTime) values (#{id},#{userName},#{userId},#{verification},#{dateTime})
+	</insert>
+	
+	<update id="updateIDCARDverification">
+		update t_idCard set verification=#{verification} where userName = #{userName} and userId = #{userId}
+	</update>
+	
+	<select id="findInfo" parameterType="String" resultType="com.what21.model.OrderBonded">
+		select * from  t_order_bonded where txLogisticID = #{txLogisticID}
+	</select>
+	<select id="findInfoCount" parameterType="String" resultType="int">
+		select 
+			count(*)
+ 		from 
+			t_order_bonded as tb LEFT JOIN t_order_bonded_sku as tbs
+		on 
+			tb.txLogisticID = tbs.txLogisticID
+		where
+			tb.txLogisticID = #{txLogisticID}
+	</select>
+	
+	<select id="getMapTxLogisticID" resultType="com.what21.model.OrderBonded">
+	select txLogisticID from t_order_bonded
+	</select>
+	
+	<insert id="insertBatch" parameterType="com.what21.model.OrderBonded">
+ 	INSERT INTO t_order_bonded (receiveMan,receiveManPhone,receiveManAddress,
+	receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+	itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+	worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+	payCompany,payNumber,ordercode,pc,isPushToWms,ispost,isCustoms,auditstatus,userId,
+	sendWarehouse,merchantNum,createTime,vipts, isPushDd,
+	isPushQd, tj_sj,
+	status_hc, customsTax, valueAddedTax,
+	consumptionTax, invtNo,
+	returncode, returnInfo, kucstate,
+	mark, disbursed)
+	VALUES
+	<foreach collection="list" item="orderBonded" separator=",">
+  		(
+  		    #{orderBonded.receiveMan},#{orderBonded.receiveManPhone},#{orderBonded.receiveManAddress},
+			#{orderBonded.receiveProvince},#{orderBonded.receiveCity},#{orderBonded.receiveCounty},
+			#{orderBonded.txLogisticID},#{orderBonded.itemName},#{orderBonded.itemWeight},
+			#{orderBonded.itemCount},#{orderBonded.carrier},#{orderBonded.mailNo},
+			#{orderBonded.markDestination},#{orderBonded.billProvideSiteName},#{orderBonded.billProvideSiteCode},
+			#{orderBonded.worth},#{orderBonded.preEntryNumber},#{orderBonded.tradeCountry},
+			#{orderBonded.buyerIdNumber},#{orderBonded.buyerName},#{orderBonded.feeAmount},
+			#{orderBonded.insureAmount},#{orderBonded.payCompany},#{orderBonded.payNumber},#{orderBonded.ordercode},
+			#{orderBonded.pc},#{orderBonded.isPushToWms},#{orderBonded.ispost},#{orderBonded.isCustoms},#{orderBonded.auditstatus},
+			#{orderBonded.userId},#{orderBonded.sendWarehouse},#{orderBonded.merchantNum},now(),#{orderBonded.vipts},
+			#{orderBonded.isPushDd},#{orderBonded.isPushQd},#{orderBonded.tjSj},#{orderBonded.statushc},#{orderBonded.customsTax},
+			#{orderBonded.valueAddedTax},#{orderBonded.consumptionTax},#{orderBonded.invtNo},#{orderBonded.returncode},
+			#{orderBonded.returnInfo},
+			#{orderBonded.kucstate},
+			#{orderBonded.mark},
+			#{orderBonded.disbursed}
+		)
+  	</foreach>
+	</insert>
+	<insert id="insertBatchSku" parameterType="com.what21.model.OrderBondedSku">
+	INSERT INTO t_order_bonded_sku 
+	(txLogisticID, itemsku, itemName, itemWeight, itemCount, unitPrice, allPrice, hz, internalNumber, s_sj, pc)
+	 VALUES 
+	 <foreach collection="list" item="orderBondedSku" separator=",">
+	 (#{orderBondedSku.txLogisticID}, #{orderBondedSku.itemsku},#{orderBondedSku.itemName}, #{orderBondedSku.itemWeight}, 
+	 #{orderBondedSku.itemCount},#{orderBondedSku.unitPrice}, #{orderBondedSku.allPrice},
+	  #{orderBondedSku.hz}, #{orderBondedSku.internalNumber},
+	  #{orderBondedSku.sSj}, #{orderBondedSku.pc})
+	 </foreach>
+	</insert>
+	
+	<select id="exportOrderBonded" parameterType="com.what21.model.OrderBondedForExport" resultType="com.what21.model.OrderBondedForExport">
+		select tob.*,tobs.*,tobs.itemCount itemCount2,tobs.itemName itemName2 from t_order_bonded tob 
+		LEFT JOIN t_order_bonded_sku tobs on  
+		tob.txLogisticID = tobs.txLogisticID 
+		where  1=1
+		<if test = 'merchantNum != null'>
+			and tob.merchantNum = #{merchantNum}
+		</if>
+		<if test = 'startTime != null'>
+			and tob.createTime &gt;= #{startTime}
+		</if>
+		<if test = 'endTime != null'>
+			and tob.createTime &lt;= #{endTime}
+		</if>
+		<if test = "queryName != null and queryValue != null and queryName!='' and queryValue!=''">
+			and tob.${queryName} like '%${queryValue}%'
+		</if>
+		<if test="ids != null  and ids!='' ">
+			and tob.id in (${ids})
+		</if>
+		<if test="auditstatus == 7">
+			and tob.auditstatus=7
+		</if>
+		<if test="auditstatus == 8">
+			and tob.auditstatus=8
+		</if>
+		<if test="auditstatus == 9">
+			and tob.auditstatus=9
+		</if>
+		<if test="auditstatus != 8 and auditstatus != 9 and auditstatus != 7">
+			and tob.auditstatus !=9  and tob.auditstatus !=8 and tob.auditstatus != 7
+		</if>
+	</select>
+	
+	<update id="backOrder" parameterType="com.what21.model.OrderBondedForExport">
+		update t_order_bonded set auditstatus = 2 where id in (${ids})
+	</update>
+	
+	<select id="findbygjz" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		SELECT * from t_order_bonded where txLogisticID = #{poNo} 
+	</select>
+	
+		<select id="upgjz" resultMap="OrderBondedResultMap" parameterType="java.util.Map">
+			update t_order_bonded set invtNo = '${invtNo}' where id in ('${ids}')
+
+	</select>
+	
+	<select id="findbyA" resultMap="OrderBondedResultMap" parameterType="OrderBonded">
+		SELECT * from t_order_bonded where ${A} 
+	</select>
+	
+		<update id="updateAtoB" parameterType="java.lang.String">
+		update t_order_bonded set  ${A}  where ${B}
+	</update>
+	
+	<delete id="deletefottxLogisticID" parameterType="String">
+		DELETE FROM t_order_bonded WHERE txLogisticID = #{txLogisticID}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

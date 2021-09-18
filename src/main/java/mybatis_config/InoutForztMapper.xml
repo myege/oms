@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.InoutForztDao">
+	<resultMap type="WmsInoutForzt" id="InoutForztResultMap">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="manualId" property="manualid" jdbcType="VARCHAR" />
+    <result column="sourceNo" property="sourceno" jdbcType="VARCHAR" />
+    <result column="A1" property="a1" jdbcType="INTEGER" />
+    <result column="A2" property="a2" jdbcType="INTEGER" />
+    <result column="A3" property="a3" jdbcType="INTEGER" />
+    <result column="A4" property="a4" jdbcType="INTEGER" />
+    <result column="A5" property="a5" jdbcType="INTEGER" />
+    <result column="A6" property="a6" jdbcType="INTEGER" />
+    <result column="A7" property="a7" jdbcType="INTEGER" />
+    <result column="B" property="b" jdbcType="INTEGER" />
+    <result column="C" property="c" jdbcType="INTEGER" />
+    <result column="C2" property="c2" jdbcType="INTEGER" />
+    <result column="D" property="d" jdbcType="INTEGER" />
+    <result column="E" property="e" jdbcType="INTEGER" />
+    <result column="F1" property="f1" jdbcType="INTEGER" />
+    <result column="F2" property="f2" jdbcType="INTEGER" />
+    <result column="F3" property="f3" jdbcType="INTEGER" />
+    <result column="F4" property="f4" jdbcType="INTEGER" />
+    <result column="F5" property="f5" jdbcType="INTEGER" />
+    <result column="F6" property="f6" jdbcType="INTEGER" />
+    <result column="F7" property="f7" jdbcType="INTEGER" />
+    <result column="F8" property="f8" jdbcType="INTEGER" />
+    <result column="G" property="g" jdbcType="INTEGER" />
+    <result column="H" property="h" jdbcType="INTEGER" />
+    <result column="I" property="i" jdbcType="INTEGER" />
+    <result column="J" property="j" jdbcType="INTEGER" />
+    <result column="K" property="k" jdbcType="INTEGER" />
+    <result column="L" property="l" jdbcType="INTEGER" />
+    <result column="creattime" property="creattime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="whereinout">
+  <if test="wmsInoutForzt!=null">
+			<where>
+				<if test="wmsInoutForzt.manualid!=null">
+					and manualid like '%${wmsInoutForzt.manualid}%'
+				</if>
+				<if test="wmsInoutForzt.sourceno!=null">
+					and sourceno like '%${wmsInoutForzt.sourceno}%'
+				</if>
+				</where>
+				</if>
+  </sql>
+	<select id="findAll" resultMap="InoutForztResultMap"  parameterType="java.util.Map">
+		select * from wms_inout_forzt 
+		<include refid="whereinout"></include>
+		order by  manualId, sourceNo asc LIMIT #{startPage},#{endPage} 
+		
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_inout_forzt
+		<include refid="whereinout"></include>
+		<!-- <where>
+			1=1
+			<if test="type == 1">
+				and manualid like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and sourceno like '%${paramValue}%'
+			</if>
+		</where> -->
+	</select>
+
+	<select id="selectByMan" resultType="com.what21.model.InoutQueryVo" parameterType="String">
+	  select * from (select manualid,sourceno,sum(inoutamount) as num,inoutflag from wms_inout group by manualid,sourceno,inoutflag) a where manualid=#{0} and sourceno=#{1} 
+	</select>
+	
+	<select id="findByMan" resultType="WmsInoutForzt" parameterType="String">
+	  select * from wms_inout_forzt where manualid=#{0} and sourceno=#{1} 
+	</select> 
+	
+   <select id="findSku" resultType="com.what21.model.Inout">
+    select * from wms_inout where manualid=#{manualid} and sourceno=#{sourceno} LIMIT #{startPage},#{endPage} 
+   </select>
+   
+	<select id="selectBySou" resultType="com.what21.model.Inout" parameterType="String">
+	  select * from wms_inout where manualid=#{0} and sourceno=#{1} 
+	</select>
+	
+	<select id="countByMs" resultType="java.lang.Integer" >
+	select count(1) from wms_inout where manualid=#{0} and sourceno=#{1} 
+	</select>
+	
+	<select id="findByIds" resultType="com.what21.model.Inout" >
+	select * from wms_inout where id in (${value})
+	</select>
+	
+	<select id="findSkuByMs" resultType="com.what21.model.Inout" >
+	select * from wms_inout where manualid=#{0} and sourceno=#{1} 
+	</select>
+	
+	<select id="findByIdsu" resultType="WmsInoutForzt" >
+	select * from wms_inout_forzt where id=#{0}
+	</select>
+	
+	<insert id="insert" parameterType="WmsInoutForzt">
+	 insert into wms_inout_forzt (
+     manualid,
+      sourceno,
+      a1,
+      a2,
+      a3,
+      a4,
+      a5,
+      a6,
+      a7,
+      b,
+      c,
+      c2,
+      d,
+      e,
+      f1,
+      f2,
+      f3,
+      f4,
+      f5,
+      f6,
+      f7,
+      f8,
+      g,
+      h,
+      i,
+      j,
+      k,
+      l,
+     creattime,
+     endtime) values(
+     #{manualid}, 
+      #{sourceno},
+      #{a1},
+      #{a2},
+      #{a3},
+      #{a4},
+      #{a5},
+      #{a6},
+      #{a7},
+      #{b},
+      #{c},
+      #{c2},
+      #{d},
+      #{e},
+      #{f1},
+      #{f2},
+      #{f3},
+      #{f4},
+      #{f5},
+      #{f6},
+      #{f7},
+      #{f8},
+      #{g},
+      #{h},
+      #{i},
+      #{j},
+      #{k},
+      #{l},
+     #{creattime},
+     #{endtime}
+     )
+	</insert>
+	
+	<update id="updateAll">
+	 update wms_inout set flag_zc=1 where flag_zc=0
+	</update>
+	
+	<update id="updatezc">
+	  update wms_inout set flag_zc=2 where flag_zc=1
+	</update>
+	
+	<update id="updateforzt" parameterType="WmsInoutForzt">
+	 update wms_inout_forzt set a1=#{a1},
+      a2=#{a2},
+      a3=#{a3},
+      a4=#{a4},
+      a5=#{a5},
+      a6=#{a6},
+      a7=#{a7},
+      b=#{b},
+      c=#{c},
+      c2=#{c2},
+      d=#{d},
+      e=#{e},
+      f1=#{f1},
+      f2=#{f2},
+      f3=#{f3},
+      f4=#{f4},
+      f5=#{f5},
+      f6=#{f6},
+      f7=#{f7},
+      f8=#{f8},
+      g=#{g},
+      h=#{h},
+      i=#{i},
+      j=#{j},
+      k=#{k},
+      l=#{l},
+      endtime=#{endtime} where manualid=#{manualid} and sourceno=#{sourceno}
+	</update>
+<!-- 拉取全部 -->
+	<select id="pullAll" resultType="com.what21.model.InoutQueryVo">
+	select manualid,sourceno,sum(inoutamount) as num,inoutflag from wms_inout where flag_zc=1 group by manualid,sourceno,inoutflag
+	</select>
+	
+	<select id="selectByManSou" resultType="com.what21.model.Inout">
+	select manualid,sourceno from wms_inout group by manualid,sourceno
+	</select>
+	
+</mapper>

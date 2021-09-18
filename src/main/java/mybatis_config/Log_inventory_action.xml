@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.Log_inventory_actionDao">
+	
+	<resultMap type="Log_inventory_action" id="Log_inventory_actionResultMap">
+		<id property="id" column="id"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="action" column="action"/>
+		<result property="number" column="number"/>
+		<result property="createTime" column="createTime"/>
+		<result property="reason" column="reason"/>
+		
+	</resultMap>
+	
+	<insert id="insert" parameterType="Log_inventory_action">
+		INSERT INTO  log_inventory_action (itemsku,action,reason,number,createTime,userId) 
+		VALUES (#{itemsku}, #{action}, #{reason},#{number},#{createTime},#{userId}) 
+	</insert>
+	
+	</mapper>

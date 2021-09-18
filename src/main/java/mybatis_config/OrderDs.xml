@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.OrderDs">
+	<resultMap type="orderDs" id="orderDsMap">
+		<id property="id" column="id"/>
+		<result property="txlogisticid" column="txlogisticid"/>
+		<result property="mailno" column="mailno"/>
+		<result property="lx" column="lx"/>
+		<result property="payinfo" column="payinfo"/>
+		<result property="payback" column="payback"/>
+		<result property="createtime" column="createtime"/>
+	</resultMap>
+	
+	
+	<select id="findByOrder" resultType="com.what21.model.OrderDs" parameterType="string">
+	select * from t_order_ds where txlogisticid = #{0}
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.OrderDs">
+		insert into t_order_ds (txlogisticid,mailno,lx,payinfo,payback,createtime,vid)
+		values
+		(#{txlogisticid},#{mailno},#{lx},#{payinfo},
+		#{payback},#{createtime},#{vid}
+		)
+		
+	</insert>
+	
+<!-- 	<select id="findgjz"  resultType="com.what21.model.OrderDs" parameterType="java.util.Map">
+			SELECT * from t_order_ds where ${gjz} 
+
+	</select> -->
+	
+</mapper>

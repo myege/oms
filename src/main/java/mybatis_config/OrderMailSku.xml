@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderMailSkuDao">
+	<resultMap type="OrderMailSku" id="OrderMailSkuResultMap">
+			<id property="id" column="id" />
+		<result property="txLogisticID" column="txLogisticID" />
+		<result property="itemsku" column="itemsku" />
+		<result property="itemName" column="itemName" />
+		<result property="itemWeight" column="itemWeight" />
+		<result property="itemCount" column="itemCount" />
+		<result property="unitPrice" column="unitPrice" />
+		<result property="allPrice" column="allPrice" />
+		<result property="hz" column="hz" />
+		<result property="excise" column="excise" />
+		<result property="vat" column="vat" />
+		<result property="consolidatedTax" column="consolidatedTax" />
+		<result property="batchNumber" column="batchNumber" />
+		<result property="ae" column="ae" />
+		<result property="imt" column="imt" />
+		<result property="standard" column="standard" />
+		<result property="unitname" column="unitname" />
+		<result property="url" column="url" />
+	</resultMap>
+	<resultMap type="OrderMailPushSku" id="OrderMailPushSkuResultMap">
+		<result property="goodsNumber" column="itemCount" />
+		<result property="goodsPrice" column="unitPrice" />
+		<result property="goodsSn" column="itemsku" />
+		<result property="goodsName" column="itemName" />
+	</resultMap>
+	<resultMap type="ItemForZy" id="ItemForZyResultMap">
+		<id property="id" column="id" />
+		<result property="itemSKU" column="itemSKU" />
+		<result property="itemName" column="itemName" />
+		<result property="itemSpec" column="itemSpec" />
+		<result property="unitWeight" column="unitWeight" />
+		<result property="unitDesc" column="unitDesc" />
+		<result property="companyCode" column="companyCode" />
+		<result property="hscode" column="hscode" />
+		<result property="oneUnitDesc" column="oneUnitDesc" />
+		<result property="twoUnitDesc" column="twoUnitDesc" />
+		<result property="country" column="country" />
+		<result property="countryOfOrigin" column="countryOfOrigin" />
+		<result property="listPrice" column="listPrice" />
+		<result property="costPrice" column="costPrice" />
+		<result property="createDateTime" column="createDateTime" />
+		<result property="vendorItemCode" column="vendorItemCode" />
+		<result property="remark" column="remark" />
+		<result property="xz" column="xz" />
+		<result property="xh" column="xh" />
+		<result property="userId" column="userId" />
+		<result property="internalNumber" column="internalNumber" />
+		<result property="taxRate" column="taxRate" />
+		<result property="firstCount" column="firstCount" />
+		<result property="secondCount" column="secondCount" />
+		<result property="productRecordNo" column="productRecordNo" />
+	</resultMap>
+	<insert id="insert" parameterType="OrderMailSku">
+	INSERT INTO t_order_Mail_sku
+		(txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz,url,itemClass,unitname,batchNumber)
+		VALUES(#{txLogisticID},#{itemsku},#{itemName},#{itemWeight},#{itemCount},#{unitPrice},#{allPrice},#{hz},#{url},#{standard},#{unitname},#{batchNumber});
+	</insert>
+
+	<insert id="batchInsert" parameterType="OrderMailSku">
+		INSERT INTO t_order_Mail_sku
+		(txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz,batchNumber,itemClass,standard,unitname)
+		VALUES
+		<foreach collection="list" item="orderMailSku" separator=",">
+			(
+			#{orderMailSku.txLogisticID},#{orderMailSku.itemsku},#{orderMailSku.itemName},#{orderMailSku.itemWeight},
+			#{orderMailSku.itemCount},#{orderMailSku.unitPrice},#{orderMailSku.allPrice},#{orderMailSku.hz},#{orderMailSku.batchNumber},#{orderMailSku.itemClass},
+			#{orderMailSku.standard},#{orderMailSku.unitname}
+			)
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_Mail_sku
+		WHERE txLogisticID = #{txLogisticID}
+	</delete>
+
+	<select id="findByTxLogisticID" resultMap="OrderMailPushSkuResultMap"
+		parameterType="String">
+		select * from t_order_Mail_sku where txLogisticID =
+		#{txLogisticID}
+	</select>
+
+	<select id="findById" resultMap="OrderMailSkuResultMap"
+		parameterType="String">
+		select * from t_order_Mail_sku where txLogisticID =
+		#{txLogisticID}
+	</select>
+
+	<select id="detailedMailSku" resultMap="OrderMailSkuResultMap"
+		parameterType="java.util.Map">
+		select * FROM t_order_Mail_sku WHERE txLogisticID =
+		#{txLogisticID} LIMIT
+		#{startPage},#{endPage}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from
+		t_order_Mail_sku where txLogisticID = #{txLogisticID}
+	</select>
+
+	<select id="findItemForZy" resultMap="ItemForZyResultMap"
+		parameterType="String">
+		select * from item_forzy where itemSKU=#{itemSku}
+	</select>
+
+	<update id="updateData" parameterType="OrderMailSku">
+		update t_order_Mail_sku
+		set
+		excise=#{excise},vat=#{vat},consolidatedTax=#{consolidatedTax}
+		where id=#{id}
+	</update>
+
+	<select id="findAllPrice" resultType="OrderMail">
+		select txLogisticID from
+		t_order_mail where totalMailNo = #{totalMailNo}
+	</select>
+
+	<select id="findAllPriceByTxLogisticID" resultMap="OrderMailSkuResultMap">
+		select itemCount as imt, allPrice from t_order_mail_sku
+		where
+		txLogisticID in
+		<foreach collection="list" item="changeOdd" open="("
+			separator="," close=")">
+			#{changeOdd.txLogisticID}
+		</foreach>
+	</select>
+
+	<update id="upodm" parameterType="OrderMailSku">
+		update t_order_Mail_sku set
+		itemsku=#{itemsku} where id=#{id}
+	</update>
+
+	<select id="odmTax" resultType="java.lang.String">
+		select itemsku from
+		t_order_Mail_sku where id = #{id}
+	</select>
+
+	<select id="findByIdArrToCz" resultMap="OrderMailSkuResultMap"
+		parameterType="String">
+		select * from t_order_Mail_sku
+		where txLogisticID in
+		<foreach collection="array" item="idArr" open="(" separator=","
+			close=")">
+			#{idArr}
+		</foreach>
+	</select>
+
+	<select id="findByTidList" resultMap="OrderMailSkuResultMap"
+		parameterType="OrderMailSku">
+		select * from t_order_Mail_sku
+		where txLogisticID in
+		<foreach collection="list" item="om" open="(" separator=","
+			close=")">
+			#{om.txLogisticID}
+		</foreach>
+	</select>
+
+
+	<select id="findALLaboutSku" resultType="OrderMailSkuAllHZ">
+		select
+		unitName,sum(allPrice) allPrice,sum(itemWeight)
+		allWeight,itemClass,sum(itemCount) allNum,itemsku  from t_order_mail_sku
+		GROUP BY itemClass,totalWayBill
+	</select>
+
+	<select id="findALLaboutSku_byIDS" resultType="OrderMailSkuAllHZ" parameterType="String">
+		select
+		t_order_mail_sku.unitName,t_order_mail_sku.itemName,sum(t_order_mail_sku.allPrice) allPrice,sum(t_order_mail_sku.itemWeight)
+		allWeight,t_order_mail_sku.itemClass,sum(t_order_mail_sku.itemCount) allNum,t_order_mail_sku.itemsku  from t_order_mail_sku
+		LEFT JOIN
+		t_order_mail
+		ON
+		t_order_mail_sku.txLogisticID=t_order_mail.txLogisticID
+		where t_order_mail.totalMailNo=#{value}
+		GROUP BY t_order_mail_sku.itemName
+	</select>
+
+	<select id="findTxloginst" resultType="com.what21.model.OrderMail" parameterType="String">
+		select * from t_order_mail where totalMailNo  = #{value}
+	</select>
+
+	<select id="findByTxLogisticID2" resultType="com.what21.model.OrderMailAndChangeOdd">
+		select t_order_Mail_sku.txLogisticID
+		,t_order_Mail_sku.itemCount
+		,t_order_Mail_sku.itemWeight
+		,t_order_Mail_sku.itemName
+		,changeodd.id
+		from t_order_mail_sku
+		left join
+		changeodd
+		on
+		t_order_mail_sku.txLogisticID=changeodd.orderNumber
+		where
+		t_order_mail_sku.txLogisticID in
+		(
+		<foreach collection="list" item="orderMail" separator=",">
+			#{orderMail.txLogisticID}
+		</foreach>
+		)
+	</select>
+</mapper> 

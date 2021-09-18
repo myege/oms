@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ReceiveHghzDataDao">
+	<resultMap type="ReceiveHghzData" id="ReceiveHghzDataResultMap">
+		<id property="id" column="id"/>
+		<result property="contentData" column="contentData"/>
+		<result property="isHandle" column="isHandle"/>
+		<result property="createTime" column="createTime"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="ReceiveHghzData">
+		INSERT INTO t_receive_hghz_data (contentData,createTime,isHandle)
+		VALUES(#{contentData},now(),#{isHandle});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="ReceiveHghzData">
+		INSERT INTO t_receive_hghz_data (contentData,createTime)
+		VALUES
+		<foreach collection="array" item="receiveHghzData" separator="," >
+  		(
+			#{receiveHghzData.contentData},now()
+		)
+  		</foreach>
+	</insert>
+	
+	<select id="findAll" resultMap="ReceiveHghzDataResultMap" parameterType="java.util.Map">
+		select * from t_receive_hghz_data where 1=1 
+		and isHandle = ${isHandle} 
+		<if test=" startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test=" endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+		order by createTime desc 
+		LIMIT ${startPage},${endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_receive_hghz_data where 1=1 
+		and isHandle = ${isHandle} 
+		<if test=" startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test=" endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+	</select>
+	
+	<update id="update" parameterType="java.lang.String">
+		update t_receive_hghz_data set isHandle = 1 where id in 
+		<foreach item="idArr" collection="array" open="(" separator="," close=")">  
+        	#{idArr}  
+        </foreach>
+	</update>
+	
+	<select id="findByInvtNo" resultMap="ReceiveHghzDataResultMap" parameterType="string">
+		select * from t_receive_hghz_data  where contentData like '%${value}%'
+	</select>
+	
+	<select id="find" resultMap="ReceiveHghzDataResultMap" parameterType="java.util.Map">
+		select * from t_receive_hghz_data LIMIT ${startPage},${endPage}
+	</select>
+</mapper>

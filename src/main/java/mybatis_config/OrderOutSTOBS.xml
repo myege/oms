@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderOutSTOBSDao">
+	<sql id="query_orderOutSTO_where">
+		<if test="orderOutSTOCustom!=null">
+			<where>
+				<if test="orderOutSTOCustom.userid !=null">
+					and userId =${orderOutSTOCustom.userid}
+				</if>
+				<if test="orderOutSTOCustom.tradeno !=null">
+					and tradeNo like '%${orderOutSTOCustom.tradeno}%'
+				</if>
+				<if test="orderOutSTOCustom.waybillno !=null">
+					and waybillNo like '%${orderOutSTOCustom.waybillno}%'
+				</if>
+				<if test="orderOutSTOCustom.status !=null">
+					and status = ${orderOutSTOCustom.status}
+				</if>
+				<if test="orderOutSTOCustom.userid !=null">
+					and userid = ${orderOutSTOCustom.userid}
+				</if>
+				<if test="orderOutSTOCustom.billno !=null">
+					and billNo like '%${orderOutSTOCustom.billno}%'
+				</if>
+				
+
+			</where>
+		</if>
+	</sql>
+	
+	<select id="findAll" resultType="com.what21.model.OrderOutSTOCustom" parameterType="com.what21.model.OrderOutSTOQueryVoBS">
+		select * from t_order_out_sto_bs
+		<include refid="query_orderOutSTO_where"></include>
+		order by status,id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="countAll" resultType="java.lang.Integer" parameterType="com.what21.model.OrderOutSTOQueryVoBS">
+		select count(1) from t_order_out_sto_bs
+		<include refid="query_orderOutSTO_where"></include>
+	</select>
+	
+	<insert id="insertBatch">
+		insert into t_order_out_sto_bs (id, siteCode, siteName, 
+      tradeNo, waybillNo, logisticId, 
+      orderDate, orderSource, volume, 
+      length, height, weight, 
+      width, senderProv, senderProvCode, 
+      senderCity, senderCityCode, senderArea, 
+      senderAreaCode, senderAddress, senderTown, 
+      senderTownCode, senderMobile, senderName, 
+      senderPhone, senderPostcode, receiverProv, 
+      receiverProvCode, receiverCity, receiverCityCode, 
+      receiverArea, receiverAreaCode, receiverTown, 
+      receiverTownCode, receiverAddress, receiverMobile, 
+      receiverName, receiverPhone, receiverPostcode, 
+      billNo, voyageNo, declPort, 
+      grossWeight, netWeight, insureAmount, 
+      feeAmount, recipientCountry, packNo, 
+      goosInfo, packageInfo, currCode, 
+      trafMode, trafName, itemCode, 
+      userId, createTime,status)
+    values 
+    <foreach collection="list" separator="," item="item">
+    (#{item.id,jdbcType=INTEGER}, #{item.sitecode,jdbcType=VARCHAR}, #{item.sitename,jdbcType=VARCHAR}, 
+      #{item.tradeno,jdbcType=VARCHAR}, #{item.waybillno,jdbcType=VARCHAR}, #{item.logisticid,jdbcType=VARCHAR}, 
+      #{item.orderdate,jdbcType=VARCHAR}, #{item.ordersource,jdbcType=VARCHAR}, #{item.volume,jdbcType=VARCHAR}, 
+      #{item.length,jdbcType=VARCHAR}, #{item.height,jdbcType=VARCHAR}, #{item.weight,jdbcType=VARCHAR}, 
+      #{item.width,jdbcType=VARCHAR}, #{item.senderprov,jdbcType=VARCHAR}, #{item.senderprovcode,jdbcType=VARCHAR}, 
+      #{item.sendercity,jdbcType=VARCHAR}, #{item.sendercitycode,jdbcType=VARCHAR}, #{item.senderarea,jdbcType=VARCHAR}, 
+      #{item.senderareacode,jdbcType=VARCHAR}, #{item.senderaddress,jdbcType=VARCHAR}, #{item.sendertown,jdbcType=VARCHAR}, 
+      #{item.sendertowncode,jdbcType=VARCHAR}, #{item.sendermobile,jdbcType=VARCHAR}, #{item.sendername,jdbcType=VARCHAR}, 
+      #{item.senderphone,jdbcType=VARCHAR}, #{item.senderpostcode,jdbcType=VARCHAR}, #{item.receiverprov,jdbcType=VARCHAR}, 
+      #{item.receiverprovcode,jdbcType=VARCHAR}, #{item.receivercity,jdbcType=VARCHAR}, #{item.receivercitycode,jdbcType=VARCHAR}, 
+      #{item.receiverarea,jdbcType=VARCHAR}, #{item.receiverareacode,jdbcType=VARCHAR}, #{item.receivertown,jdbcType=VARCHAR}, 
+      #{item.receivertowncode,jdbcType=VARCHAR}, #{item.receiveraddress,jdbcType=VARCHAR}, #{item.receivermobile,jdbcType=VARCHAR}, 
+      #{item.receivername,jdbcType=VARCHAR}, #{item.receiverphone,jdbcType=VARCHAR}, #{item.receiverpostcode,jdbcType=VARCHAR}, 
+      #{item.billno,jdbcType=VARCHAR}, #{item.voyageno,jdbcType=VARCHAR}, #{item.declport,jdbcType=VARCHAR}, 
+      #{item.grossweight,jdbcType=VARCHAR}, #{item.netweight,jdbcType=VARCHAR}, #{item.insureamount,jdbcType=VARCHAR}, 
+      #{item.feeamount,jdbcType=VARCHAR}, #{item.recipientcountry,jdbcType=VARCHAR}, #{item.packno,jdbcType=INTEGER}, 
+      #{item.goosinfo,jdbcType=VARCHAR}, #{item.packageinfo,jdbcType=VARCHAR}, #{item.currcode,jdbcType=VARCHAR}, 
+      #{item.trafmode,jdbcType=VARCHAR}, #{item.trafname,jdbcType=VARCHAR}, #{item.itemcode,jdbcType=VARCHAR}, 
+      #{item.userid,jdbcType=INTEGER}, #{item.createtime,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER})
+      </foreach>
+	</insert>
+	
+	<select id="findByIds" resultType="com.what21.model.OrderOutSTOCustomBS">
+		select * from t_order_out_sto_bs where id in
+		<foreach collection="array" separator=","  open="(" close=")" item="item">
+			${item}
+		</foreach>
+	</select>
+	
+	
+	<update id="updateStatus" parameterType="int">
+		update t_order_out_sto_bs set status = 1 where id = ${value}
+	</update>
+  	
+  	<delete id="deleteByIds">
+  		delete from t_order_out_sto_bs where id in
+  		<foreach collection="array" open="(" close=")" separator="," item="item">
+  			${item}
+  		</foreach>
+  	</delete>
+  	
+  	
+  	<delete id="deleteByWayBillnos">
+  		delete from t_order_out_sto_bs where waybillNo in
+  		<foreach collection="list" open="(" close=")" separator="," item="item">
+  			#{item}
+  		</foreach>
+  	</delete>
+  	
+  	<delete id="deleteNoNeed">
+  		delete from t_order_out_sto_bs where waybillNo in (select waybillNo from t_order_out where status in (3,4,5,9))
+  	</delete>
+</mapper>

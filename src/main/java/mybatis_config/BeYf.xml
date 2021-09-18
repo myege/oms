@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeYfDao">
+	<sql id="queryBeYfWhere">
+		<where>
+			<if test="pramid!=null and pramid != ''">
+				and pramid = ${pramid}
+			</if>
+	 	</where>
+	</sql>
+	<resultMap id="BeYfResultMap" type="BeYf">
+	    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="xh" property="xh" jdbcType="INTEGER" />
+    <result column="jjkh" property="jjkh" jdbcType="VARCHAR" />
+    <result column="jjrq" property="jjrq" jdbcType="DATE" />
+    <result column="ydbh" property="ydbh" jdbcType="VARCHAR" />
+    <result column="mdd" property="mdd" jdbcType="VARCHAR" />
+    <result column="sjzl" property="sjzl" jdbcType="VARCHAR" />
+    <result column="jfzl" property="jfzl" jdbcType="VARCHAR" />
+    <result column="ysyf" property="ysyf" jdbcType="VARCHAR" />
+    <result column="bz" property="bz" jdbcType="VARCHAR" />
+    <result column="xz" property="xz" jdbcType="VARCHAR" />
+    <result column="drsj" property="drsj" jdbcType="VARCHAR" />
+    <result column="pramid" property="pramid" jdbcType="INTEGER" />
+  	</resultMap>
+
+	
+	<select id="findAll" resultMap="BeYfResultMap" parameterType="java.util.Map">
+		select * from be_yf 
+	   <include refid="queryBeYfWhere"></include>
+	   order by (ysyf+0)
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_yf
+		<include refid="queryBeYfWhere"></include>	
+	</select>
+	
+	<insert id="insert" parameterType="BeYf">
+		  insert into be_yf (id, xh, jjkh, 
+      jjrq, ydbh, mdd, 
+      sjzl, jfzl, ysyf, bz, 
+      xz, drsj, pramid)
+    values (#{id,jdbcType=INTEGER}, #{xh,jdbcType=INTEGER}, #{jjkh,jdbcType=VARCHAR}, 
+      #{jjrq,jdbcType=DATE}, #{ydbh,jdbcType=VARCHAR}, #{mdd,jdbcType=VARCHAR}, 
+      #{sjzl,jdbcType=VARCHAR}, #{jfzl,jdbcType=VARCHAR}, #{ysyf,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, 
+      #{xz,jdbcType=VARCHAR}, #{drsj,jdbcType=VARCHAR}, #{pramid,jdbcType=INTEGER})
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_yf where id = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="BeYf">
+		select * from be_yf where id = ${value}	
+	</select>
+	
+	<select id="findByPramid" parameterType="java.util.Map" resultMap="BeYfResultMap">
+		select * from be_yf 
+		<include refid="queryBeYfWhere"></include>	
+		order by (ysyf+0)
+		<include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="countByPramid" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_yf where pramid = ${pramid}	order by ysyf
+	</select>
+	
+	 <update id="update" parameterType="BeYf" >
+    update be_yf
+    set xh = #{xh,jdbcType=INTEGER},
+      jjkh = #{jjkh,jdbcType=VARCHAR},
+      jjrq = #{jjrq,jdbcType=DATE},
+      ydbh = #{ydbh,jdbcType=VARCHAR},
+      mdd = #{mdd,jdbcType=VARCHAR},
+      sjzl = #{sjzl,jdbcType=VARCHAR},
+      jfzl = #{jfzl,jdbcType=VARCHAR},
+      ysyf = #{ysyf,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      xz = #{xz,jdbcType=VARCHAR},
+      drsj = #{drsj,jdbcType=VARCHAR},
+      pramid = #{pramid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  	<delete id="deleteByPramid" parameterType="java.util.Map">
+		delete from be_yf where pramid = ${pramid}	
+	</delete>
+	
+</mapper>

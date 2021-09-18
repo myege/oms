@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BePttsfDao">
+	<sql id="queryBePttsfWhere">
+		<where>
+			<if test="pramid!=null and pramid != ''">
+				and pramid = ${pramid}
+			</if>
+	 	</where>
+	</sql>
+	<resultMap id="BePttsfResultMap" type="BePttsf">
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="khddh" property="khddh" jdbcType="VARCHAR" />
+	    <result column="sjr" property="sjr" jdbcType="VARCHAR" />
+	    <result column="spsl" property="spsl" jdbcType="INTEGER" />
+	    <result column="spzj" property="spzj" jdbcType="VARCHAR" />
+	    <result column="spmc" property="spmc" jdbcType="VARCHAR" />
+	    <result column="kddh" property="kddh" jdbcType="VARCHAR" />
+	    <result column="ptsjsyf" property="ptsjsyf" jdbcType="VARCHAR" />
+	    <result column="sbf" property="sbf" jdbcType="VARCHAR" />
+	    <result column="drsj" property="drsj" jdbcType="VARCHAR" />
+	    <result column="pramid" property="pramid" jdbcType="INTEGER" />
+  	</resultMap>
+
+	
+	<select id="findAll" resultMap="BePttsfResultMap" parameterType="java.util.Map">
+		select * from be_pttsf
+	   <include refid="queryBePttsfWhere"></include>
+	   order by (ptsjsyf+0)
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_pttsf
+		<include refid="queryBePttsfWhere"></include>	
+	</select>
+	
+	<insert id="insert" parameterType="BePttsf">
+		 insert into be_pttsf (id, khddh, sjr, 
+      spsl, spzj, spmc, kddh, 
+      ptsjsyf, sbf, drsj, 
+      pramid)
+    values (#{id,jdbcType=INTEGER}, #{khddh,jdbcType=VARCHAR}, #{sjr,jdbcType=VARCHAR}, 
+      #{spsl,jdbcType=INTEGER}, #{spzj,jdbcType=VARCHAR}, #{spmc,jdbcType=VARCHAR}, #{kddh,jdbcType=VARCHAR}, 
+      #{ptsjsyf,jdbcType=VARCHAR}, #{sbf,jdbcType=VARCHAR}, #{drsj,jdbcType=VARCHAR}, 
+      #{pramid,jdbcType=INTEGER})
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_pttsf where id = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="BePttsf">
+		select * from be_pttsf where id = ${value}	
+	</select>
+	
+	<select id="findByPramid" parameterType="java.util.Map" resultMap="BePttsfResultMap">
+		select * from be_pttsf
+		<include refid="queryBePttsfWhere"></include>
+		order by (ptsjsyf+0)
+		<include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="countByPramid" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_pttsf where pramid = ${pramid}	
+	</select>
+	
+	<delete id="deleteByPramid" parameterType="java.util.Map">
+		delete from be_pttsf where pramid = ${pramid} 
+	</delete>
+	
+</mapper>

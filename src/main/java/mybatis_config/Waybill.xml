@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.what21.dao.WaybillDao">
+
+	<resultMap type="Waybill" id="waybillResultMap">
+		<id property="id" column="id" />
+		<result property="expressCode" column="expressCode" />
+		<result property="expressNumber" column="expressNumber" />
+		<result property="acceptTime" column="acceptTime" />
+		<result property="acceptState" column="acceptState" />
+		<result property="endTime" column="endTime" />
+		<result property="endState" column="endState" />
+		<result property="signTime" column="signTime" />
+		<result property="signState" column="signState" />
+		<result property="business" column="business" />
+		<result property="isSign" column="isSign" />
+	</resultMap>
+	
+	<update id="update" >
+	<foreach collection="list" item="item"  separator=";">
+		  update  t_waybill set acceptTime=#{item.acceptTime},acceptState=#{item.acceptState},
+		  endTime = #{item.endTime},endState = #{item.endState},signTime=#{item.signTime},signState=#{item.signState},isSign = #{item.isSign}
+		  where expressNumber = #{item.expressNumber}
+	</foreach>
+		  
+	</update>
+	
+	<select id="findAll" resultMap="waybillResultMap" parameterType="java.util.Map">
+		
+		select * from t_waybill where 1=1 and isSign=${isSign}
+		
+		<if test="userId != null and userId != 0">
+          	and userId = ${userId} 
+        </if>
+        
+		order by isSign,expressNumber
+		LIMIT
+		#{startPage},#{endPage}
+		
+	</select>
+
+	<select id="findId" resultMap="waybillResultMap" parameterType="java.util.Map">
+		select * from t_waybill  where id=#{id}
+	</select>
+	
+	<select id="findIdArray" resultMap="waybillResultMap" >
+	select *,substring(timediff(substring( endTime,12,18),substring( acceptTime,12,18)),1,2) as sx  from t_waybill where id=
+		<foreach collection="array" item="wey" separator="," open="(" close=")">
+		#{wey}
+		</foreach>
+		
+		
+	</select>
+	
+	<insert id="insert"  parameterType="Waybill" >
+		
+		insert into t_waybill (expressCode,expressNumber,createTime,userId,business)
+		values(#{expressCode},#{expressNumber},#{createTime},#{userId},#{business})
+		
+	</insert>
+
+
+    <select id="findByExpressNumber" resultMap="waybillResultMap" parameterType="java.util.Map">
+	
+		select * from t_waybill where expressNumber=#{expressNumber} and userId=#{userId}
+		
+	</select>
+	
+	<select id="findIsSign" resultMap="waybillResultMap" parameterType="java.util.Map">
+		
+		select * from t_waybill
+
+		<if test="paramValue!=null and paramValue!=''">
+			where isSign=${paramValue}
+		</if>
+		<if test="userId != null and userId != 0">
+			and userId =  ${userId}
+		</if>
+		limit #{startPage},#{endPage}
+
+	</select>
+	
+	
+	                    <!-- _____________________________________________________________________________________________________________ -->
+	 
+	 
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		
+		select count(1) from t_waybill  where 1=1 and isSign=${isSign}
+
+		<if test=" value !='' and value !=null">
+		     <if test="name=='expressCode'">  and expressCode like'%${value}%'  </if>
+		     <if test="name=='expressNumber'"> and expressNumber like'%${value}%' </if>
+		     <if test="name=='business'"> and business like'%${value}%'  </if>
+		     <if test="name=='kong'"> </if>
+		</if>
+		
+		<if test="time2 !='' and time2 !=null">
+		  <![CDATA[and acceptTime >=  '${time1}'  and  acceptTime <= '${time2}']]> 
+		</if>
+		
+		<if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+		 <![CDATA[and acceptTime >='${time1}' ]]> 
+	    </if>
+
+		<if test=" time4 !='' and time4 !=null ">
+			 <![CDATA[and acceptTime >=  '${time3}'  and  acceptTime <= '${time4}']]>
+		</if>
+		
+		<if test="time3 !='' and time3 != null and  (time4 =='' or time4 ==null)">
+	         <![CDATA[and acceptTime >='${time3}']]>
+	    </if>
+		
+         <if test="userId != null and userId != 0">
+			and userId = ${userId}
+	    </if>  
+	    
+	</select>
+
+                      <!-- _____________________________________________________________________________________________________________ -->
+ 	
+
+	<delete id="delete"   parameterType="java.util.Map">
+	
+		delete from t_waybill where  isSign=${isSign} and
+		
+		 <if test=" value !='' and value !=null">
+			   <if test="name == 'expressNumber'"> expressNumber like '%${value}%' and </if>
+			   <if test="name == 'expressCode'"> expressCode like '%${value}%' and </if>
+			   <if test="name == 'business'"> business like '%${value}%' and </if>
+			   <if test="name=='kong'"> </if>
+		 </if>
+		 
+		 <if test=" time2 !='' and time2 !=null ">
+		       <![CDATA[ acceptTime >=  '${time1}'  and  acceptTime <= '${time2}' and]]> 
+		</if>
+		
+		<if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+		       <![CDATA[acceptTime >='${time1}' and]]> 
+	    </if>
+		 
+		<if test="mz == '7878' ">
+		      id=${id} and
+		</if>
+		 
+	    <if test="userId != null and userId != 0">
+		       userId = ${userId} and
+		</if>
+		     1=1 
+	</delete>
+
+                    <!-- _____________________________________________________________________________________________________________ -->
+	
+
+	<select id="findSearch" resultMap="waybillResultMap" parameterType="java.util.Map">
+
+		select *,substring(timediff(substring( endTime,12,18),substring( acceptTime,12,18)),1,2) as sx from t_waybill where 1=1 and isSign=${isSign} 
+		
+		<if test=" paramValue!=null and paramValue!=''">
+		   <if test="paramName=='expressNumber'"> and expressNumber like '%${paramValue}%' </if>
+		   <if test="paramName=='expressCode'"> and expressCode like '%${paramValue}%' </if>
+		   <if test="paramName=='business'"> and business like '%${paramValue}%' </if>
+		   <if test="name=='kong'"> </if>
+		</if>
+
+        <if test="  time2 !='' and time2 !=null ">
+            <![CDATA[and acceptTime >=  '${time1}'  and  acceptTime <= '${time2}' ]]> 
+	     
+		</if>
+
+        <if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+             <![CDATA[and acceptTime >='${time1}']]> 
+	    </if>
+
+        <if test="  time4 !='' and time4 !=null ">
+            <![CDATA[and acceptTime >=  '${time3}'  and  acceptTime <= '${time4}']]> 
+		 </if>
+  
+        <if test="  time3 !='' and time3 != null and  (time4 =='' or time4 ==null)">
+            <![CDATA[and acceptTime >='${time3}' ]]> 
+	    </if>
+	    
+
+		<if test="userId != null and userId != 0">
+			and userId =  ${userId}
+	    </if>
+			
+			order by isSign,expressNumber
+			
+		<if test="startPage !=null and endPage !=null">
+		 limit #{startPage},#{endPage}
+		</if>
+
+	</select>
+
+	                 <!-- _____________________________________________________________________________________________________________ -->
+	
+	<select id="dateTime" resultMap="waybillResultMap" parameterType="java.util.Map">
+	
+	<!--  <![CDATA[]]> 此符号防止冲突（< = >） -->
+	   
+	   select * from t_waybill where 1=1 and isSign=${isSign}
+	   
+	   <if test=" value!=null and value!=''">
+		   <if test="name=='expressNumber'"> and expressNumber like '%${value}%' </if>
+		   <if test="name=='expressCode'"> and expressCode like '%${value}%' </if>
+		   <if test="name=='business'"> and business like '%${value}%' </if>
+		   <if test="name=='kong'"> </if>
+		</if>
+	   
+	   <if test="time2 !='' and time2 !=null  ">
+	      <![CDATA[and acceptTime >=  '${time1}'  and  acceptTime <= '${time2}']]> 
+	   </if>
+	   
+	   <if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	      <![CDATA[ and acceptTime >='${time1}']]> 
+	   </if>
+	   
+	    <if test="userId != null and userId != 0">
+			and userId =  ${userId}
+		</if>
+	    
+	    ORDER BY isSign,expressNumber 
+	    
+	    LIMIT ${startPage},${endPage}
+	
+	</select>
+	
+	
+	<select id="getExpressNumber" resultType="string">
+		select expressNumber from t_waybill where isSign=0 or isSign is null
+	</select>
+
+
+<insert id="insertList" >
+		insert into t_waybill (expressCode,expressNumber,createTime,userId,business)values
+		<foreach collection="list" item="item" separator=",">
+		(#{item.expressCode},#{item.expressNumber},now(),#{item.userId},#{item.business})
+		</foreach>
+</insert>
+	
+
+
+</mapper>

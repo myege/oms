@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ItemForZyDao">
+	<resultMap type="ItemForZy" id="ItemForZyResultMap">
+		<id property="id" column="id"/>
+		<result property="itemSKU" column="itemSKU"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemSpec" column="itemSpec"/>
+		<result property="unitWeight" column="unitWeight"/>
+		<result property="unitDesc" column="unitDesc"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="hscode" column="hscode"/>
+		<result property="oneUnitDesc" column="oneUnitDesc"/>
+		<result property="twoUnitDesc" column="twoUnitDesc"/>
+		<result property="country" column="country"/>
+		<result property="countryOfOrigin" column="countryOfOrigin"/>
+		<result property="listPrice" column="listPrice"/>
+		<result property="costPrice" column="costPrice"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="vendorItemCode" column="vendorItemCode"/>
+		<result property="remark" column="remark"/>
+		<result property="xz" column="xz"/>
+		<result property="xh" column="xh"/>
+		<result property="userId" column="userId"/>
+		<result property="internalNumber" column="internalNumber"/>
+		<result property="taxRate" column="taxRate"/>
+		<result property="firstCount" column="firstCount"/>
+		<result property="secondCount" column="secondCount"/>
+		<result property="productRecordNo" column="productRecordNo"/>
+		<result property="excise" column="excise"/>
+		<result property="vat" column="vat"/>
+		<result property="genre" column="genre"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="ItemForZyResultMap" parameterType="java.util.Map">
+			SELECT * from item_forzy
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="textForZy != null and textForZy !=''">
+				and itemName like '%${textForZy}%'
+		    </if>
+		    <if test="textForZy1 != null and textForZy1 !=''">
+				and itemSKU like '%${textForZy1}%'
+		    </if>
+			<!-- <if test=" timeForZy !='' and timeForZy != null and  (timeForZy1 !='' or timeForZy1 !=null)">
+				and createDateTime &gt;='${timeForZy}' and createDateTime &lt;='${timeForZy1}'
+			</if> -->
+		</where>
+			order by genre
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from item_forzy
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="textForZy != null and textForZy !=''">
+				and itemName like '%${textForZy}%'
+		    </if>
+		    <if test="textForZy1 != null and textForZy1 !=''">
+				and itemSKU like '%${textForZy1}%'
+		    </if>
+			<!-- <if test=" timeForZy !='' and timeForZy != null and  (timeForZy1 !='' or timeForZy1 !=null)">
+				and createDateTime &gt;='${timeForZy}' and createDateTime &lt;='${timeForZy1}'
+			</if> -->
+		</where>
+				 
+	</select>
+	
+	<select id="dateTime" resultMap="ItemForZyResultMap" parameterType="java.util.Map">
+	 		SELECT * from item_forzy
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="textForZy != null and textForZy !=''">
+				and itemName like '%${textForZy}%'
+		    </if>
+		    <if test="textForZy1 != null and textForZy1 !=''">
+				and itemSKU like '%${textForZy1}%'
+		    </if>
+			<!-- <if test=" timeForZy !='' and timeForZy != null and  (timeForZy1 !='' or timeForZy1 !=null)">
+				and createDateTime &gt;='${timeForZy}' and createDateTime &lt;='${timeForZy1}'
+			</if> -->
+		</where>
+				order by genre
+				LIMIT #{startPage},#{endPage}
+	</select>
+
+	<delete id ="deleteItem" parameterType="String">
+		DELETE  FROM item_forzy WHERE id = #{id}
+	</delete>
+
+	
+	<select id="findBySku" resultMap="ItemForZyResultMap" parameterType="ItemForZy">
+	     select * from item_forzy where itemSKU=#{itemSKU} and companyCode=#{companyCode}
+	</select>
+	
+	<insert id="insert" parameterType="ItemForZy">
+		insert into item_forzy (unitDesc,
+		country,genre,itemSKU,itemName,companyCode,
+		hscode,oneUnitDesc,twoUnitDesc,productRecordNo,excise,vat)
+		values(#{unitDesc},
+		#{country},#{genre},#{itemSKU},#{itemName},
+		'ZY',#{hscode},#{oneUnitDesc},#{twoUnitDesc},
+		'1001','0','0.17')
+	</insert>
+	
+	<update id="updateItemForZy" parameterType="ItemForZy">
+	 	update  item_forzy set unitDesc=#{unitDesc},companyCode='ZY',excise='0',vat='0.17',country=#{country},hscode=#{hscode},oneUnitDesc=#{oneUnitDesc},twoUnitDesc=#{twoUnitDesc},genre=#{genre},
+		itemSKU=#{itemSKU},itemName=#{itemName},productRecordNo='1001' where id=#{id}
+	</update>  
+	<select id="findByItemSku" resultMap="ItemForZyResultMap" parameterType="ItemForZy">
+		SELECT * from item_forzy where itemSKU =#{itemSKU} limit 0,1
+	</select> 
+	<select id="findByItemSkuList" resultType="java.lang.String">
+		SELECT itemSKU from item_forzy 
+		where itemSKU in 
+		<foreach collection="list" item="itemSKU" open="(" separator="," close=")">
+			#{itemSKU}
+		</foreach>
+	</select>
+	<select id="findByIdToBG"  resultMap="ItemForZyResultMap" parameterType="int">
+		SELECT * from item_forzy where id=#{id}
+	</select>
+	
+	<select id="findByToBG"  resultMap="ItemForZyResultMap" parameterType="java.util.Map">
+		SELECT * from item_forzy
+		<where>
+			<if test="itemSKU != null and itemSKU != ''">
+          		and itemSKU = #{itemSKU} 
+       	 	</if>
+       	 	<if test="itemName != null and itemName != ''">
+       	 		and itemName = #{itemName} 
+       	 	</if>
+		</where>
+	</select>
+	
+	<insert id="insertBatch" parameterType="ItemForZy">
+		insert into item_forzy (unitDesc,
+		country,genre,itemSKU,itemName,companyCode,
+		hscode,oneUnitDesc,twoUnitDesc,productRecordNo,excise,vat,internalNumber)
+		values
+		<foreach collection="list" item="item" separator=",">
+		(#{item.unitDesc},
+		#{item.country},#{item.genre},#{item.itemSKU},#{item.itemName},
+		'ZY',#{item.hscode},#{item.oneUnitDesc},#{item.twoUnitDesc},
+		#{item.productRecordNo},'0','0.17',#{item.internalNumber})
+		</foreach>		
+	</insert>
+</mapper>

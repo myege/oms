@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeHcDao">
+	<sql id="queryBeHcWhere">
+		<where>
+			<if test="pramid!=null and pramid != ''">
+				and pramid = ${pramid}
+			</if>
+	 	</where>
+	</sql>
+	<resultMap id="BeHcResultMap" type="BeHc">
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="pm" property="pm" jdbcType="VARCHAR" />
+	    <result column="ddbh" property="ddbh" jdbcType="VARCHAR" />
+	    <result column="ydbh" property="ydbh" jdbcType="VARCHAR" />
+	    <result column="spjs" property="spjs" jdbcType="INTEGER" />
+	    <result column="sjr" property="sjr" jdbcType="VARCHAR" />
+	    <result column="qpm" property="qpm" jdbcType="VARCHAR" />
+	    <result column="qzd" property="qzd" jdbcType="VARCHAR" />
+	    <result column="qzddj" property="qzddj" jdbcType="VARCHAR" />
+	    <result column="zxgg" property="zxgg" jdbcType="VARCHAR" />
+	    <result column="zxggdj" property="zxggdj" jdbcType="VARCHAR" />
+	    <result column="drsj" property="drsj" jdbcType="TIMESTAMP" />
+	    <result column="pramid" property="pramid" jdbcType="INTEGER" />
+	    <result column="hj" property="hj" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	
+	<select id="findAll" resultMap="BeHcResultMap" parameterType="java.util.Map">
+		select * from be_hc
+	   <include refid="queryBeHcWhere"></include>
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+		
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_hc
+		<include refid="queryBeHcWhere"></include>	
+	</select>
+	
+	<insert id="insert" parameterType="BeHc">
+		 insert into be_hc (id, pm, ddbh, 
+      ydbh, spjs, sjr, qpm, 
+      qzd,qzddj, zxgg, zxggdj, drsj, 
+      pramid,hj)
+    values (#{id,jdbcType=INTEGER}, #{pm,jdbcType=VARCHAR}, #{ddbh,jdbcType=VARCHAR}, 
+      #{ydbh,jdbcType=VARCHAR}, #{spjs,jdbcType=INTEGER}, #{sjr,jdbcType=VARCHAR}, #{qpm,jdbcType=VARCHAR}, 
+      #{qzd,jdbcType=VARCHAR}, #{qzddj,jdbcType=VARCHAR},#{zxgg,jdbcType=VARCHAR}, #{zxggdj,jdbcType=VARCHAR}, #{drsj,jdbcType=TIMESTAMP}, 
+      #{pramid,jdbcType=INTEGER},#{hj,jdbcType=VARCHAR})
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_hc where id = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="BeHc">
+		select * from be_hc where id = ${value}	
+	</select>
+	
+	<select id="findByPramid" parameterType="java.util.Map" resultMap="BeHcResultMap">
+		select * from be_hc 
+		<include refid="queryBeHcWhere"></include>
+		<include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="countByPramid" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_hc where pramid = ${pramid}	
+	</select>
+	<delete id="deleteByPramid" parameterType="java.util.Map">
+		delete from be_hc where pramid = ${pramid}	
+	</delete>
+	
+	
+</mapper>

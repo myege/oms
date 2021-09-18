@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.GodownentryDao">
+	<resultMap type="Godownentry" id="GodownentryResultMap">
+		<id property="id" column="id"/>
+		<result property="totalMailNo" column="totalMailNo"/>
+		<result property="pc" column="pc"/>
+		<result property="createdatatime" column="createdatatime"/>
+		<result property="username" column="username"/>
+		<result property="userid" column="userid"/>
+		<result property="sum" column="sum"/>
+		<result property="success" column="success"/>
+		<result property="fail" column="fail"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="GodownentryResultMap" parameterType="java.util.Map">
+
+		select * from cz_godownentry order by createdatatime desc LIMIT #{startPage},#{endPage} 
+
+	
+	</select>
+	<insert id="addGo" parameterType="Godownentry">
+		INSERT INTO cz_godownentry (totalMailNo,pc,username,userid,createdatatime) VALUES (#{totalMailNo},#{pc},#{username},#{userid},#{createdatatime})
+	</insert>
+	<delete id = "deleteG" parameterType="String">
+		DELETE FROM cz_godownentry WHERE id = #{id}
+	</delete>
+	<select id="countGodownentry" resultType="java.lang.Integer">
+		select count(1) from cz_godownentry
+	</select>
+	<select id="find"  resultMap="GodownentryResultMap"  parameterType="java.util.Map">
+		select * from cz_godownentry where 1=1
+		<if test="type == 1 ">
+			and totalMailNo like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and pc like '%${paramValue}%'
+		</if>
+		order by id desc
+		LIMIT #{startPage},#{endPage} 
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_godownentry 
+		<where>
+			1=1
+			<if test="type == 1">
+				and totalMailNo like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and pc like '%${paramValue}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="findByTotalMailNo" resultType="Godownentry" parameterType="String">
+		select * from cz_godownentry where 1=1 and totalMailNo=#{totalMailNo}
+	</select>
+	
+	<update id="update" parameterType="Godownentry">
+	
+	    update  cz_godownentry set sum = #{sum},success = #{success},fail = #{fail} where totalMailNo=#{totalMailNo} and id=#{id}
+	
+	</update>
+	
+	<select id="findByPc" resultType="Godownentry"  parameterType="Godownentry">
+		select * from cz_godownentry where totalMailNo = #{totalMailNo} and pc = #{pc} 
+	</select>
+	
+	<select id="findById" resultType="Godownentry" parameterType="String">
+		select * from cz_godownentry where id = #{id}
+	</select>
+	
+	</mapper>

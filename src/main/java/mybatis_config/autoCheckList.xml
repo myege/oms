@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.AutoCheckListDao">
+<sql id="whereAutoCheckList">
+		<if test="autoCheckList != null">
+			<where>
+				<if test="autoCheckList.companybm != null">
+					and companybm like '%${autoCheckList.companybm}%'
+				</if>
+			</where>
+		</if> 
+	</sql>
+	<select id="findAll" parameterType="com.what21.model.AutoCheckListVo" resultType="com.what21.model.AutoCheckList">
+	select * from t_autochecklist
+	<include refid="whereAutoCheckList" />
+	<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count" parameterType="com.what21.model.AutoCheckListVo" resultType="int">
+	select count(id) from t_autochecklist 
+	<include refid="whereAutoCheckList"/>
+	</select>
+	
+	<insert id="save" parameterType="com.what21.model.AutoCheckList">
+    insert into t_autochecklist ( companybm, companyName, 
+      autoGainOrder, orderPreview, downPlatform, 
+      getStream, grabNumbers, orderSubmitted, 
+      logisticsSubmitted, listSubmitted, downWarehouse, 
+      automaticCompletion)
+    values ( #{companybm,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{autoGainOrder,jdbcType=INTEGER}, #{orderPreview,jdbcType=INTEGER}, #{downPlatform,jdbcType=INTEGER}, 
+      #{getStream,jdbcType=INTEGER}, #{grabNumbers,jdbcType=INTEGER}, #{orderSubmitted,jdbcType=INTEGER}, 
+      #{logisticsSubmitted,jdbcType=INTEGER}, #{listSubmitted,jdbcType=INTEGER}, #{downWarehouse,jdbcType=INTEGER}, 
+      #{automaticCompletion,jdbcType=INTEGER})
+	</insert>
+	<update id="updateById" parameterType="com.what21.model.AutoCheckList">
+    update t_autochecklist
+    set companybm = #{companybm,jdbcType=VARCHAR},
+      companyName = #{companyName,jdbcType=VARCHAR},
+      autoGainOrder = #{autoGainOrder,jdbcType=INTEGER},
+      orderPreview = #{orderPreview,jdbcType=INTEGER},
+      downPlatform = #{downPlatform,jdbcType=INTEGER},
+      getStream = #{getStream,jdbcType=INTEGER},
+      grabNumbers = #{grabNumbers,jdbcType=INTEGER},
+      orderSubmitted = #{orderSubmitted,jdbcType=INTEGER},
+      logisticsSubmitted = #{logisticsSubmitted,jdbcType=INTEGER},
+      listSubmitted = #{listSubmitted,jdbcType=INTEGER},
+      downWarehouse = #{downWarehouse,jdbcType=INTEGER},
+      automaticCompletion = #{automaticCompletion,jdbcType=INTEGER} where id =${id}
+	</update>
+	<delete id="deleteCompanyByIds" parameterType="String">
+	DELETE FROM t_autochecklist WHERE id in (
+  	<foreach collection="array" item="id" separator=",">
+  	#{id} 
+  	</foreach>
+  	)
+	</delete>
+	
+	<select id="findById" parameterType="Integer" resultType="com.what21.model.AutoCheckList">
+	select *from t_autochecklist where id=#{value}
+	</select>
+	<select id="findOrderByAuditstatus" parameterType="String" resultType="com.what21.model.AutoCheckListExtend">
+	SELECT ob.returninfo,ob.id,ob.mailNo,ob.txLogisticID,ob.itemCount,ob.merchantNum,ob.worth,ob.buyerName,ob.buyerIdNumber
+	FROM t_autochecklist ta right JOIN 
+	t_order_bonded ob on  ta.companybm = ob.merchantNum WHERE ${plan} =1
+	AND ob.auditstatus in 
+	(${auditstatus}) 
+	</select>
+	<select id="findOrderById" parameterType="String" resultType="com.what21.model.OrderMail">
+	SELECT * from t_order_mail where ${value}
+	</select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.what21.model.Outshiptosku" >
+  <resultMap id="BaseResultMap" type="com.what21.model.Outshiptosku" >
+    <result column="billNo" property="billno" jdbcType="VARCHAR" />
+    <result column="logisticsNo" property="logisticsno" jdbcType="VARCHAR" />
+    <result column="totalPackageNo" property="totalpackageno" jdbcType="INTEGER" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+  	<id column="tabID" property="tabid" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insertSku" parameterType="com.what21.model.Outshiptosku">
+    insert into outshiptosku (billNo, logisticsNo, totalPackageNo, note)values
+    <foreach collection="list" separator="," item="item">
+     (#{item.billno,jdbcType=VARCHAR}, #{item.logisticsno,jdbcType=VARCHAR}, #{item.totalpackageno,jdbcType=INTEGER}, 
+      #{item.note,jdbcType=VARCHAR}
+  </foreach>
+  </insert>
+  
+  
+  </mapper>

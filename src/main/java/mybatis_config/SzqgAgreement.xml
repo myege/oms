@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.SzqgAgreementDao">
+	<resultMap type="SzqgAgreement" id="ItemResultMap">
+		<id property="id" column="id"/>
+		<result property="version" column="version"/>
+		<result property="appid" column="appid"/>
+		<result property="personPriKey" column="personPriKey"/>
+		<result property="merchantId" column="merchantId"/>
+		<result property="merchantName" column="merchantName"/>
+		<result property="lb" column="lb"/>
+	</resultMap>
+	<select id="findAll" resultMap="ItemResultMap" parameterType="java.util.Map">
+			SELECT * from szqg_agent
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text3 != null and text3!=''">
+				and itemName like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and companyCode like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and itemSKU like '%${text5}%'
+		    </if>
+			
+		</where>
+			order by createDateTime
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from szqg_agent
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+	            and userId=#{userId} 
+	        </if>
+			<if test="text3 != null and text3!=''">
+				and itemName like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and companyCode like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and itemSKU like '%${text5}%'
+		    </if>
+			<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createDateTime &gt;='${time3}' and createDateTime &lt;='${time4}'
+			</if>
+		</where>
+				 
+	</select>
+	
+	<select id="dateTime" resultMap="ItemResultMap" parameterType="java.util.Map">
+	 	SELECT * from item
+	<where>
+			1=1
+		<if test="userId != null and userId != 0">
+          	and userId = #{userId} 
+       	 </if>
+		<if test="text3 != null and text3!=''">
+			and itemName like '%${text3}%'
+	    </if>
+	    <if test="text4 != null and text4!=''">
+			and companyCode like '%${text4}%'
+	    </if>
+	    <if test="text5 != null and text5!=''">
+				and itemSKU like '%${text5}%'
+		    </if>
+		<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+			and createDateTime &gt;='${time3}' and createDateTime &lt;='${time4}'
+		</if>
+		</where>
+				order by createDateTime
+				LIMIT #{startPage},#{endPage}
+	</select>
+
+	<delete id ="deleteItem" parameterType="String">
+		DELETE  FROM item WHERE id = #{id}
+	</delete>
+
+	
+	<select id="findBySku" resultMap="ItemResultMap" parameterType="Item">
+	     select * from item where itemSKU=#{itemSKU}
+	</select>
+	
+	<insert id="insert" parameterType="Item">
+		insert into item (userId,itemSpec,unitWeight,unitDesc, createDateTime, 
+		country,costPrice,itemSKU,itemName,companyCode,vendorItemCode,remark,xz,xh,itemcode,wmstype,
+		listPrice,hscode,oneUnitDesc,twoUnitDesc,countryOfOrigin,internalNumber,taxRate,productRecordNo)
+		values(#{userId},#{itemSpec},#{unitWeight},#{unitDesc},
+		#{createDateTime},#{country},#{costPrice},#{itemSKU},#{itemName},
+		#{companyCode},#{vendorItemCode},#{remark},#{xz},#{xh},#{itemcode},#{wmstype},#{listPrice},
+		#{hscode},#{oneUnitDesc},#{twoUnitDesc},#{countryOfOrigin},#{internalNumber},#{taxRate},#{productRecordNo})
+	</insert>
+	
+	<update id="updateItme" parameterType='Item'>
+		update item set
+		userId=#{userId},itemSpec=#{itemSpec},unitWeight=#{unitWeight},unitDesc=#{unitDesc},itemcode=#{itemcode},country=#{country},costPrice=#{costPrice},itemSKU=#{itemSKU},
+		itemName=#{itemName},companyCode=#{companyCode},vendorItemCode=#{vendorItemCode},remark=#{remark},
+		xz=#{xz},xh=#{xh},listPrice=#{listPrice},hscode=#{hscode},
+		oneUnitDesc=#{oneUnitDesc},countryOfOrigin=#{countryOfOrigin},twoUnitDesc=#{twoUnitDesc},internalNumber=#{internalNumber},
+		taxRate=#{taxRate},productRecordNo=#{productRecordNo}
+		where id=#{id}
+	</update>
+	
+	<insert id="insertBatch" >
+		insert into szqg_agent (userId,lawName,lawNameTel,fullName,socialCreditCode,regCo,
+		customsCode,tradeCo,copEndDate,businessCode,addrCo,busiType,enFullCo,enAddrCo,rgDate,valiDate,
+		idNumber,dxpId,createDateTime)
+		values
+		<foreach collection="list" item="SzqgAgent" separator=",">		
+		(#{SzqgAgent.userId},#{SzqgAgent.lawName},#{SzqgAgent.lawNameTel},#{SzqgAgent.fullName},#{SzqgAgent.socialCreditCode},
+		#{SzqgAgent.regCo},#{SzqgAgent.customsCode},#{SzqgAgent.tradeCo},#{SzqgAgent.copEndDate},#{SzqgAgent.businessCode},#{SzqgAgent.addrCo},
+		#{SzqgAgent.busiType},#{SzqgAgent.enFullCo},#{SzqgAgent.enAddrCo},#{SzqgAgent.rgDate},#{SzqgAgent.valiDate},#{SzqgAgent.idNumber},
+		#{SzqgAgent.dxpId},#{SzqgAgent.createDateTime})
+		</foreach>
+	</insert>
+
+	<select id="findArray" resultMap="ItemResultMap" >
+		select * from item where id in
+	<foreach collection="array" item="item" separator="," open="(" close=")">		
+		#{item}
+	</foreach>
+	</select>
+	<select id="finImpWms" resultMap="ItemResultMap" >select * from item</select>
+	
+	<update id="updateWmsType">
+			UPDATE item SET wmstype = 1 WHERE id in
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+		 #{item.id}
+		</foreach>
+	</update>
+	<update id="updateWmsType2">
+			UPDATE item SET wmstype = 1 WHERE id =${gjz} 
+	
+	</update>
+	<select id="findById" resultType="com.what21.model.Item" parameterType="String">
+		select * from item where id = #{id}
+	</select>
+	
+	<update id="updateById" parameterType="com.what21.model.Item">
+		update item set
+		 itemSKU = #{itemSKU},
+		 itemcode = #{itemcode},
+		 itemName = #{itemName},
+		 itemSpec = #{itemSpec},
+		 unitDesc = #{unitDesc},
+		 companyCode = #{companyCode},
+		 hscode = #{hscode},
+		 oneUnitDesc = #{oneUnitDesc},
+		 twoUnitDesc = #{twoUnitDesc},
+		 productRecordNo = #{productRecordNo},
+		 unitWeight = #{unitWeight},
+		 taxRate = #{taxRate},
+		 country = #{country},
+		 internalNumber = #{internalNumber}
+		where id = #{id}
+	</update>
+	<insert id="save" parameterType="com.what21.model.Item">
+		Insert into item
+			(itemSKU, itemcode, 
+			itemName,itemSpec,
+			unitDesc,companyCode,
+			hscode,oneUnitDesc,
+			twoUnitDesc,productRecordNo,
+			unitWeight,taxRate,
+			country,internalNumber,
+			createDateTime)
+			 	values
+			 (#{itemSKU},#{itemcode},
+			 #{itemName},#{itemSpec},
+			 #{unitDesc},#{companyCode},
+			 #{hscode},#{oneUnitDesc},
+			 #{twoUnitDesc},#{productRecordNo},
+			 #{unitWeight},#{taxRate},
+			 #{country},#{internalNumber},
+			 #{createDateTime})
+	</insert>
+	
+	<select id="findgjz" resultMap="ItemResultMap" parameterType="java.util.Map">
+			SELECT * from szqg_agreement where id= '${gjz}'
+
+	</select>
+	
+	
+	<select id="findhzqd" resultMap="ItemResultMap" parameterType="java.util.Map">
+			
+SELECT * from item it ,(SELECT tb.mailno, tb.invtno, ts.itemsku,ts.itemcount,ts.unitprice,ts.allprice from t_order_bonded  tb,t_order_bonded_sku ts where tb.txLogisticID=ts.txLogisticID and tb.mailno in(
+SELECT ask.mailno from annotation an, annotation_sku ask  where an.jobformid=ask.jobformid and ${gjz} )) t  where it.itemsku=t.itemsku ORDER BY it.internalNumber
+
+	</select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.what21.dao.BaseMapper" >
+  <sql id="page">
+		 <if test="startPage!=null and endPage!=null">
+	 		LIMIT ${startPage},${endPage}	
+	 	</if>
+  </sql>
+  <sql id="pageQuery">
+		<if test="pageQuery!=null">
+			<if test="pageQuery.startPage != null and pageQuery.endPage != ''">
+		 		LIMIT ${pageQuery.startPage},${pageQuery.endPage}
+		 	</if>
+		</if>
+	</sql>
+</mapper>

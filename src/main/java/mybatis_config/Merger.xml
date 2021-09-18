@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.MergerDao">
+	<resultMap type="Merger" id="MergerResultMap">
+		<id property="id" column="id"/>    
+		<result property="companyCode" column="companyCode"/>
+		<result property="manualId" column="manualId"/>
+		<result property="sourceNo" column="sourceNo"/>
+		<result property="itemNo" column="itemNo"/>
+		<result property="itemType" column="itemType"/>
+		<result property="flag" column="flag"/>
+		<result property="goodsName" column="goodsName"/>
+		<result property="goodsNo" column="goodsNo"/>
+		<result property="goodsSpec" column="goodsSpec"/>
+		<result property="currencyType" column="currencyType"/>
+		<result property="declareUnit" column="declareUnit"/>
+		<result property="unit1" column="unit1"/>
+		<result property="unit2" column="unit2"/>
+		<result property="useFlag" column="useFlag"/>
+		<result property="actionType" column="actionType"/>
+		
+	</resultMap>
+	
+	<sql id="whereFindAll">
+	<where>
+	1=1
+	<if test="mergerCustom.manualId !=null and mergerCustom.manualId !='' ">
+			and manualId like '%${mergerCustom.manualId}%'
+		</if>
+		<if test="mergerCustom.sourceNo !=null and mergerCustom.sourceNo !=''">
+			and sourceNo like '%${mergerCustom.sourceNo}%'
+		</if>
+		<if test="mergerCustom.goodsNo !=null and mergerCustom.goodsNo !=''">
+			and goodsNo like '%${mergerCustom.goodsNo}%'
+		</if>
+	</where>
+	</sql>
+	<select id="findAll2" parameterType="com.what21.model.MergerCustom" resultType="com.what21.model.MergerCustom">
+	select * from wms_merger 
+	<include refid="whereFindAll"></include>
+	order by id desc
+	 <if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count2" parameterType="com.what21.model.MergerCustom" resultType="int">
+	select count(1) from wms_merger 
+	<include refid="whereFindAll"></include>
+	</select>
+	
+	<select id="findAll" resultMap="MergerResultMap" parameterType="java.util.Map">
+		select * from wms_merger order by id desc LIMIT #{startPage},#{endPage}
+	</select>
+	<delete id = "merdelete" parameterType="String">
+		DELETE FROM wms_merger WHERE id = #{id}
+	</delete>
+	<select id="cx" resultMap="MergerResultMap" parameterType="java.util.Map">
+		select * from wms_merger where 1=1
+		<if test="type == 1 ">
+			and manualId like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and sourceNo like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and goodsNo like '%${paramValue}%'
+		</if>
+		order by goodsNo, manualId 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_merger 
+		<where>
+			1=1
+			<if test="type == 1">
+				and manualId like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and sourceNo like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and goodsNo like '%${paramValue}%'
+			</if>
+			 
+		</where>
+	</select>
+	<select id="findByid" resultType="Merger">
+		select * from wms_merger where id = #{id}
+	</select>
+	<insert id="insert1" parameterType="Merger">
+		INSERT INTO wms_merger (companyCode,manualId,sourceNo,itemNo,itemType,flag,goodsName,goodsNo,goodsSpec,
+		currencyType,declareUnit,unit1,unit2,useFlag,actionType)
+		VALUES(#{companyCode},#{manualId},#{sourceNo},#{itemNo},#{itemType},#{flag},
+		#{goodsName},#{goodsNo},#{goodsSpec},#{currencyType},#{declareUnit},#{unit1},#{unit2},#{useFlag},#{actionType});
+	</insert>
+	
+	
+	<select id="meadd"  resultMap="MergerResultMap">
+		select * from wms_merger where id = #{id}
+	</select>
+	
+	<update id="mflag" parameterType="Merger">
+		update wms_merger set flag = #{flag}   where id = #{id}
+	</update>
+	
+</mapper>

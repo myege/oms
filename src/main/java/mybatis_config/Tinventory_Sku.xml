@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.TinventorySku">
+	<resultMap type="com.what21.model.TinventorySku" id="TinventorySku">
+		<id property="id" column="id"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="itemName" column="itemName"/>
+		<result property="updateInventory" column="updateInventory"/>
+		<result property="merchant" column="merchant"/>
+		<result property="merchantx" column="merchantx"/>
+		<result property="date" column="date"/>	
+		<result property="pc" column="pc"/>
+			
+	</resultMap>
+	
+	<!--查看转让详情 -->
+	<select id="findtinSku" parameterType="java.util.Map" resultType="com.what21.model.TinventorySku">
+		select *from t_inventory_Sku
+		<where>
+				 pc = #{pc} 
+			<if test="merchant != null and merchant != ''">
+          		<!-- and merchant = #{merchant} 转让商家or merchantx = #{merchant}接受商家 -->
+          		and #{merchant} in(merchant,merchantx)<!--选中的商家名称等于转让商家或者接受商家  -->
+       	 	</if>
+			<if test="itemsku != null and itemsku != ''">
+          		and sku = #{sku} 
+       	 	</if>
+		</where>
+		ORDER BY date DESC LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<!-- 添加转让详情 -->
+	<insert id="addTinSku" parameterType="com.what21.model.TinventorySku">
+		insert into t_inventory_Sku(itemsku,itemName,updateInventory,merchant,merchantx,date,pc) 
+		values(#{itemsku},#{itemName},#{updateInventory},#{merchant},#{merchantx},#{date},#{pc})
+	</insert>
+	
+	<!-- 查询总条数 -->
+	<select id="countSku" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from t_inventory_Sku
+			<where>
+				1=1
+			<if test="merchant != null and merchant != ''">
+          		and merchant = #{merchant} 
+       	 	</if>
+			<if test="itemsku != null and itemsku != ''">
+          		and itemsku = #{itemsku} 
+       	 	</if>
+		</where>
+	</select>
+</mapper>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

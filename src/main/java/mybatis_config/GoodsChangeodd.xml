@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.GoodsChangeoddDao">
+	<resultMap type="GoodsChangeodd" id="goodsChangeoddResultMap">
+		<id property="id" column="id"/>
+		<result property="expressNumber" column="expressNumber"/>
+		<result property="orderNumber" column="orderNumber"/>
+		<result property="changeoId" column="changeoId"/>
+		<result property="pnname" column="pnname"/>
+		<result property="nweight" column="nweight"/>
+		<result property="newnum" column="newnum"/>
+		
+	</resultMap>
+	<insert id="insertand" parameterType="GoodsChangeodd">
+		INSERT INTO goods_changeodd (changeoId, expressNumber, orderNumber, pnname, 
+		nweight, newnum) 
+		VALUES (#{changeoId}, #{expressNumber}, #{orderNumber}, #{pnname}, 
+		#{nweight}, #{newnum})
+	</insert>
+	
+	<insert id="insertAlls">
+		INSERT INTO goods_changeodd (changeoId, expressNumber, orderNumber, pnname, 
+		nweight, newnum) 
+		VALUES
+
+			<foreach collection="list" item="Goods" separator=",">
+				(#{Goods.changeoId,jdbcType=VARCHAR}, 
+				#{Goods.expressNumber,jdbcType=VARCHAR},
+				#{Goods.orderNumber,jdbcType=VARCHAR}, 
+				#{Goods.pnname,jdbcType=VARCHAR}, 
+				#{Goods.nweight,jdbcType=VARCHAR}, 
+				#{Goods.newnum,jdbcType=VARCHAR})
+			</foreach>
+		
+	</insert>
+	
+	<select id="findByExpressNumber" resultMap="goodsChangeoddResultMap" parameterType="String">
+		select * from goods_changeodd where expressNumber = #{expressNumber}
+	</select>
+	
+	<select id="findExpressNumber" resultMap="goodsChangeoddResultMap" parameterType="String">
+		select * from goods_changeodd where expressNumber = #{expressNumber}
+	</select>
+	
+	<select id="updatecod" resultMap="goodsChangeoddResultMap" parameterType="String">
+		select * from goods_changeodd  where expressNumber=#{expressNumber}
+	</select>
+	
+	<delete id="deleteByPids">
+		delete from goods_changeodd where changeoid in 
+		<foreach collection="array" close=")" open="(" item="id" separator=",">
+			${id}
+		</foreach>
+		
+	</delete>
+	
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.WinventoryDao">
+	<resultMap type="Winventory" id="WinventoryResultMap">
+		<id property="id" column="id"/>
+		<result property="manualId" column="manualId"/>
+		<result property="sourceNo" column="sourceNo"/>
+		<result property="goodsQuantity" column="goodsQuantity"/>
+		<result property="itemType" column="itemType"/>
+		<result property="goodsUnit" column="goodsUnit"/>
+		<result property="storageLocation" column="storageLocation"/>
+		<result property="inventoryTime" column="inventoryTime"/>
+		<result property="remark" column="remark"/>
+		<result property="datatime" column="datatime"/>
+		<result property="flag" column="flag"/>
+		<result property="userId" column="userId"/>
+		
+		
+	</resultMap>
+	<sql id="whereFindAll">
+	where 1=1
+	<if test="winventoryCustom.manualId !=null and winventoryCustom.manualId !='' ">
+			and manualId like '%${winventoryCustom.manualId}%'
+		</if>
+		<if test="winventoryCustom.goodsUnit !=null and winventoryCustom.goodsUnit !='' ">
+			and goodsUnit like '%${winventoryCustom.goodsUnit}%'
+		</if>
+		<if test="winventoryCustom.sourceNo !=null and winventoryCustom.sourceNo !='' ">
+			and sourceNo like '%${winventoryCustom.sourceNo}%'
+		</if>
+	</sql>
+	<select id="findAll2" parameterType="com.what21.model.WinventoryCustom" resultType="com.what21.model.Winventory">
+	select * from wms_inventory
+	<include refid="whereFindAll"></include>
+	order by sourceNo, manualId
+	<if test="pageQuery!=null">
+		limit ${pageQuery.startPage},${pageQuery.endPage}
+	</if>
+	</select>
+	
+	<select id="count2" parameterType="com.what21.model.WinventoryCustom" resultType="int">
+	select count(1) from wms_inventory
+	<include refid="whereFindAll"></include> 
+	</select>
+	
+	
+	<select id="findAll" resultMap="WinventoryResultMap" parameterType="java.util.Map">
+		select * from wms_inventory LIMIT #{startPage},#{endPage}
+	</select>
+	<delete id = "wdelete" parameterType="String">
+		DELETE FROM wms_inventory WHERE id = #{id}
+	</delete>
+	<select id="findw" resultMap="WinventoryResultMap" parameterType="java.util.Map">
+		select * from wms_inventory where 1=1
+		<if test="type == 1 ">
+			and manualId like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and goodsUnit like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and sourceNo like '%${paramValue}%'
+		</if>
+		order by sourceNo, manualId 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_inventory 
+		<where>
+			1=1
+			<if test="type == 1">
+				and manualId like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and goodsUnit like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and sourceNo like '%${paramValue}%'
+			</if>
+			 
+		</where>
+	</select>
+	
+	<select id="findByW" resultType="Winventory">
+		select * from wms_inventory where id = #{id}
+	</select>
+	<insert id="insertw" parameterType="Winventory">
+		INSERT INTO wms_inventory (manualId,sourceNo,goodsQuantity,itemType,goodsUnit,storageLocation,inventoryTime,remark,flag,datatime,userId)
+		VALUES(#{manualId},#{sourceNo},#{goodsQuantity},#{itemType},#{goodsUnit},
+		#{storageLocation},#{inventoryTime},#{remark},#{flag},#{datatime},#{userId});
+	</insert>
+	
+	<select id="wadd"  resultMap="WinventoryResultMap" parameterType="java.util.Map">
+		<!-- select * from wms_inventory where id = #{id} -->
+		
+		<![CDATA[select * from wms_inventory where flag is null or flag = '处理失败' LIMIT 0,500]]> 
+		
+	</select>
+	
+	<update id="wflag" parameterType="Winventory">
+		update wms_inventory set flag = #{flag}   where id in (${ids})
+	</update>
+	
+	
+	<select id="findwId" resultType="Winventory">
+		select * from wms_inventory where manualId = #{manualId}
+	</select>
+	
+</mapper>

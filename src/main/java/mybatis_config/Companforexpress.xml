@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.Companforexpress">
+	<resultMap type="com.what21.model.Companforexpress" id="Companforexpress">
+		<id property="id" column="id"/>
+		<result property="bm" column="bm"/>
+		<result property="logisticsName" column="logisticsName"/>
+		<result property="logisticsCode" column="logisticsCode"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="com.what21.model.Companforexpress">
+		select *from companforexpress 
+	</select>
+	
+	<select id="findByBm" resultType="com.what21.model.Companforexpress" parameterType="string">
+		select *from companforexpress where bm = #{_parameter}
+	</select>
+	
+</mapper>

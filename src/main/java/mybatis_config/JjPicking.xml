@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.what21.dao.JjPickingDao">
+   <resultMap type="JjPicking" id="jjpickResultMap">
+		<id property="id" column="id"/>
+		<result property="pick" column="pick"/>
+		<result property="shop" column="shop"/>
+		<result property="picksum" column="picksum"/>
+		<result property="pickname" column="pickname"/>
+		<result property="picktime" column="picktime"/>
+		<result property="lx" column="lx"/>
+	</resultMap>
+<select id="findAll" parameterType="com.what21.model.JjPickingVo" resultType="com.what21.model.JjPicking">
+	select * from jj_picking order by picktime desc
+	<!-- <include refid="whereCompany" /> -->
+	<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+		
+	</select>
+	<select id="count" parameterType="com.what21.model.JjPickingVo" resultType="int">
+	select count(id) from jj_picking 
+	<!-- <include refid="whereCompany" /> -->
+	</select>
+	
+	
+	<insert id="distributeLeaflets" parameterType="com.what21.model.JjPicking">
+	INSERT INTO jj_picking (pick,picksum,shop,pickname,picktime,lx) VALUES 
+	(#{jjPickingCustom.pick},#{jjPickingCustom.picksum},#{jjPickingCustom.shop},#{jjPickingCustom.pickname},now(),#{jjPickingCustom.lx})
+	</insert>
+	
+	
+	<select id="findPick" resultType="com.what21.model.JjPicking">
+	select pick from jj_picking
+	</select>
+	<insert id="insertBatch" parameterType="com.what21.model.JjPicking">
+	INSERT INTO jj_picking (pick,picksum) VALUES 
+	<foreach collection="list" item="picking" separator=",">
+	(
+	#{picking.pick},#{picking.picksum}
+	)
+	</foreach>
+	</insert>
+	
+	
+	<select id="findbygjz" resultMap="jjpickResultMap" parameterType="java.util.Map">
+			SELECT * from jj_picking where #{gjz}
+
+	</select>
+	
+	<select id="findbygjz2" resultMap="jjpickResultMap" parameterType="java.util.Map">
+			SELECT * from jj_picking where picktime BETWEEN '${startTime}' and '${endTime}'
+
+	</select>
+	
+	<select id="findbygjz3" resultMap="jjpickResultMap" parameterType="java.util.Map">
+			SELECT * from jj_picking where picktime BETWEEN '${startTime}' and '${endTime}' order by pickname
+
+	</select>
+	
+	<select id="findbyby" resultMap="jjpickResultMap" parameterType="java.util.Map">
+		select SUM(shop) shop,SUM(picksum) picksum,pickname from jj_picking where date_format(picktime,'%Y-%m')=date_format(now(),'%Y-%m') GROUP BY pickname ORDER BY picksum DESC
+
+	</select>
+	
+	<select id="findbybn" resultMap="jjpickResultMap" parameterType="java.util.Map">
+			select SUM(shop) shop,SUM(picksum) picksum,pickname from jj_picking where date_format(picktime,'%Y')=date_format(now(),'%Y') GROUP BY pickname ORDER BY picksum DESC
+
+
+	</select>
+	
+		<select id="findById" resultType="com.what21.model.JjPicking" parameterType="String">
+		select * from jj_picking where id = #{id}
+	</select>
+	
+	<update id="updateById" parameterType="com.what21.model.JjPicking">
+		update jj_picking set
+		 pick = #{pick},
+		 shop = #{shop},
+		 picksum = #{picksum},
+		 pickname = #{pickname}
+		where id = #{id}
+	</update>
+</mapper>

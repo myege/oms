@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeAccessoryDao">
+	<resultMap id="BeAccessoryResultMap" type="BeAccessory">
+		    <id column="id" property="id" jdbcType="INTEGER" />
+		    <result column="itemName" property="itemname" jdbcType="VARCHAR" />
+		    <result column="resFilename" property="resfilename" jdbcType="VARCHAR" />
+		    <result column="tarFilename" property="tarfilename" jdbcType="VARCHAR" />
+		    <result column="lzdId" property="lzdid" jdbcType="INTEGER" />
+		    <result column="createTime" property="createtime" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	
+	<select id="findById" resultType="BeAccessory" parameterType="int">
+		select * from be_accessory where id = ${value}		
+	</select>
+
+	<select id="findByLzdIdAndItemName" resultMap="BeAccessoryResultMap" parameterType="map">
+		select * from be_accessory where lzdId = ${lzdid}
+		<if test="accessory!=null and accessory!=''">
+			 and itemName = 'accessory'
+		</if>
+		<if test="inventory!=null and inventory!=''">
+			 and itemName in ('inventory', 'tallying','customs')
+		</if> 
+		<if test="startPage!=null and startPage!=''">
+			 limit ${startPage},${endPage}	
+		</if> 
+			
+	</select>
+	
+	<select id="countByLzdIdAndItemName" resultType="int" parameterType="map">
+		select count(*) from be_accessory where lzdId = ${lzdid} 
+		<if test="accessory!=null and accessory!=''">
+			 and itemName = 'accessory'
+		</if>
+		<if test="inventory!=null and inventory!=''">
+			 and itemName in ('inventory', 'tallying','customs')
+		</if> 
+	</select>
+	
+	<select id="findByLzdIdAndItemName2" resultMap="BeAccessoryResultMap" parameterType="map">
+		select * from be_accessory where lzdId = ${lzdid} and itemName = #{itemname}	
+	</select>
+	<select id="countByLzdIdAndItemName2" resultType="int" parameterType="map">
+		select count(*) from be_accessory where lzdId = ${lzdid} and itemName = #{itemname}	
+	</select>
+	
+	<insert id="insert" parameterType="BeAccessory">
+		    insert into be_accessory (id, itemName, resFilename, 
+		      tarFilename, lzdId, createTime
+		      )
+		    values (#{id,jdbcType=INTEGER}, #{itemname,jdbcType=VARCHAR}, #{resfilename,jdbcType=VARCHAR}, 
+		      #{tarfilename,jdbcType=VARCHAR}, #{lzdid,jdbcType=INTEGER}, #{createtime,jdbcType=VARCHAR}
+		      )
+	</insert>
+	
+	<update id="update" parameterType="BeAccessory" >
+	    update be_accessory
+	    set itemName = #{itemname,jdbcType=VARCHAR},
+	      resFilename = #{resfilename,jdbcType=VARCHAR},
+	      tarFilename = #{tarfilename,jdbcType=VARCHAR},
+	      lzdId = #{lzdid,jdbcType=INTEGER},
+	      createTime = #{createtime,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteById" parameterType="int">
+		delete from be_accessory where id = ${value}
+	</delete>
+	
+	<delete id="deleteByLzdId" parameterType="int">
+		delete from be_accessory where lzdid = ${value}
+	</delete>
+	
+	
+</mapper>

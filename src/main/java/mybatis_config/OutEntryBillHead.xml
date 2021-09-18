@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.OutEntryBillHeadDao">
+		<resultMap type="OutEntryBillHead" id="OutEntryBillHeadResultMap">
+			<id property="id" column="id"/>
+			<result property="pcId" column="pcId"/>
+			<result property="entry_no" column="entry_no"/>
+			<result property="order_no" column="order_no"/>
+			<result property="wb_no" column="wb_no"/>
+			<result property="trade_country" column="trade_country"/>
+			<result property="i_e_flag" column="i_e_flag"/>
+			<result property="i_e_port" column="i_e_port"/>
+			<result property="i_e_date" column="i_e_date"/>
+			<result property="d_date" column="d_date"/>
+			<result property="trade_co" column="trade_co"/>
+			<result property="trade_name" column="trade_name"/>
+			<result property="owner_code" column="owner_code"/>
+			<result property="owner_name" column="owner_name"/>
+			<result property="agent_code" column="agent_code"/>
+			<result property="agent_name" column="agent_name"/>
+			<result property="trade_mode" column="trade_mode"/>
+			<result property="traf_mode" column="traf_mode"/>
+			<result property="traf_name" column="traf_name"/>
+			<result property="voyage_no" column="voyage_no"/>
+			<result property="bill_no" column="bill_no"/>
+			<result property="wrap_type" column="wrap_type"/>
+			<result property="cert_code" column="cert_code"/>
+			<result property="container_no" column="container_no"/>
+			<result property="license_no" column="license_no"/>
+			<result property="pack_no" column="pack_no"/>
+			<result property="gross_wt" column="gross_wt"/>
+			<result property="net_wt" column="net_wt"/>
+			<result property="trade_rate" column="trade_rate"/>
+			<result property="pass_no" column="pass_no"/>
+			<result property="decl_total" column="decl_total"/>
+			<result property="decl_port" column="decl_port"/>
+			<result property="input_er" column="input_er"/>
+			<result property="input_code" column="input_code"/>
+			<result property="input_name" column="input_name"/>
+			<result property="type_date" column="type_date"/>
+			<result property="end_date" column="end_date"/>
+			<result property="note_s" column="note_s"/>
+			<result property="status" column="status"/>
+			<result property="remark" column="remark"/>
+			<result property="entry_id" column="entry_id"/>
+			<result property="rg_flag" column="rg_flag"/>
+			<result property="gj_flag" column="gj_flag"/>
+			<result property="rsk_flag" column="rsk_flag"/>
+			<result property="r_flag" column="r_flag"/>
+			<result property="r_date" column="r_date"/>
+			<result property="end_flag" column="end_flag"/>
+			<result property="close_flag" column="close_flag"/>
+		</resultMap>
+		
+		<insert id="add" parameterType="OutEntryBillHead">
+		INSERT INTO cz_out_entrybill_head (pcId,entry_no,order_no,wb_no,trade_country,i_e_flag,i_e_port,i_e_date,d_date,trade_co, 
+		trade_name,owner_code,owner_name,agent_code,agent_name,trade_mode,traf_mode,traf_name,voyage_no,bill_no,
+		wrap_type,cert_code,container_no,license_no,pack_no,gross_wt,net_wt,trade_rate,pass_no,decl_total,
+		decl_port,input_er,input_code,input_name,type_date,end_date,note_s,status,remark,entry_id,
+		rg_flag,gj_flag,rsk_flag,r_flag,r_date,end_flag,close_flag)
+		 VALUES (#{pcId},#{entry_no},#{order_no},#{wb_no},#{trade_country},#{i_e_flag},#{i_e_port},#{i_e_date},#{d_date},#{trade_co},
+		 #{trade_name},#{owner_code},#{owner_name},#{agent_code},#{agent_name},#{trade_mode},#{traf_mode},#{traf_name},#{voyage_no},#{bill_no},
+		 #{wrap_type},#{cert_code},#{container_no},#{license_no},#{pack_no},#{gross_wt},#{net_wt},#{trade_rate},#{pass_no},#{decl_total},
+		 #{decl_port},#{input_er},#{input_code},#{input_name},#{type_date},#{end_date},#{note_s},#{status},#{remark},#{entry_id},
+		 #{rg_flag},#{gj_flag},#{rsk_flag},#{r_flag},#{r_date},#{end_flag},#{close_flag})
+	    </insert>
+	    
+	    
+		<select id="findAll" resultMap="OutEntryBillHeadResultMap" parameterType="java.util.Map">
+		select * from cz_out_entrybill_head where pcId=#{pcId} LIMIT #{startPage},#{endPage}
+	    </select>
+	    
+	    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_out_entrybill_head  where pcId=#{pcId}
+	    </select>
+	    
+	    <delete id = "delete" parameterType="String">
+		DELETE FROM cz_out_entrybill_head WHERE pcId = #{id}
+	    </delete>
+		
+		
+		
+	</mapper>	

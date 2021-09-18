@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.Companyforzy">
+	<resultMap type="com.what21.model.EndCompany" id="Companyforzy">
+		<id property="id" column="id"/>
+		<result property="companytszt" column="companytszt"/>
+		<result property="companybm" column="companybm"/>
+		<result property="companyName" column="companyName"/>
+		
+		<result property="companyCode" column="companyCode"/>
+		<result property="payCompanyCode" column="payCompanyCode"/>
+		<result property="eCommerceName" column="eCommerceName"/>
+		
+		<result property="eCommerceCode" column="eCommerceCode"/>
+		<result property="logisCompanyName" column="logisCompanyName"/>
+		<result property="logisCompanyCode" column="logisCompanyCode"/>
+		
+		<result property="declareCompanyName" column="declareCompanyName"/>
+		<result property="declareCompanyCode" column="declareCompanyCode"/>
+		<result property="applicationFormNo" column="applicationFormNo"/>
+		
+		<result property="internalAreaCompanyNo" column="internalAreaCompanyNo"/>
+		<result property="internalAreaCompanyName" column="internalAreaCompanyName"/>
+		<result property="assureCode" column="assureCode"/>
+		
+		<result property="customsField" column="customsField"/>
+		<result property="declPort" column="declPort"/>
+		<result property="accountBookNo" column="accountBookNo"/>
+		
+		<result property="country" column="country"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendTel" column="sendTel"/>
+		
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<select id="findByZy" parameterType="string" resultType="com.what21.model.Companyforzy">
+		select *From companyforzy where companybm = #{_parameter}
+	</select>
+	
+	<select id="findOver"  resultType="com.what21.model.Companyforzy">
+		select * From companyforzy 
+	</select>
+	
+</mapper>

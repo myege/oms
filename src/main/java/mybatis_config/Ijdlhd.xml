@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.IjdlhdDao">
+	<resultMap type="Ijdlhd" id="IjdlhdResultMap">
+		<id property="id" column="id"/>
+		<result property="poNo" column="poNo"/>
+		<result property="seqNo" column="seqNo"/>
+		<result property="warehouseName" column="warehouseName"/>
+		<result property="ownerName" column="ownerName"/>
+		<result property="ownerNo" column="ownerNo"/>
+		<result property="goodsid" column="goodsid"/>
+		<result property="goodsName" column="goodsName"/>
+		<result property="sellerRecord" column="sellerRecord"/>
+		<result property="expectedQty" column="expectedQty"/>
+		<result property="qty" column="qty"/>
+		<result property="createtime" column="createtime"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="IjdlhdResultMap" parameterType="java.util.Map">
+			SELECT * from ijdlhd
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and ownerNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and goodsid like '%${text5}%'
+		    </if>
+			<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createDateTime &gt;='${time3}' and createDateTime &lt;='${time4}'
+			</if>
+		</where>
+			order by  createtime
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from ijdlhd
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+	            and userId=#{userId} 
+	        </if>
+			<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		   <if test="text4 != null and text4!=''">
+				and ownerNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and goodsid like '%${text5}%'
+		    </if>
+			<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createtime &gt;='${time3}' and createtime &lt;='${time4}'
+			</if>
+		</where>
+				 
+	</select>
+	
+		<delete id="delete" parameterType="String">
+		delete from ijdlhd where poNo = #{poNo}  
+	</delete>
+	
+		<insert id="insertBatch" >
+		insert into ijdlhd (ownerName,ownerNo,poNo,seqNo,warehouseName,qty,expectedQty,goodsName,goodsid,sellerRecord,createtime)
+		values
+		<foreach collection="list" item="ijdlhd" separator=",">		
+		(#{ijdlhd.ownerName},#{ijdlhd.ownerNo},#{ijdlhd.poNo},#{ijdlhd.seqNo},#{ijdlhd.warehouseName},#{ijdlhd.qty},#{ijdlhd.expectedQty},#{ijdlhd.goodsName},#{ijdlhd.goodsid},#{ijdlhd.sellerRecord},#{ijdlhd.createtime})
+		</foreach>
+	</insert>
+</mapper>

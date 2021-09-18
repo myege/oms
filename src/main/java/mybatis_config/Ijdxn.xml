@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.IjdxnDao">
+	<resultMap type="Ijdxn" id="IjdxnResultMap">
+		<id property="id" column="id"/>
+		<result property="brand" column="brand"/>
+		<result property="brandEn" column="brandEn"/>
+		<result property="ccProvider" column="ccProvider"/>
+		<result property="composition" column="composition"/>
+		<result property="customId" column="customId"/>
+		<result property="customModel" column="customModel"/>
+		<result property="customsRegionCode" column="customsRegionCode"/>
+		<result property="eclpCode" column="eclpCode"/>
+		<result property="eclpName" column="eclpName"/>
+		<result property="email" column="email"/>
+		<result property="function" column="function"/>
+		<result property="goodsData" column="goodsData"/>
+		<result property="goodsName" column="goodsName"/>
+		<result property="goodsNameEn" column="goodsNameEn"/>
+		<result property="goodsPicture" column="goodsPicture"/>
+		<result property="goodsSellerPrice" column="goodsSellerPrice"/>
+		<result property="grossWeight" column="grossWeight"/>
+		<result property="hgsbys" column="hgsbys"/>
+		<result property="hsCode" column="hsCode"/>
+		<result property="ids" column="ids"/>
+		<result property="manufacturer" column="manufacturer"/>
+		<result property="modified" column="modified"/>
+		<result property="netWeight" column="netWeight"/>
+		<result property="note" column="note"/>
+		<result property="operation" column="operation"/>
+		<result property="originArea" column="originArea"/>
+		<result property="originCountry" column="originCountry"/>
+		<result property="phone" column="phone"/>
+		<result property="roduceAddress" column="roduceAddress"/>
+		<result property="safeDays" column="safeDays"/>
+		<result property="salesWebSite" column="salesWebSite"/>
+		<result property="skuId" column="skuId"/>
+		<result property="spe" column="spe"/>
+		<result property="status" column="status"/>
+		<result property="supplier" column="supplier"/>
+		<result property="taxCommitmentsway" column="taxCommitmentsway"/>
+		<result property="taxRate" column="taxRate"/>
+		<result property="unit" column="unit"/>
+		<result property="upc" column="upc"/>
+		<result property="use" column="use1"/>
+		<result property="vatRate" column="vatRate"/>
+		<result property="venderId" column="venderId"/>
+		<result property="venderName" column="venderName"/>
+		<result property="volume" column="volume"/>
+		<result property="xingHao" column="xingHao"/>
+		<result property="rejectInfo" column="rejectInfo"/>
+		<result property="xtzt" column="xtzt"/>
+		<result property="created" column="created"/>
+		<result property="createtime" column="createtime"/>
+	</resultMap>
+	<select id="findAll" resultMap="IjdxnResultMap" parameterType="java.util.Map">
+			SELECT * from ijdxnRecording
+		<where>
+				1=1
+			<if test="text3 != null and text3!=''">
+				and skuId like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and upc like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and venderId like '%${text5}%'
+		    </if>
+			<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createtime &gt;='${time3}' and createtime &lt;='${time4}'
+			</if>
+		</where>
+			order by xtzt, createtime
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from ijdxnRecording
+		<where>
+				1=1
+			
+			<if test="text3 != null and text3!=''">
+				and skuId like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and upc like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and venderId like '%${text5}%'
+		    </if>
+			<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createtime &gt;='${time3}' and createtime &lt;='${time4}'
+			</if>
+		</where>
+				 
+	</select>
+		<select id="findbygjz" resultMap="IjdxnResultMap" parameterType="Ijdxn">
+		SELECT * from ijdxnRecording where skuId = #{sellerRecord}
+	</select>
+	
+		<update id="updatebygjz" parameterType="Ijdxn">
+		update ijdxnRecording set note = '${notes}' ,xtzt = '${status}'  where skuId = '${sellerRecord}'
+	</update>
+	
+	<insert   id="insertBatch" >
+		INSERT    into ijdxnRecording (brand,brandEn,ccProvider,composition,created,customId,customModel,customsRegionCode,eclpCode,eclpName,email,function,goodsData,goodsName,goodsNameEn,goodsPicture,goodsSellerPrice,grossWeight,hgsbys,hsCode,ids,manufacturer,modified,netWeight,note,operation,originArea,originCountry,phone,roduceAddress,safeDays,salesWebSite,skuId,spe,status,supplier,taxCommitmentsway,taxRate,unit,upc,use1,vatRate,venderId,venderName,volume,xingHao,xtzt,createtime)
+		values
+		<foreach collection="list" item="OnlineRecordingParamTo" separator=",">		
+		(#{OnlineRecordingParamTo.brand},#{OnlineRecordingParamTo.brandEn},#{OnlineRecordingParamTo.ccProvider},#{OnlineRecordingParamTo.composition},
+		#{OnlineRecordingParamTo.created},#{OnlineRecordingParamTo.customId},#{OnlineRecordingParamTo.customModel},#{OnlineRecordingParamTo.customsRegionCode},
+		#{OnlineRecordingParamTo.eclpCode},#{OnlineRecordingParamTo.eclpName},#{OnlineRecordingParamTo.email},#{OnlineRecordingParamTo.function},#{OnlineRecordingParamTo.goodsData}
+		,#{OnlineRecordingParamTo.goodsName},#{OnlineRecordingParamTo.goodsNameEn},#{OnlineRecordingParamTo.goodsPicture},#{OnlineRecordingParamTo.goodsSellerPrice}
+		,#{OnlineRecordingParamTo.grossWeight},#{OnlineRecordingParamTo.hgsbys},#{OnlineRecordingParamTo.hsCode},#{OnlineRecordingParamTo.ids},#{OnlineRecordingParamTo.manufacturer}
+		,#{OnlineRecordingParamTo.modified},#{OnlineRecordingParamTo.netWeight},#{OnlineRecordingParamTo.note},#{OnlineRecordingParamTo.operation}
+		,#{OnlineRecordingParamTo.originArea},#{OnlineRecordingParamTo.originCountry},#{OnlineRecordingParamTo.phone},#{OnlineRecordingParamTo.roduceAddress},#{OnlineRecordingParamTo.safeDays}
+		,#{OnlineRecordingParamTo.salesWebSite},#{OnlineRecordingParamTo.skuId},#{OnlineRecordingParamTo.spe},#{OnlineRecordingParamTo.status},#{OnlineRecordingParamTo.supplier},#{OnlineRecordingParamTo.taxCommitmentsway}
+		,#{OnlineRecordingParamTo.taxRate},#{OnlineRecordingParamTo.unit},#{OnlineRecordingParamTo.upc},#{OnlineRecordingParamTo.use},#{OnlineRecordingParamTo.vatRate}
+		,#{OnlineRecordingParamTo.venderId},#{OnlineRecordingParamTo.venderName},#{OnlineRecordingParamTo.volume},#{OnlineRecordingParamTo.xingHao},#{OnlineRecordingParamTo.xtzt},#{OnlineRecordingParamTo.createtime})
+		</foreach>
+		
+	</insert> 
+	
+	<select id="findgjz" resultMap="IjdxnResultMap" parameterType="java.util.Map">
+			SELECT * from ijdxnRecording where ${gjz} 
+
+	</select>
+</mapper>

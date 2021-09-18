@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CompanyforzyDao">
+	<resultMap type="CompanyZyAndOrderMail"  id="CompanyAndorderMailMap">
+		<id property="id" column="id"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="carrier" column="carrier"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="receiveProvince" column="receiveProvince"/>
+		<result property="receiveCity" column="receiveCity"/>
+		<result property="receiveCounty" column="receiveCounty"/>
+		<result property="receiveCountr" column="receiveCountr"/>
+		<result property="receiveManPhone" column="receiveManPhone"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="sendTel" column="sendTel"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="userid" column="userid"/>
+		<result property="receiveManAddress" column="receiveManAddress"/>
+		<result property="billProvideSiteCode" column="billProvideSiteCode"/>
+	</resultMap>
+	
+	<select id="findAllByCompanyCode" resultMap="CompanyAndorderMailMap">
+		SELECT t_order_mail.mailNo
+	      ,t_order_mail.txLogisticID
+	      ,t_order_mail.carrier
+	      ,t_order_mail.buyerName
+	      ,t_order_mail.receiveProvince
+	      ,t_order_mail.receiveCity
+	      ,t_order_mail.billProvideSiteCode
+	      ,t_order_mail.userid
+	      ,t_order_mail.receiveCounty
+	      ,t_order_mail.receiveCountr
+		  ,t_order_mail.receiveManPhone
+		  ,t_order_mail.itemName 
+		  ,t_order_mail.itemWeight 
+		  ,t_order_mail.itemCount 
+		  ,t_order_mail.receiveManAddress   
+		  ,companyforzy.sendName 
+		  ,companyforzy.sendAddress
+		  ,companyforzy.sendTel		  
+	FROM t_order_mail
+		 LEFT JOIN
+	companyforzy
+		  ON 
+	t_order_mail.merchantNum=companyforzy.companybm
+	where t_order_mail.merchantNum in
+	(
+		<foreach collection="list" item="orderMail" separator=",">
+			#{orderMail.merchantNum}
+		</foreach>	
+	)
+	and t_order_mail.mailNo in (
+		<foreach collection="list" item="orderMail" separator=",">
+			#{orderMail.mailNo}
+		</foreach>	
+	)
+	</select>
+	
+</mapper>

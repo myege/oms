@@ -1,0 +1,29 @@
+  	<script src="<%=path %>/static/js/jquery.min.js"></script>
+    <script src="<%=path %>/static/js/bootstrap.min.js"></script>
+    <script src="<%=path %>/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="<%=path %>/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="<%=path %>/static/js/plugins/layer/layer.min.js"></script>
+    <script src="<%=path %>/static/js/hplus.min.js"></script>
+    <script type="text/javascript" src="<%=path %>/static/js/contabs.min.js"></script>
+    <script src="<%=path %>/static/js/plugins/pace/pace.min.js"></script>
+    
+     <script src="<%=path %>/static/js/jquery.validate.min.js"></script>
+    <script src="<%=path %>/static/js/jquery.validate.extend.js"></script>
+     <script src="<%=path %>/static/js/test/message-cn.js"></script>
+    <!-- bootstrap table 相关JS -->
+    <script src="<%=path %>/static/plugins/bootstrap-table/bootstrap-table.js"></script>
+    <!-- bootstrap select 相关JS -->
+    <script src="<%=path %>/static/plugins/bootstrap-select/bootstrap-select.js"></script>
+    <!-- layui js -->
+   
+    <script src="<%=path %>/static/plugins/laydate/laydate.js"></script>
+    <script src="<%=path %>/static/layer/layer.js"></script>
+    <!--遮罩层-->
+    <script src="<%=path %>/static/js/plugins/blockUI/jquery.blockUI.js"></script>
+	<!-- 自己写的封装JS -->
+	<script src="<%=path %>/static/js/test/ztz.js"></script>
+	<!-- 工具JS -->
+	<script src="<%=path %>/static/js/tools.js"></script>
+	<script src="<%=path %>/static/js/plugins/switchery/switchery.js"></script>
+	<script type="text/javascript" src="<%=path%>/js/printer.js"></script>
+	

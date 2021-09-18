@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+          	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+            http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+    		http://www.springframework.org/schema/mvc   
+    		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!--默认的mvc注解映射的支持 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 启用autowire -->
+	<context:annotation-config />
+	
+	<!-- 启用spring注解扫描并指定包所在的位置 -->
+	<context:component-scan base-package="com.what21.*" /><!-- 
+	<context:component-scan base-package="end_waybill.*" /> -->
+	<!-- 第一种发布方式：简单发布(没有接口的发布) -->
+	<!-- id:唯一标示  implementor：提供服务的类 address:服务的请求url-->
+	<!-- 
+	<jaxws:endpoint id="helloService" implementor="cn.itcast.cxf.HelloService" address="/hello">
+		加入请求的消息拦截器
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		加入响应的消息拦截器
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+	 -->
+	
+	<!-- <bean id="orderAcceptDaoImpl" class="com.what21.dao.impl.OrderAcceptDaoImpl"></bean> -->
+	<!-- 第二种发布方式：带有接口的发布 -->
+	<!-- id:唯一标示 serviceClass：接口类型 address：服务的请求url-->
+	<jaxws:server id="importOrderService" serviceClass="com.what21.service.ImportOrderService" address="/importOrder">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.ImportOrderServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	<jaxws:server id="importOrderMailService" serviceClass="com.what21.service.ImportOrderMailService" address="/importOrderMail">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.ImportOrderMailServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	<jaxws:server id="importOrderStatusService" serviceClass="com.what21.service.ImportOrderStatusService" address="/importOrderStatus">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.ImportOrderStatusServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	<jaxws:server id="importGylFinanceOrderService" serviceClass="com.what21.service.ImportGylFinanceOrderService" address="/importGylFinanceOrder">
+		<jaxws:serviceBean>
+			<bean class="com.what21.service.impl.ImportGylFinanceOrderServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	<jaxws:server id="importOrderOutService" serviceClass="com.what21.service.ImportOrderOutService" address="/importOrderOut">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.ImportOrderOutServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	<jaxws:server id="checkInventoryService" serviceClass="com.what21.service.CheckInventoryService" address="/checkInventory">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.CheckInventoryServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	
+	<jaxws:server id="importKuChunImpoService" serviceClass="com.what21.service.ImportKuChunImpoService" address="/importKuChun">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.ImportKuChunImpoServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	<jaxws:server id="YTOTrackService" serviceClass="com.what21.service.YTOTrackService" address="/YTOTrackService">
+		<jaxws:serviceBean>
+			<!-- 服务的实现类 -->
+			<bean class="com.what21.service.impl.YTOTrackServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<!-- 加入请求的消息拦截器 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<!-- 加入响应的消息拦截器 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors>
+	</jaxws:server> 
+	
+	
+	
+	
+</beans>
+

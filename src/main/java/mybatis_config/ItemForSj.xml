@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ItemForSjDao">
+	<resultMap type="ItemForSj" id="ItemForSjResultMap">
+		<id property="id" column="id"/>
+		<result property="goods_sn" column="goods_sn"/>
+		<result property="goods_name" column="goods_name"/>
+		<result property="codeTs" column="codeTs"/>
+		<result property="tradeCurr" column="tradeCurr"/>
+		<result property="goodsUnit" column="goodsUnit"/>
+		<result property="firstUnit" column="firstUnit"/>
+		<result property="secondUnit" column="secondUnit"/>
+		<result property="goodsModel" column="goodsModel"/>
+		<result property="cat_id" column="cat_id"/>
+		<result property="brand_id" column="brand_id"/>
+		<result property="shop_price" column="shop_price"/>
+		<result property="goods_desc" column="goods_desc"/>
+		<result property="goods_thumb" column="goods_thumb"/>
+		<result property="goods_number" column="goods_number"/>
+		<result property="is_on_sale" column="is_on_sale"/>
+	</resultMap>
+	<select id="findAll" resultMap="ItemForSjResultMap" parameterType="java.util.Map">
+			SELECT * from item_forsj
+		<where>
+				1=1
+			<if test="goods_sn != null and goods_sn != 0">
+          		and goods_sn = #{goods_sn} 
+       	 	</if>
+			<if test="codeTs != null and codeTs !=''">
+				and codeTs like '%${codeTs}%'
+		    </if>
+		    <if test="goods_name != null and goods_name !=''">
+				and goods_name like '%${goods_name}%'
+		    </if>
+		</where>
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from item_forsj
+		<where>
+				1=1
+			<if test="goods_sn != null and goods_sn != 0">
+          		and goods_sn = #{goods_sn} 
+       	 	</if>
+			<if test="codeTs != null and codeTs !=''">
+				and codeTs like '%${codeTs}%'
+		    </if>
+		    <if test="goods_name != null and goods_name !=''">
+				and goods_name like '%${goods_name}%'
+		    </if>
+		</where>
+				 
+	</select>
+	
+	<insert id="insertIn" parameterType="ItemForSj">
+		INSERT INTO item_forsj(goods_sn,goods_name,codeTs,tradeCurr,goodsUnit,firstUnit,secondUnit,
+		goodsModel,cat_id,brand_id,shop_price,goods_desc,goods_thumb,goods_number,is_on_sale) 
+		VALUES(#{goods_sn},#{goods_name},#{codeTs},#{tradeCurr},#{goodsUnit},#{firstUnit},#{secondUnit},
+		#{goodsModel},#{cat_id},#{brand_id},#{shop_price},#{goods_desc},#{goods_thumb},#{goods_number},#{is_on_sale});
+	</insert>
+	
+	<select id="findByInF" resultType="ItemForSj">
+		select * from item_forsj where goods_sn = #{goods_sn}
+	</select>
+	
+	<select id="findintfo" resultMap="ItemForSjResultMap" parameterType="java.util.Map">
+		select * from item_forsj where 1=1
+		<if test="type == 1 ">
+			and goods_sn like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and codeTs like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and goods_name like '%${paramValue}%'
+		</if>
+		order by goods_name, goods_sn 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<delete id = "intfodelete" parameterType="String">
+		DELETE FROM item_forsj WHERE id = #{id}
+	</delete>
+	
+	<update id="intfoedit" parameterType="ItemForSj">
+			update  item_forsj set goods_sn=#{goods_sn},goods_name=#{goods_name},codeTs=#{codeTs},tradeCurr=#{tradeCurr},goodsUnit=#{goodsUnit},
+		firstUnit=#{firstUnit},secondUnit=#{secondUnit},goodsModel=#{goodsModel},cat_id=#{cat_id},brand_id=#{brand_id},shop_price=#{shop_price},
+		goods_desc=#{goods_desc},goods_thumb=#{goods_thumb},goods_number=#{goods_number} where id=#{id}
+	</update>
+	
+	<update id="updateStatus" parameterType="ItemForSj">
+		update  item_forsj set  is_on_sale=1  where id=#{id}
+	</update>
+	
+	<select id="findById" resultMap="ItemForSjResultMap" >
+			SELECT * from item_forsj where id=#{id}
+	</select>
+	
+	<update id="updatefsj" parameterType="ItemForSj">
+		update  item_forsj set  is_on_sale=1  where id=#{id}
+	</update>
+	
+	
+	
+
+</mapper>

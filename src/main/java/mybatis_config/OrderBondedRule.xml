@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderBondedRuleDao">
+
+<sql id="query_orderBondedRule_where">
+		<if test="orderBondedRule!=null">
+			<where>
+				<if test="orderBondedRule.province !=null">
+					and province like '%${orderBondedRule.province}%'
+				</if>
+				<if test="orderBondedRule.carrier !=null">
+					and carrier like '%${orderBondedRule.carrier}%'
+				</if>
+
+			</where>
+		</if>
+	</sql>
+	
+	<select id="findAll" resultType="com.what21.model.OrderBondedRule" parameterType="com.what21.model.OrderBondedRuleQueryVo">
+		select * from t_order_bonded_rule
+		<include refid="query_orderBondedRule_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="countAll" resultType="java.lang.Integer" parameterType="com.what21.model.OrderBondedRuleQueryVo">
+		select count(1) from t_order_bonded_rule
+		<include refid="query_orderBondedRule_where"></include>
+	</select>
+
+	<select id="findByProvinceAndCarrier" resultType="com.what21.model.OrderBondedRule" parameterType="com.what21.model.OrderBondedRule">
+		select * from t_order_bonded_rule where province like '%${province}%' and carrier = #{carrier}
+	</select>
+	
+	 <insert id="insert" parameterType="com.what21.model.OrderBondedRule" >
+    insert into t_order_bonded_rule (id, province, weight, 
+      carrier, createtime)
+    values (#{id,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{carrier,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  
+    <update id="update" parameterType="com.what21.model.OrderBondedRule" >
+    update t_order_bonded_rule
+    set province = #{province,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      carrier = #{carrier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <select id="findById" resultType="com.what21.model.OrderBondedRule" parameterType="java.lang.Integer" >
+    select *
+    from t_order_bonded_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <delete id="deleteByIds">
+  	delete from t_order_bonded_rule where id in
+  	<foreach collection="array" open="(" close=")" separator="," item="item">
+  			${item}
+  	</foreach>
+  	</delete>
+  	
+  	<insert id="insertBatch">
+	insert into t_order_bonded_rule (id, province, weight, 
+      carrier, createtime)
+    values 
+    <foreach collection="list" separator="," item="item">
+    (#{item.id,jdbcType=INTEGER}, #{item.province,jdbcType=VARCHAR}, #{item.weight,jdbcType=DOUBLE}, 
+      #{item.carrier,jdbcType=VARCHAR}, #{item.createtime,jdbcType=TIMESTAMP})
+      </foreach>
+	</insert>
+</mapper>

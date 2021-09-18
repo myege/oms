@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.JjPickingSkuDao">
+<sql id="whereJjPickingSku">
+where 1=1
+	<if test="jjPickingSkuCustom!=null">
+		<if test="jjPickingSkuCustom.pick!=null">
+			and pick=#{jjPickingSkuCustom.pick}
+		</if>
+	</if>
+</sql>
+<select id="findAll" parameterType="com.what21.model.JjPickingSkuVo" resultType="com.what21.model.JjPickingSku">
+	select * from jj_picking_sku
+	 <include refid="whereJjPickingSku" />
+	<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count" parameterType="com.what21.model.JjPickingSkuVo" resultType="int">
+	select count(id) from jj_picking_sku 
+	<include refid="whereJjPickingSku" />
+	</select>
+	
+	<select id="findBill" resultType="com.what21.model.JjPickingSku">
+	select bill from jj_picking_sku
+	</select>
+	<insert id="insertBatchSku" parameterType="com.what21.model.JjPickingSku">
+	INSERT INTO jj_picking_sku (pick, pickname, bill) VALUES 
+	<foreach collection="list" item="sku" separator=",">
+	(#{sku.pick},#{sku.pickname},#{sku.bill})</foreach>
+	</insert>
+	<update id="distributeLeafletsSku" parameterType="com.what21.model.JjPickingCustom">
+	UPDATE jj_picking_sku SET pickname=#{jjPickingCustom.pickname} WHERE pick in (
+	<foreach collection="jjPickingCustom.picks" item="pick" separator=",">
+	#{pick}
+	</foreach>
+	)
+	</update>
+</mapper>

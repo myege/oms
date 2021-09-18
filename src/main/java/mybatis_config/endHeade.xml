@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.EndHeader">
+	<resultMap type="com.what21.model.EndHeader" id="EndHeaderMap">
+		<id property="id" column="id"/>
+		<result property="ordercode" column="ordercode"/>
+		<result property="netWeight" column="netWeight"/>
+		<result property="grossWeight" column="grossWeight"/>
+		<result property="goodsName" column="goodsName"/>
+		<result property="sendArea" column="sendArea"/>
+		<result property="consignee" column="consignee"/>
+		<result property="consigneeTel" column="consigneeTel"/>
+		<result property="worth" column="worth"/>
+		<result property="billcode" column="billcode"/>
+		<result property="packNo" column="packNo"/>
+		<result property="status" column="status"/>
+		<result property="creatdatatime" column="creatdatatime"/>
+		<result property="flag" column="flag"/>
+		<result property="consigneeAddress" column="consigneeAddress"/>
+		<result property="consigneeArea" column="consigneeArea"/>
+		<result property="bg" column="bg"/>
+		<result property="tovipdpt" column="tovipdpt"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="com.what21.model.EndHeader" parameterType="java.util.Map">
+		select * from end_header_bg  ORDER BY creatdatatime DESC LIMIT #{pStart},#{pEnd}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="map">
+			SELECT count(1) from end_header_bg
+		<where>
+				1=1
+			<if test="ordercode!=null and ordercode!=''">
+				and ordercode = #{ordercode}
+			</if>
+			<if test="flag!=null and flag!=''">
+				and flag = #{flag}
+			</if>
+			<if test="billcode!=null and billcode!=''">
+				and billcode = #{billcode}
+			</if>
+		</where>
+	</select>
+	<!-- 条件查询 -->
+	<select id="findCondition" resultType="com.what21.model.EndHeader" parameterType="map">
+			SELECT * from end_header_bg
+			<where>
+				1=1
+			<if test="ordercode!=null and ordercode!=''">
+				and ordercode = #{ordercode}
+			</if>
+			<if test="flag!=null and flag!=''">
+				and flag = #{flag}
+			</if>
+			<if test="billcode!=null and billcode!=''">
+				and billcode = #{billcode}
+			</if>
+			<if test="id !=null and id !=''">
+				and id = #{id}
+			</if>
+		</where>
+		ORDER BY creatdatatime DESC  LIMIT #{pStart},#{pEnd}
+	</select>
+	
+	<insert id="add"  parameterType="com.what21.model.EndHeader">
+			insert into end_header_bg
+			(ordercode,netWeight,grossWeight,goodsName,sendArea,consignee,consigneeTel,
+			worth,billcode,packNo,status,creatdatatime,flag,consigneeAddress,consigneeArea,bg,tovipdpt
+			) 
+		values
+			(#{ordercode},#{netWeight},#{grossWeight},#{goodsName},#{sendArea},
+			#{consignee},#{consigneeTel},#{worth},#{billcode},#{packNo},
+			#{status},#{creatdatatime},#{flag},#{consigneeAddress},#{consigneeArea},
+			#{bg},#{tovipdpt}
+			)
+	</insert>
+	
+	<delete id="delete"  parameterType="java.lang.Integer">
+		DELETE FROM end_header_bg WHERE id= #{id}
+	</delete>
+	
+	<update id="update"  parameterType="com.what21.model.EndHeader">
+		UPDATE end_header_bg SET 
+		ordercode = #{ordercode},netWeight = #{netWeight},grossWeight = #{grossWeight} ,
+		goodsName = #{goodsName},sendArea = #{sendArea},consignee = #{consignee} ,
+		consigneeTel = #{consigneeTel},worth = #{worth},billcode = #{billcode} ,
+		packNo = #{packNo},status = #{status},creatdatatime = #{creatdatatime} ,
+		flag = #{flag},consigneeAddress = #{consigneeAddress},bg = #{bg} ,
+		tovipdpt = #{tovipdpt},consigneeArea = #{consigneeArea}
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>
+	

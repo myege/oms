@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.OutPcDao">
+		<resultMap type="OutPc" id="OutPcResultMap">
+			<id property="id" column="id"/>
+			<result property="pc" column="pc"/>
+			<result property="createdatatime" column="createdatatime"/>
+			<result property="userid" column="userid"/>
+			<result property="userName" column="userName"/>
+		</resultMap>
+		
+		<select id="findAll" resultMap="OutPcResultMap" parameterType="java.util.Map">
+		select * from cz_out_pc where 1=1
+		<if test="type == 2 ">
+			and pc like '%${paramValue}%'
+		</if>
+		 LIMIT #{startPage},#{endPage}
+	    </select>
+	    
+	    <insert id="addO" parameterType="OutPc">
+		INSERT INTO cz_out_pc (pc,userName,userid,createdatatime) VALUES (#{pc},#{userName},#{userid},#{createdatatime})
+	    </insert>
+	    
+	    <delete id = "deleteO" parameterType="String">
+		DELETE FROM cz_out_pc WHERE id = #{id}
+	    </delete>
+	    
+	    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_out_pc 
+		<where>
+			1=1
+			<if test="type == 2">
+				and pc like '%${paramValue}%'
+			</if>
+		</where>
+	    </select>
+	    
+		
+	</mapper>	

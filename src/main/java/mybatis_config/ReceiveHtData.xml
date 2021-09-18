@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ReceiveHtDataDao">
+	<resultMap type="ReceiveHtData" id="ReceiveHtDataResultMap">
+		<id property="id" column="id"/>
+		<result property="statusName" column="statusName"/>
+		<result property="detailInfo" column="detailInfo"/>
+		<result property="expressNo" column="expressNo"/>
+		<result property="isSuccess" column="isSuccess"/>
+		<result property="isHandle" column="isHandle"/>
+		<result property="createTime" column="createTime"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="ReceiveHtData">
+		INSERT INTO t_receive_ht_data (statusName,detailInfo,expressNo,isSuccess,createTime)
+		VALUES(#{statusName},#{detailInfo},#{expressNo},#{isSuccess},now());
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="ReceiveHtData">
+		INSERT INTO t_receive_ht_data (statusName,detailInfo,expressNo,isSuccess,createTime)
+		VALUES
+		<foreach collection="array" item="receiveHtData" separator="," >
+  		(
+			#{receiveHtData.statusName},#{receiveHtData.detailInfo},
+			#{receiveHtData.expressNo},#{receiveHtData.isSuccess},now()
+		)
+  		</foreach>
+	</insert>
+	
+	<select id="findAll" resultMap="ReceiveHtDataResultMap" parameterType="java.util.Map">
+		select * from t_receive_ht_data where 1=1 
+		and isHandle = ${isHandle} 
+		<if test=" startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test=" endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+		order by createTime desc 
+		LIMIT ${startPage},${endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_receive_ht_data where 1=1 
+		and isHandle = ${isHandle} 
+		<if test=" startTime !='' and startTime != null">
+			and createTime &gt;='${startTime}'
+		</if>
+		<if test=" endTime !='' and endTime != null">
+			and createTime &lt;='${endTime}'
+		</if>
+	</select>
+	
+	<update id="update" parameterType="java.lang.String">
+		update t_receive_ht_data set isHandle = 1 where id in 
+		<foreach item="idArr" collection="array" open="(" separator="," close=")">  
+        	#{idArr}  
+        </foreach>
+	</update>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.IjdcgdysDao">
+	<resultMap type="Ijdcgdys" id="IjdcgdysResultMap">
+		<id property="id" column="id"/>
+		<result property="poNo" column="poNo"/>
+		<result property="corrDocNo" column="corrDocNo"/>
+		<result property="corrDocTime" column="corrDocTime"/>
+		<result property="declNo" column="declNo"/>
+		<result property="declTime" column="declTime"/>
+		<result property="provider" column="provider"/>
+		<result property="createtime" column="createtime"/>
+		<result property="status" column="status"/>
+		<result property="notes" column="notes"/>
+		<result property="provider" column="provider"/>
+		<result property="createtime" column="createtime"/>
+		
+	</resultMap>
+	<select id="findAll" resultMap="IjdcgdysResultMap" parameterType="java.util.Map">
+			SELECT * from ijdcgdys
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+          		and userId = #{userId} 
+       	 	</if>
+			<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and corrDocNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and declNo like '%${text5}%'
+		    </if>
+			<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createDateTime &gt;='${time3}' and createDateTime &lt;='${time4}'
+			</if>
+		</where>
+			order by status, createtime
+			LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from ijdcgdys
+		<where>
+				1=1
+			<if test="userId != null and userId != 0">
+	            and userId=#{userId} 
+	        </if>
+		<if test="text3 != null and text3!=''">
+				and poNo like '%${text3}%'
+		    </if>
+		    <if test="text4 != null and text4!=''">
+				and corrDocNo like '%${text4}%'
+		    </if>
+		    <if test="text5 != null and text5!=''">
+				and declNo like '%${text5}%'
+		    </if>
+			<if test="time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createtime &gt;='${time3}' and createtime &lt;='${time4}'
+			</if>
+		</where>
+				 
+	</select>
+	
+	<insert id="insertBatch" >
+		insert into ijdcgdys (poNo,corrDocNo,corrDocTime,declNo,declTime,provider,createtime)
+		values
+		<foreach collection="list" item="ijdcgdys" separator=",">		
+		(#{ijdcgdys.poNo},#{ijdcgdys.corrDocNo},#{ijdcgdys.corrDocTime},#{ijdcgdys.declNo},#{ijdcgdys.declTime},#{ijdcgdys.provider},#{ijdcgdys.createtime})
+		</foreach>
+	</insert>
+	<delete id="delete" parameterType="String">
+		delete from ijdcgdys 
+		where poNo = #{poNo}  
+	</delete>
+	
+	<select id="findbygjz" resultMap="IjdcgdysResultMap" parameterType="Ijdcgdys">
+		SELECT * from ijdcgdys where poNo = #{poNo} 
+	</select>
+	
+	<update id="updatebygjz" parameterType="Ijdcgdys">
+		update ijdcgdys set notes = '${notes}' ,status = '${status}'  where poNo = '${poNo}'
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeQgfDao">
+	<sql id="queryBeQgfWhere">
+		<where>
+			<if test="pramid!=null and pramid != ''">
+				and pramid = ${pramid}
+			</if>
+
+	 	</where>
+	</sql>
+	<resultMap id="BeQgfResultMap" type="BeQgf">
+	     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="rq" jdbcType="TIMESTAMP" property="rq" />
+    <result column="ydh" jdbcType="VARCHAR" property="ydh" />
+    <result column="tpsl" jdbcType="VARCHAR" property="tpsl" />
+    <result column="hdf" jdbcType="VARCHAR" property="hdf" />
+    <result column="fbf" jdbcType="VARCHAR" property="fbf" />
+    <result column="jgcf" jdbcType="VARCHAR" property="jgcf" />
+    <result column="bgbjf" jdbcType="VARCHAR" property="bgbjf" />
+    <result column="zf" jdbcType="VARCHAR" property="zf" />
+    <result column="bb" jdbcType="VARCHAR" property="bb" />
+    <result column="jyjyf" jdbcType="VARCHAR" property="jyjyf" />
+    <result column="bgf" jdbcType="VARCHAR" property="bgf" />
+    <result column="ldf" jdbcType="VARCHAR" property="ldf" />
+    <result column="baf" jdbcType="VARCHAR" property="baf" />
+    <result column="hff" jdbcType="VARCHAR" property="hff" />
+    <result column="cyf" jdbcType="VARCHAR" property="cyf" />
+    <result column="hj" jdbcType="VARCHAR" property="hj" />
+    <result column="czsj" jdbcType="TIMESTAMP" property="czsj" />
+    <result column="pramid" jdbcType="INTEGER" property="pramid" />
+    <result column="hdfSm" jdbcType="VARCHAR" property="hdfSm" />
+    <result column="fbfSm" jdbcType="VARCHAR" property="fbfSm" />
+    <result column="jgcfSm" jdbcType="VARCHAR" property="jgcfSm" />
+    <result column="bgbjfSm" jdbcType="VARCHAR" property="bgbjfSm" />
+    <result column="zfSm" jdbcType="VARCHAR" property="zfSm" />
+    <result column="bbSm" jdbcType="VARCHAR" property="bbSm" />
+    <result column="jyjyfSm" jdbcType="VARCHAR" property="jyjyfSm" />
+    <result column="bgfSm" jdbcType="VARCHAR" property="bgfSm" />
+    <result column="ldfSm" jdbcType="VARCHAR" property="ldfSm" />
+    <result column="bafSm" jdbcType="VARCHAR" property="bafSm" />
+    <result column="hffSm" jdbcType="VARCHAR" property="hffSm" />
+    <result column="cyfSm" jdbcType="VARCHAR" property="cyfSm" />
+  	</resultMap>
+
+	
+	<select id="findAll" resultMap="BeQgfResultMap" parameterType="java.util.Map">
+		select * from be_qgf
+	   <include refid="queryBeQgfWhere"></include>
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="findAllByPramid" resultMap="BeQgfResultMap" parameterType="java.util.Map">
+		select * from be_qgf
+	   <include refid="queryBeQgfWhere"></include>
+	   order by (hj+0)
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_qgf
+		<include refid="queryBeQgfWhere"></include>	
+	</select>
+	
+	<insert id="insert" parameterType="BeQgf">
+		insert into be_qgf (id, rq, ydh, 
+      tpsl, hdf, fbf, jgcf, 
+      bgbjf, zf, bb, jyjyf, 
+      bgf, ldf, baf, hff, 
+      cyf, hj, czsj, pramid, 
+      hdfSm, fbfSm, jgcfSm, 
+      bgbjfSm, zfSm, bbSm, 
+      jyjyfSm, bgfSm, ldfSm, 
+      bafSm, hffSm, cyfSm
+      )
+    values (#{id,jdbcType=INTEGER}, #{rq,jdbcType=TIMESTAMP}, #{ydh,jdbcType=VARCHAR}, 
+      #{tpsl,jdbcType=VARCHAR}, #{hdf,jdbcType=VARCHAR}, #{fbf,jdbcType=VARCHAR}, #{jgcf,jdbcType=VARCHAR}, 
+      #{bgbjf,jdbcType=VARCHAR}, #{zf,jdbcType=VARCHAR}, #{bb,jdbcType=VARCHAR}, #{jyjyf,jdbcType=VARCHAR}, 
+      #{bgf,jdbcType=VARCHAR}, #{ldf,jdbcType=VARCHAR}, #{baf,jdbcType=VARCHAR}, #{hff,jdbcType=VARCHAR}, 
+      #{cyf,jdbcType=VARCHAR}, #{hj,jdbcType=VARCHAR}, #{czsj,jdbcType=TIMESTAMP}, #{pramid,jdbcType=INTEGER}, 
+      #{hdfSm,jdbcType=VARCHAR}, #{fbfSm,jdbcType=VARCHAR}, #{jgcfSm,jdbcType=VARCHAR}, 
+      #{bgbjfSm,jdbcType=VARCHAR}, #{zfSm,jdbcType=VARCHAR}, #{bbSm,jdbcType=VARCHAR}, 
+      #{jyjyfSm,jdbcType=VARCHAR}, #{bgfSm,jdbcType=VARCHAR}, #{ldfSm,jdbcType=VARCHAR}, 
+      #{bafSm,jdbcType=VARCHAR}, #{hffSm,jdbcType=VARCHAR}, #{cyfSm,jdbcType=VARCHAR}
+      )
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_qgf where id = ${value}
+	</delete>
+	
+	
+	<delete id="deleteByPramid" parameterType="int">
+		delete from be_qgf where pramid = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="BeQgf">
+		select * from be_qgf where id = ${value}	
+	</select>
+	
+	<select id="findByPramid" parameterType="java.lang.Integer" resultType="BeQgf">
+		select * from be_qgf 
+		where pramid=${value}
+	</select>
+
+	<select id="countByPramid" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_qgf where pramid = ${pramid}	
+	</select>
+	
+	<update id="update" parameterType="BeQgf">
+		update be_qgf
+    set rq = #{rq,jdbcType=TIMESTAMP},
+      ydh = #{ydh,jdbcType=VARCHAR},
+      tpsl = #{tpsl,jdbcType=VARCHAR},
+      hdf = #{hdf,jdbcType=VARCHAR},
+      fbf = #{fbf,jdbcType=VARCHAR},
+      jgcf = #{jgcf,jdbcType=VARCHAR},
+      bgbjf = #{bgbjf,jdbcType=VARCHAR},
+      zf = #{zf,jdbcType=VARCHAR},
+      bb = #{bb,jdbcType=VARCHAR},
+      jyjyf = #{jyjyf,jdbcType=VARCHAR},
+      bgf = #{bgf,jdbcType=VARCHAR},
+      ldf = #{ldf,jdbcType=VARCHAR},
+      baf = #{baf,jdbcType=VARCHAR},
+      hff = #{hff,jdbcType=VARCHAR},
+      cyf = #{cyf,jdbcType=VARCHAR},
+      hj = #{hj,jdbcType=VARCHAR},
+      czsj = #{czsj,jdbcType=TIMESTAMP},
+      pramid = #{pramid,jdbcType=INTEGER},
+      hdfSm = #{hdfSm,jdbcType=VARCHAR},
+      fbfSm = #{fbfSm,jdbcType=VARCHAR},
+      jgcfSm = #{jgcfSm,jdbcType=VARCHAR},
+      bgbjfSm = #{bgbjfSm,jdbcType=VARCHAR},
+      zfSm = #{zfSm,jdbcType=VARCHAR},
+      bbSm = #{bbSm,jdbcType=VARCHAR},
+      jyjyfSm = #{jyjyfSm,jdbcType=VARCHAR},
+      bgfSm = #{bgfSm,jdbcType=VARCHAR},
+      ldfSm = #{ldfSm,jdbcType=VARCHAR},
+      bafSm = #{bafSm,jdbcType=VARCHAR},
+      hffSm = #{hffSm,jdbcType=VARCHAR},
+      cyfSm = #{cyfSm,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	
+	
+</mapper>

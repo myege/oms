@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.StojsDao">
+	<sql id="queryStojsWhere">
+		<if test="stojs!=null">
+			<where>
+				<if test="stojs.company !=null">
+					and company like '%${stojs.company}%'
+				</if>
+				<if test="stojs.number !=null">
+					and number like '%${stojs.number}%'
+				</if>
+				<if test="stojs.qdzt !=null">
+					and qdzt = ${stojs.qdzt}
+				</if>
+				<if test="stojs.bbzt !=null">
+					and bbzt = ${stojs.bbzt}
+				</if>
+	 		</where>
+		</if>	
+	</sql>
+	<sql id="queryStojsQdWhere">
+		<if test="stojsQd!=null">
+			<where>
+				<if test="stojsQd.pid !=null">
+					and pid = ${stojsQd.pid}
+				</if>
+				<if test="stojsQd.province !=null">
+					and province = #{stojsQd.province}
+				</if>
+	 		</where>
+		</if>	
+	</sql>
+	<sql id="queryStojsBbWhere">
+		<if test="stojsBb!=null">
+			<where>
+				<if test="stojsBb.pid !=null">
+					and pid = ${stojsBb.pid}
+				</if>
+				<if test="stojsBb.province !=null">
+					and province = #{stojsBb.province}
+				</if>
+	 		</where>
+		</if>	
+	</sql>
+	<sql id="pageQuery">
+		<if test="pageQuery!=null">
+			<if test="pageQuery.startPage != null and pageQuery.endPage != ''">
+		 		LIMIT ${pageQuery.startPage},${pageQuery.endPage}
+		 	</if>
+		</if>
+	</sql>
+
+
+	
+	<select id="findAll" resultType="com.what21.model.Stojs" parameterType="com.what21.model.StojsQueryVo">
+		select * from stojs
+	   <include refid="queryStojsWhere"></include>
+	   order by id desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.StojsQueryVo">
+		select count(id) from stojs
+		<include refid="queryStojsWhere"></include>	
+	</select>
+	
+	<select id="findById" resultType="com.what21.model.Stojs" parameterType="int">
+		select * from stojs where id =${value}
+	</select>
+	
+	
+	<select id="countByMailNo" resultType="int" parameterType="string">
+		select count(id) from stojs_qd where mailNo =#{string}
+	</select>
+	
+	
+  <insert id="insert" parameterType="com.what21.model.Stojs" >
+    insert into stojs (id, company, number, 
+      qdzt, bbzt)
+    values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, 
+      #{qdzt,jdbcType=VARCHAR}, #{bbzt,jdbcType=VARCHAR})
+  </insert>
+
+	<delete id="deleteByIds">
+		delete from stojs where id in
+		<foreach collection="array" open="(" close=")" separator="," item="id">
+			${id}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteQdsByIds">
+		delete from stojs_qd where pid in
+		<foreach collection="array" open="(" close=")" separator="," item="id">
+			${id}
+		</foreach>
+	</delete>
+	
+	
+	<delete id="deleteBbsByIds">
+		delete from stojs_bb where pid in
+		<foreach collection="array" open="(" close=")" separator="," item="id">
+			${id}
+		</foreach>
+	</delete>
+	
+	<update id="updateQdztByIds" >
+		update stojs set qdzt = '1' where id in 
+		<foreach collection="list" close=")" open="(" item="id" separator=",">
+			${id}
+		</foreach>
+	</update>
+	
+	<update id="updateQdztById" parameterType="int">
+		update stojs set qdzt = '1' where id = ${value}
+	</update>
+	
+	<select id="findAllQd" resultType="com.what21.model.StojsQd" parameterType="com.what21.model.StojsQueryVo">
+		select * from stojs_qd
+	   <include refid="queryStojsQdWhere"></include>
+	   order by id desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="countQd" resultType="java.lang.Integer" parameterType="com.what21.model.StojsQueryVo">
+		select count(id) from stojs_qd
+		<include refid="queryStojsQdWhere"></include>	
+	</select>
+	
+<insert id="insertQdBatch"  >
+    insert into stojs_qd (id, pid, txLogisticID, 
+      mailNo, weight, worth, 
+      Province, City, Address
+      )     
+    values 
+    <foreach collection="list" separator="," item="stojsQd">
+    (#{stojsQd.id,jdbcType=INTEGER}, #{stojsQd.pid,jdbcType=INTEGER}, #{stojsQd.txlogisticid,jdbcType=VARCHAR}, 
+      #{stojsQd.mailno,jdbcType=VARCHAR}, #{stojsQd.weight,jdbcType=VARCHAR}, #{stojsQd.worth,jdbcType=VARCHAR}, 
+      #{stojsQd.province,jdbcType=VARCHAR}, #{stojsQd.city,jdbcType=VARCHAR}, #{stojsQd.address,jdbcType=VARCHAR}
+      )
+      </foreach>
+  </insert>
+  
+  
+  
+  <select id="getPWCs1" resultType="com.what21.model.PWC">
+  	select province ,sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0 and weight &lt;=0.3 group by province ;
+  </select>
+  
+   <select id="getPWCs2" resultType="com.what21.model.PWC">
+  	select province ,sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0.3 and weight &lt;=0.5 group by province ;
+  </select>
+  
+    <select id="getPWCs3" resultType="com.what21.model.PWC">
+  	select province ,sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0.5 and weight &lt;=1.0  group by province ;
+  </select>
+  
+     <select id="getPWCs4" resultType="com.what21.model.PWC">
+  	select province ,sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 1.0 and weight &lt;=3.0 group by province ;
+  </select>
+  
+    <select id="getPWCs5" resultType="com.what21.model.PWC">
+  	select province ,sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 3.0 group by province ;
+  </select>
+	
+	<insert id="inserBbBatch" >
+	  insert into stojs_bb (id, pid, Province, 
+      line1dl, line1weight, line2dl, 
+      line2weight, line3dl, line3weight,line4dl, line4weight, line5dl, 
+      line5weight
+      )
+    values 
+    	<foreach collection="list" separator="," item="stojsBb">
+    (#{stojsBb.id,jdbcType=INTEGER}, #{stojsBb.pid,jdbcType=INTEGER}, #{stojsBb.province,jdbcType=VARCHAR}, 
+      #{stojsBb.line1dl,jdbcType=INTEGER}, #{stojsBb.line1weight,jdbcType=VARCHAR}, #{stojsBb.line2dl,jdbcType=INTEGER}, 
+      #{stojsBb.line2weight,jdbcType=VARCHAR}, #{stojsBb.line3dl,jdbcType=INTEGER}, #{stojsBb.line3weight,jdbcType=VARCHAR}, #{stojsBb.line4dl,jdbcType=INTEGER}, 
+      #{stojsBb.line4weight,jdbcType=VARCHAR}, #{stojsBb.line5dl,jdbcType=INTEGER}, #{stojsBb.line5weight,jdbcType=VARCHAR}
+      )
+      </foreach>
+  </insert>
+
+  	<update id="updateBbztById" parameterType="int">
+		update stojs set bbzt = '1' where id = ${value}
+	</update>
+	
+	<select id="findAllBb" resultType="com.what21.model.StojsBb" parameterType="com.what21.model.StojsQueryVo">
+		select * from stojs_bb
+	   <include refid="queryStojsBbWhere"></include>
+	   order by id desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="countBb" resultType="java.lang.Integer" parameterType="com.what21.model.StojsQueryVo">
+		select count(id) from stojs_bb
+		<include refid="queryStojsBbWhere"></include>	
+	</select>
+	
+	<select id="getPWCs1NotGroup" resultType="com.what21.model.PWC">
+  	select sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0 and weight &lt;=0.3
+  </select>
+  
+   <select id="getPWCs2NotGroup" resultType="com.what21.model.PWC">
+  	select sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0.3 and weight &lt;=0.5
+  </select>
+  
+    <select id="getPWCs3NotGroup" resultType="com.what21.model.PWC">
+  	select sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 0.5 and weight &lt;=1.0
+  </select>
+  
+     <select id="getPWCs4NotGroup" resultType="com.what21.model.PWC">
+  	select sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 1.0 and weight &lt;=3.0
+  </select>
+  
+    <select id="getPWCs5NotGroup" resultType="com.what21.model.PWC">
+  	select sum(truncate(weight,2)) weight,count(id) count from stojs_qd where pid = ${value} and weight > 3.0 
+  </select>
+  
+</mapper>

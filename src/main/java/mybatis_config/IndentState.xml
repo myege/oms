@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.IndentState">
+	<resultMap type="com.what21.model.IndentState" id="IndentState">
+		<id property="id" column="id"/>
+		<result property="indentId" column="indentId"/>
+		<result property="date" column="date"/>
+		<result property="tx" column="tx"/>
+	</resultMap>
+	
+	<select id="findIndentId" parameterType="string" resultType="com.what21.model.IndentState">
+		select *from indentState where indentId=#{indentId} ORDER BY date DESC
+	</select>
+	
+</mapper>

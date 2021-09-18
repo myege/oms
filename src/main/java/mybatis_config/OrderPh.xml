@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderPhDao">
+	<resultMap type="OrderPh" id="OrderPhResultMap">
+		<id property="id" column="id"/>
+		<result property="receiveMan" column="receiveMan"/>
+		<result property="receiveManPhone" column="receiveManPhone"/>
+		<result property="receiveManAddress" column="receiveManAddress"/>
+		<result property="receiveProvince" column="receiveProvince"/>
+		<result property="receiveCity" column="receiveCity"/>
+		<result property="receiveCounty" column="receiveCounty"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="carrier" column="carrier"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="markDestination" column="markDestination"/>
+		<result property="billProvideSiteName" column="billProvideSiteName"/>
+		<result property="billProvideSiteCode" column="billProvideSiteCode"/>
+		<result property="worth" column="worth"/>
+		<result property="preEntryNumber" column="preEntryNumber"/>
+		<result property="tradeCountry" column="tradeCountry"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="feeAmount" column="feeAmount"/>
+		<result property="insureAmount" column="insureAmount"/>
+		<result property="payNumber" column="payNumber"/>
+		<result property="ordercode" column="ordercode"/>
+		<result property="pc" column="pc"/>
+		<result property="isPushToWms" column="isPushToWms"/>
+		<result property="ispost" column="ispost"/>
+		<result property="isCustoms" column="isCustoms"/>
+		<result property="auditstatus" column="auditstatus"/>
+		<result property="userId" column="userId"/>
+		<result property="sendWarehouse" column="sendWarehouse"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendTel" column="sendTel"/>
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="area" column="number"/>
+		<result property="isPushDd" column="isPushDd"/>
+		<result property="isPushQd" column="isPushQd"/>
+		<result property="statushc" column="statushc"/>
+		<result property="createTime" column="createTime"/> 
+		<result property="invtNo" column="invtNo"/>
+		<result property="customsTax" column="customsTax"/>
+		<result property="valueAddedTax" column="valueAddedTax"/>
+		<result property="consumptionTax" column="consumptionTax"/>
+		
+	</resultMap>
+	<resultMap type="OrderPhPush" id="OrderPhPushResultMap">
+		<result property="address" column="receiveManAddress"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="company" column="sendWarehouse"/>
+		<result property="consignee" column="receiveMan"/>
+		<result property="invoiceNo" column="mailNo"/>
+		<result property="kdId" column="carrier"/>
+		<result property="ordeAmount" column="worth"/>
+		<result property="orderSn" column="txLogisticID"/>
+		<result property="purchaserTelNumber" column="receiveManPhone"/>
+		<result property="signBuilding" column="buyerIdNumber"/>
+		<result property="tel" column="receiveManPhone"/>
+		<result property="createTime" column="createTime"/> 
+	</resultMap>
+	
+	<select id="findAll" resultMap="OrderPhResultMap" parameterType="java.util.Map">
+		select * from t_order_ph where 1=1
+		
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9">
+			and auditstatus !=9
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		
+		order by auditstatus, ispost, isPushToWms, isPushDd, isPushQd, isCustoms, paynumber, createTime desc, txLogisticID  
+		
+		LIMIT ${startPage},${endPage}
+		
+		
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_order_ph where 1=1
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9">
+			and auditstatus !=9
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createTime &gt;='${time3}' and createTime &lt;='${time4}'
+		</if>
+	</select>
+	
+	<select id="odbdateTime" resultMap="OrderPhResultMap" parameterType="java.util.Map">
+	 	SELECT * from t_order_ph
+	<where>
+			1=1
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9">
+			and auditstatus !=9
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		 <if test=" time3 !='' and time3 != null and  (time4 !='' or time4 !=null)">
+				and createTime &gt;='${time3}' and createTime &lt;='${time4}'
+			</if>
+		</where>
+				order by createTime
+				LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findByTxLogisticID" resultType="OrderPh">
+		select * from t_order_ph where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<select id="findByMailNo" resultType="OrderPh">
+		select ob.*, c.sendName, c.sendTel, c.sendAddress 
+		from t_order_ph ob 
+		left join company c on ob.merchantNum = c.companybm 
+		where mailNo = #{mailNo} 
+	</select>
+	
+	<select id="findById" resultMap="OrderPhPushResultMap">
+		select * from t_order_ph where id = #{id}
+	</select>
+	
+	<select id="findByIdToBG" resultMap="OrderPhResultMap">
+		select * from t_order_ph where id = #{id}
+	</select>
+	
+	<select id="findByIdToWJ" resultMap="OrderPhResultMap">
+		select ob.*, c.sendName,c.sendTel,c.sendAddress from t_order_ph ob
+		left join company c on ob.merchantNum = c.companybm  
+		where ob.id = #{id}
+	</select>
+	
+	<select id="findByIdToWms" resultMap="OrderPhResultMap">
+		select * from t_order_ph 
+		where id = #{id}
+	</select>
+	
+	<select id="findAreaByName" resultMap="OrderPhResultMap">
+		select number from t_dict_area 
+		where name = #{paramName}
+	</select>
+	
+	<select id="findOrderStatus" resultMap="OrderPhResultMap">
+		select txLogisticID, mailNo, auditstatus from t_order_ph 
+		where txLogisticID in 
+		<foreach collection="array" item="idArr" open="(" separator="," close=")">
+			#{idArr}
+		</foreach>
+	</select>
+	
+	<select id="findByObArr" resultMap="OrderPhResultMap" parameterType="OrderPh">
+		select txLogisticID, mailNo from t_order_ph 
+		<where>
+			txLogisticID in 
+			<foreach collection="array" item="OrderPh" open="(" separator="," close=")" >
+				#{OrderPh.txLogisticID}
+			</foreach>
+		</where> 
+	</select>
+	
+	<select id="exportOrder" resultMap="OrderPhResultMap" parameterType="java.util.Map">
+	select * from t_order_ph where 1=1
+		
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9">
+			and auditstatus !=9
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null ">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID'  and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'pc' and paramValue !='' and paramValue !=null">
+			and pc like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'itemName' and paramValue !='' and paramValue !=null">
+			and itemName like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		order by auditstatus, ispost, createTime desc, txLogisticID  
+		
+	</select>
+	<insert id="insert" parameterType="OrderPh">
+		INSERT INTO t_order_ph (receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,sendWarehouse,merchantNum,createTime)
+		VALUES(#{receiveMan},#{receiveManPhone},#{receiveManAddress},#{receiveProvince},
+			#{receiveCity},#{receiveCounty},#{txLogisticID},#{itemName},#{itemWeight},#{itemCount},
+			#{carrier},#{mailNo},#{markDestination},#{billProvideSiteName},#{billProvideSiteCode},
+			#{worth},#{preEntryNumber},#{tradeCountry},#{buyerIdNumber},#{buyerName},#{feeAmount},
+			#{insureAmount},#{payNumber},#{ordercode},#{pc},#{ispost},#{isCustoms},#{auditstatus},
+			#{userId},#{sendWarehouse},#{merchantNum},now());
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="OrderPh">
+		INSERT INTO t_order_ph (receiveMan,receiveManPhone,receiveManAddress,
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight,
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode,
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount,
+			payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,sendWarehouse,merchantNum,createTime)
+		VALUES
+		<foreach collection="array" item="OrderPh" separator="," >
+  		(
+			#{OrderPh.receiveMan},#{OrderPh.receiveManPhone},#{OrderPh.receiveManAddress},#{OrderPh.receiveProvince},
+			#{OrderPh.receiveCity},#{OrderPh.receiveCounty},#{OrderPh.txLogisticID},#{OrderPh.itemName},#{OrderPh.itemWeight},#{OrderPh.itemCount},
+			#{OrderPh.carrier},#{OrderPh.mailNo},#{OrderPh.markDestination},#{OrderPh.billProvideSiteName},#{OrderPh.billProvideSiteCode},
+			#{OrderPh.worth},#{OrderPh.preEntryNumber},#{OrderPh.tradeCountry},#{OrderPh.buyerIdNumber},#{OrderPh.buyerName},#{OrderPh.feeAmount},
+			#{OrderPh.insureAmount},#{OrderPh.payNumber},#{OrderPh.ordercode},#{OrderPh.pc},#{OrderPh.ispost},#{OrderPh.isCustoms},#{OrderPh.auditstatus},
+			#{OrderPh.userId},#{OrderPh.sendWarehouse},#{OrderPh.merchantNum},now()
+		)
+  		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_ph WHERE txLogisticID = #{txLogisticID} 
+	</delete>
+	
+	<update id="updateAuditstatus" parameterType="OrderPh">
+		update t_order_ph set auditstatus = #{auditstatus} where id = #{id}
+	</update>
+	
+	<update id="updateIsPushToWms" parameterType="java.lang.String">
+		update t_order_ph set isPushToWms = 1 where id in 
+		<foreach item="idArr" collection="array" open="(" separator="," close=")">  
+        	#{idArr}  
+        </foreach>
+	</update>
+	
+	<update id="updateAuditstatusByTxLogisticID" parameterType="OrderPh">
+		update t_order_ph set auditstatus = #{auditstatus} where txLogisticID = #{txLogisticID}
+	</update>
+	
+	<update id="updateExpressParam" parameterType="OrderPh">
+		update t_order_ph set mailNo = #{mailNo}, markDestination = #{markDestination}, 
+		billProvideSiteName = #{billProvideSiteName}, billProvideSiteCode = #{billProvideSiteCode}, 
+		auditstatus = #{auditstatus} 
+		where id = #{id} 
+	</update>
+	
+	<update id="updateIsPushDd" parameterType="OrderPh">
+		update t_order_ph set isPushDd = #{isPushDd} where id = #{id}
+	</update>
+	
+	<update id="updateIsPushQd" parameterType="OrderPh">
+		update t_order_ph set isPushQd = #{isPushQd} where id = #{id}
+	</update>
+	
+	<update id="updateIspost" parameterType="OrderPh">
+		update t_order_ph set ispost = #{ispost} where id = #{id}
+	</update>
+			
+	<update id="updateIsCustoms" parameterType="OrderPh">
+		update t_order_ph set isCustoms = #{isCustoms} where id = #{id}
+	</update>
+	
+	<update id="updateIsCustomsByTxLogisticID" parameterType="OrderPh">
+		update t_order_ph set isCustoms = #{isCustoms} where txLogisticID = #{txLogisticID}
+	</update>
+	
+	<update id="updateCountAndWeight" parameterType="OrderPh">
+		update t_order_ph set itemCount = #{itemCount}, itemWeight = #{itemWeight}, worth = #{worth} where id = #{id}
+	</update>
+	
+	<update id="payNumber" parameterType="OrderPh">
+		update t_order_ph set payNumber = #{payNumber} where txLogisticID = #{txLogisticID} 
+	</update>
+	
+	<select id="findTxLogisticID" resultMap="OrderPhResultMap"  >
+		<![CDATA[select * from t_order_ph where payNumber is null or payNumber = ""]]>
+	</select>
+	
+	<select id="hyjStatus" resultMap="OrderPhResultMap" parameterType="OrderPh">
+		select txLogisticID,mailNo,merchantNum,auditstatus,status_hc from t_order_ph where merchantNum = #{merchantNum} and status_hc is null
+	</select>
+	
+	<update id="updateStatus" parameterType="OrderPh">
+		UPDATE t_order_ph set  status_hc = 1 where merchantNum = #{merchantNum} and auditstatus = 9 and status_hc is null
+	</update>
+	<select id="findaddress" resultMap="OrderPhResultMap" parameterType="OrderPh">
+		select number,name,shortName from t_dict_area where  LENGTH(number)=6 
+	</select>
+	<update id="updaddress" parameterType="OrderPh">
+		update t_order_ph set receiveProvince=#{receiveProvince},receiveCity=#{receiveCity},receiveCounty=#{receiveCounty} where id=#{id}
+	</update>
+	<select id="findCs" resultMap="OrderPhResultMap"  parameterType="OrderPh">
+		select itemName,itemWeight,itemCount,worth,txLogisticID  from t_order_ph where id = #{idd}
+	</select>
+	<update id="upm" parameterType="OrderPh">
+		UPDATE t_order_ph set  itemWeight=#{itemWeight},itemCount=#{itemCount},worth=#{worth}  where id=#{id}
+	</update>
+	<select id="findTxId" resultMap="OrderPhResultMap"  parameterType="OrderPh">
+		select txLogisticID  from t_order_ph where id = #{idd}
+	</select>
+	<delete id="deletetx" parameterType="String">
+		delete from t_order_ph  where id = #{id}
+	</delete>
+	<update id="editodIdN" parameterType="OrderPh">
+			update  t_order_ph set buyerIdNumber=#{buyerIdNumber}, buyerName=#{buyerName},receiveMan=#{receiveMan} where id=#{id}
+	</update>
+	<update id="updateInvtno" parameterType="OrderPh">
+		update t_order_ph set invtNo = #{invtNo},customsTax = #{customsTax},valueAddedTax = #{valueAddedTax},consumptionTax = #{consumptionTax} where id = #{id}
+	</update>
+		<select id="findOneById" parameterType="int" resultType="OrderPh">
+		select * from t_order_ph where id= #{id}
+	</select>
+</mapper>

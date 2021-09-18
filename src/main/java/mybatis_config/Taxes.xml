@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.TaxesDao">
+	<resultMap type="Taxes" id="TaxesResultMap">
+		<result property="unitPrice" column="unitPrice"/>
+		<result property="itemCount" column="itemCount"/>
+		
+		<result property="m" column="m"/>
+		<result property="mul" column="mul"/>
+		<result property="zs" column="zs"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="sj" column="sj"/>
+		<result property="y" column="y"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="zmul" column="zmul"/>
+		<result property="zsj" column="zsj"/>
+	</resultMap>
+	
+	<select id="MByY" resultMap="TaxesResultMap" parameterType="java.util.Map">
+		SELECT count(*) as zs,merchantnum as sj,month(createTime) as m,YEAR(createTime) as y
+		from t_order_bonded 
+		where merchantnum=#{tax_b} and YEAR(createTime)=#{tax_a} GROUP BY sj,m ORDER BY sj,m 
+	</select>
+	
+	<select  id="ddsj" resultMap="TaxesResultMap" parameterType="java.util.Map"><!-- 查询单类商品的税金 -->
+		 SELECT txLogisticID,allPrice*taxRate as mul,t.itemsku
+		 from t_order_bonded_sku t,item i where t.itemsku=i.itemSKU 
+	</select>
+	
+	<update id="updatesj"   parameterType="java.util.Map">
+		UPDATE t_order_bonded_sku SET s_sj=#{mul} WHERE txLogisticID =#{txLogisticID} and itemsku=#{itemsku}
+	</update>
+	
+	<select  id="ddfz" resultMap="TaxesResultMap" parameterType="java.util.Map"><!-- 查询单号类商品的总税金 -->
+		 SELECT sum(s_sj) as zmul,txLogisticID
+		 from t_order_bonded_sku  GROUP BY txLogisticID
+	</select>
+	<update id="updatetjsj"  parameterType="Taxes">
+		UPDATE t_order_bonded SET tj_sj=#{zmul} WHERE txLogisticID =#{txLogisticID} 
+	</update>
+	
+	<select  id="zsj" resultMap="TaxesResultMap" parameterType="java.util.Map"><!--税金结果保留小数点后4位(未四舍五入)-->
+		SELECT YEAR(createTime) as y,month(createTime) as m ,cast(sum(t1.mul) as decimal(10,4))as zsj from t_order_bonded t INNER JOIN 
+	 	 (SELECT txLogisticID,sum(allPrice*taxrate) as mul
+		 from t_order_bonded_sku as t_o INNER JOIN item as i on t_o.itemsku=i.itemSKU  GROUP BY txLogisticID) as t1 on t.txLogisticID=t1.txLogisticID
+		 where merchantnum=#{tax_b} and YEAR(createTime)=#{tax_a} GROUP BY m,y
+	</select>
+	
+	
+</mapper>

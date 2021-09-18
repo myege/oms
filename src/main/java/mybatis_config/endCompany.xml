@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.model.EndCompany">
+	<resultMap type="com.what21.model.EndCompany" id="EndCompanyMap">
+		<id property="id" column="id"/>
+		<result property="company" column="company"/>
+		<result property="companyid" column="companyid"/>
+		<result property="customsCode" column="customsCode"/>
+	</resultMap>
+	<!-- 
+		查询全部
+		pstart  开始记录条数
+		pend	显示记录条数
+	 -->
+	<select id="findAll" resultType="com.what21.model.EndCompany" parameterType="java.util.Map">
+		SELECT * FROM end_company_toka ORDER BY customsCode DESC LIMIT #{pStart},#{pEnd} 
+	</select>
+	<!-- 查询总跳数 -->
+	<select id="count" resultType="int" parameterType="java.util.Map">
+		select count(*) from end_company_toka
+		<where>
+			1=1
+			<if test="company !=null and company !='' ">
+				and company like #{company}
+			</if>
+			<if test="companyid !=null and companyid !='' ">
+				and company like #{companyid}
+			</if>
+			<if test="customsCode !=null and customsCode !='' ">
+				and company like #{companyid}
+			</if>
+			<if test="id !=null and id !='' ">
+				and id=#{id}
+			</if>
+		</where>
+	</select>
+	<!-- 条件查询 -->
+	<select id="findCond" resultType="com.what21.model.EndCompany" parameterType="java.util.Map">
+		select * from end_company_toka
+		<where>
+			1=1
+			<if test="company !=null and company !='' ">
+				and company like #{company}
+			</if>
+			<if test="companyid !=null and companyid !='' ">
+				and companyid like #{companyid}
+			</if>
+			<if test="customsCode !=null and customsCode !='' ">
+				and customsCode like #{customsCode}
+			</if>
+			<if test="id !=null and id !='' ">
+				and id=#{id}
+			</if>
+		</where>
+		ORDER BY customsCode DESC LIMIT #{pStart},#{pEnd}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addCom"  parameterType="com.what21.model.EndCompany">
+		insert into end_company_toka(company,companyid,customsCode) 
+		values(#{company},#{customsCode},#{companyid})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="com.what21.model.EndCompany">
+		UPDATE end_company_toka SET 
+		company = #{company},companyid = #{companyid},customsCode = #{customsCode} 
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete"  parameterType="int">
+		DELETE FROM end_company_toka WHERE id = #{id}
+	</delete>
+</mapper>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

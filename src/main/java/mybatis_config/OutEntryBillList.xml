@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.OutEntryBillListDao">
+		<resultMap type="OutEntryBillList" id="OutEntryBillListResultMap">
+			<id property="id" column="id"/>
+			<result property="entry_no" column="entry_no"/>
+			<result property="g_no" column="g_no"/>
+			<result property="pass_no" column="pass_no"/>
+			<result property="code_ts" column="code_ts"/>
+			<result property="g_name" column="g_name"/>
+			<result property="g_model" column="g_model"/>
+			<result property="origin_country" column="origin_country"/>
+			<result property="g_qty" column="g_qty"/>
+			<result property="g_unit" column="g_unit"/>
+			<result property="decl_price" column="decl_price"/>
+			<result property="trade_curr" column="trade_curr"/>
+			<result property="decl_total" column="decl_total"/>
+			<result property="duty_mode" column="duty_mode"/>
+			<result property="note_s" column="note_s"/>
+		</resultMap>
+		
+		<insert id="add" parameterType="OutEntryBillList">
+			INSERT INTO cz_out_entrybill_list(entry_no,g_no,pass_no,code_ts,g_name,g_model,origin_country,
+			g_qty,g_unit,decl_price,trade_curr,decl_total,duty_mode,note_s)
+			VALUES(#{entry_no},#{g_no},#{pass_no},#{code_ts},#{g_name},#{g_model},#{origin_country},#{g_qty},
+			#{g_unit},#{decl_price},#{trade_curr},#{decl_total},#{duty_mode},#{note_s})
+		</insert>
+		
+		<delete id = "delete" parameterType="String">
+		
+			DELETE FROM cz_out_entrybill_list  where entry_no in (select entry_no from cz_out_entrybill_head  where pcId = #{id} )
+
+	    </delete>
+		
+	</mapper>	

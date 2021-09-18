@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CEB622Message xmlns="http://www.chinaport.gov.cn/ceb" guid="f8a1dade-3b2f-496a-9025-0a320a750bbb" version="1.0">
+    <InventoryReturn>
+        <guid>99d84166-9c88-42bc-8365-4ba4ac77314f</guid>
+        <customsCode>2992</customsCode>
+        <ebpCode>3301964H63</ebpCode>
+        <ebcCode>3301964H63</ebcCode>
+        <agentCode>3316W6K002</agentCode>
+        <copNo>HZBO30000999692508</copNo>
+        <preNo>B20170216024198560</preNo>
+        <invtNo>29922017I046748715</invtNo>
+        <returnStatus>120</returnStatus>
+        <returnTime>20170216093248003</returnTime>
+        <returnInfo>[Code:1800;Desc:逻辑校验通过]</returnInfo>
+    </InventoryReturn>
+</CEB622Message>

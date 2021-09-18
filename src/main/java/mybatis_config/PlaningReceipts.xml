@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.PlaningReceiptsDao">
+	<resultMap type="PlaningReceipts" id="PlaningReceiptsResultMap">
+		<id property="id" column="id"/>
+		<result property="planingReceiptsId" column="planingReceiptsId"/>
+		<result property="manualId" column="manualId"/>
+		<result property="customsCode" column="customsCode"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="companyName" column="companyName"/>
+		<result property="grossWeight" column="grossWeight"/>
+		<result property="netWeight" column="netWeight"/>
+		<result property="amount" column="amount"/>
+		<result property="wrapType" column="wrapType"/>
+		<result property="providerCode" column="providerCode"/>
+		<result property="type" column="type"/>
+		<result property="port" column="port"/>
+		
+		
+		<result property="flag" column="flag"/>
+		<result property="datatime" column="datatime"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="PlaningReceiptsResultMap" parameterType="java.util.Map">
+		select * from wms_planing_receipts where 1=1 
+		<if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+		order by  datatime desc
+		 LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<delete id = "delete" parameterType="String">
+		DELETE wms_planing_receipts ,wms_planing_receipts_sku from wms_planing_receipts 
+		
+		LEFT JOIN wms_planing_receipts_sku ON wms_planing_receipts.planingReceiptsId=wms_planing_receipts_sku.planingReceiptsId
+		
+		WHERE wms_planing_receipts.planingReceiptsId=#{planingReceiptsId}
+	</delete>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_planing_receipts
+		<where>
+			1=1
+			<if test="type == 1">
+				and planingReceiptsId like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and companyCode like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and providerCode like '%${paramValue}%'
+			</if> 
+			 
+		</where>
+	</select>
+	
+	<select id="pr" resultMap="PlaningReceiptsResultMap" parameterType="java.util.Map">
+	
+		select * from wms_planing_receipts where 1=1
+		<if test="type == 1 ">
+			and planingReceiptsId like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and companyCode like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and providerCode like '%${paramValue}%'
+		</if>
+		
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="findByIdToPR" resultMap="PlaningReceiptsResultMap">
+		select * from wms_planing_receipts where id = #{id}
+	</select>
+	
+	
+	<insert id="insert"  parameterType="PlaningReceipts">
+	
+	insert into wms_planing_receipts(planingReceiptsId,manualId,customsCode,companyCode,
+	companyName,grossWeight,netWeight,amount,wrapType,providerCode,type,port,flag,datatime,userId)
+	
+	values(#{planingReceiptsId},#{manualId},#{customsCode},#{companyCode},#{companyName},
+	#{grossWeight},#{netWeight},#{amount},#{wrapType},#{providerCode},#{type},#{port},#{flag},#{datatime},#{userId})
+	
+	</insert>
+	
+	<select id="findByPlaningReceiptsId" resultType="PlaningReceipts">
+		select * from wms_planing_receipts where planingReceiptsId = #{planingReceiptsId}
+	</select>
+	
+	<update id="insertFlag"  parameterType="PlaningReceipts">
+	
+	update  wms_planing_receipts set flag=#{flag} where id=#{id}
+	
+	</update>
+	
+	<sql id="whereWmsPlaningReceipts">
+	where 1=1 
+	<if test="planingReceiptsCustom.userId != null and planingReceiptsCustom.userId != 0">
+	 		and userId = #{planingReceiptsCustom.userId} 
+	    </if>
+		<if test="planingReceiptsCustom.planingReceiptsId !=null and planingReceiptsCustom.planingReceiptsId != ''">
+			and planingReceiptsId like '%${planingReceiptsCustom.planingReceiptsId}%'
+		</if>
+		<if test="planingReceiptsCustom.companyCode !=null and planingReceiptsCustom.companyCode != ''">
+			and companyCode like '%${planingReceiptsCustom.companyCode}%'
+		</if>
+		<if test="planingReceiptsCustom.providerCode !=null and planingReceiptsCustom.providerCode != ''">
+			and providerCode like '%${planingReceiptsCustom.providerCode}%'
+		</if>
+	</sql>
+	<select id="findAll2" parameterType="com.what21.model.PlaningReceiptsCustom" resultType="com.what21.model.PlaningReceipts">
+		select * from wms_planing_receipts 
+		<include refid="whereWmsPlaningReceipts"></include>
+		order by  datatime desc
+		<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>	
+	<select id="count2" parameterType="com.what21.model.PlaningReceiptsCustom" resultType="int">
+		select count(1) from wms_planing_receipts 
+		<include refid="whereWmsPlaningReceipts"></include>
+	</select>
+	
+	</mapper>

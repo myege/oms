@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.CostDao">
+	<resultMap type="Cost" id="CostResultMap">
+		<id property="id" column="id"/>
+		<result property="companyName" column="companyName"/>
+		<result property="name" column="name"/>
+		<result property="attn" column="attn"/>
+		<result property="commissionDate" column="commissionDate"/>
+		<result property="totanumber" column="totanumber"/>
+		<result property="purpose" column="purpose"/>
+		<result property="number" column="number"/>
+		<result property="volume" column="volume"/>
+		<result property="serviceNumber" column="serviceNumber"/>
+		<result property="branchMailNo" column="branchMailNo"/>
+		<result property="fightNumber" column="fightNumber"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="remark" column="remark"/>
+		<result property="userId" column="userId"/>
+		<result property="isTj" column="isTj"/>
+		<result property="fp" column="fp"/>
+		<result property="fn" column="fn"/>
+		<result property="fm" column="fm"/>
+		<result property="fr" column="fr"/>
+		<result property="op" column="op"/>
+		<result property="opn" column="opn"/>
+		<result property="om" column="om"/>
+		<result property="opr" column="opr"/>
+		<result property="gp" column="gp"/>
+		<result property="gn" column="gn"/>
+		<result property="gm" column="gm"/>
+		<result property="gr" column="gr"/>
+		<result property="tp" column="tp"/>
+		<result property="tn" column="tn"/>
+		<result property="tm" column="tm"/>
+		<result property="tr" column="tr"/>
+		<result property="pp" column="pp"/>
+		<result property="pn" column="pn"/>
+		<result property="pm" column="pm"/>
+		<result property="pr" column="pr"/>
+		<result property="tt" column="tt"/>
+		<result property="ex" column="ex"/>
+		<result property="va" column="va"/>
+		<result property="con" column="con"/>
+		<result property="why" column="why"/>
+		<result property="pe" column="pe"/>
+		<result property="icount" column="icount"/>
+		<result property="icounts" column="icounts"/>
+		<result property="ints" column="ints"/>
+		<result property="zh" column="zh"/>
+		<result property="intss" column="intss"/>
+		<result property="isPayment" column="isPayment"/>
+		<result property="zd" column="zd"/>
+		<result property="totalAmount" column="totalAmount"/>
+		<result property="totalTax" column="totalTax"/>
+		<result property="surplusFunds" column="surplusFunds"/>
+		<result property="alreadyUsedFunds" column="alreadyUsedFunds"/>
+	</resultMap>
+		<select id="findAll" resultMap="CostResultMap" parameterType="java.util.Map">
+			 SELECT * from Cost where 1=1
+			 <if test="userId != null and userId != 0">
+	 				and userId = #{userId} 
+	    		</if>
+			 <if test="paramName == 'serviceNumber'">
+				and serviceNumber like '%${paramValue}%'
+			</if>
+			<if test="paramName == 'fightNumber'">
+				and fightNumber like '%${paramValue}%'
+			</if>
+			<if test="paramName == 'totanumber'">
+				and totanumber like '%${paramValue}%'
+			</if>
+			
+		</select>
+	
+		<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+			SELECT count(1) from Cost 
+			<where>
+				1=1
+				<if test="userId != null and userId != 0">
+	 				and userId = #{userId} 
+	    		</if>
+				<if test="paramName == 'serviceNumber'">
+					and serviceNumber like '%${paramValue}%'
+				</if>
+				<if test="paramName == 'fightNumber'">
+					and fightNumber like '%${paramValue}%'
+				</if>
+				<if test="paramName == 'totanumber'">
+					and totanumber like '%${paramValue}%'
+				</if>
+			</where>
+		</select>
+		
+		<update id="updateCost" parameterType="Cost">
+	 		update  Cost set companyName=#{companyName},name=#{name},attn=#{attn},commissionDate=#{commissionDate},totanumber=#{totanumber},purpose=#{purpose},
+			number=#{number},volume=#{volume},serviceNumber=#{serviceNumber},branchMailNo=#{branchMailNo},fightNumber=#{fightNumber},itemWeight=#{itemWeight},remark=#{remark} where id=#{id}
+		</update>  
+	
+		<insert id="addCost" parameterType="Cost">
+			INSERT INTO  Cost (companyName,name,attn,commissionDate,totanumber,purpose,
+			number,volume,serviceNumber,branchMailNo,fightNumber,itemWeight,remark,totalAmount,userId) 
+			VALUES (#{companyName}, #{name}, #{attn},#{commissionDate},#{totanumber},#{purpose},
+			#{number}, #{volume}, #{serviceNumber},#{branchMailNo},#{fightNumber},#{itemWeight},#{remark},#{totalAmount},#{userId}) 
+		</insert>
+	
+		<delete id="deleteCost" parameterType="String">
+			DELETE FROM Cost WHERE id = #{id} 
+		</delete>
+		
+		<select id="findCost" resultType="Cost">
+			SELECT c.*,cc.freightPrice AS fp,cc.freightNumber AS fn,cc.freightMoney AS fm,cc.freightRemark AS fr,
+			cc.operationprice AS op,cc.operationNumber AS opn,cc.operationMoney AS om ,cc.operationRemark AS opr,cc.groundprice AS gp,
+			cc.groundNumber AS gn,cc.groundMoney AS gm ,cc.groundRemark AS gr,cc.taxprice AS tp,
+			cc.taxNumber AS tn,cc.taxMoney AS tm,cc.taxRemark AS tr,cc.platformprice AS pp,cc.platformnumber AS pn,
+			cc.platformMoney AS pm,cc.platformRemark AS pr,cc.total AS tt FROM cost c INNER JOIN cost_sku cc ON c.id =cc.costId
+			WHERE c.id =#{id}
+		</select>
+		
+		
+		<update id="updateCostisTj" parameterType="Cost">
+	 		update  Cost set isTj =1 where id=#{id}
+		</update>  
+		
+		<update id="updateCostxg" parameterType="String">
+	 		update  Cost set userId =12 where id=#{id}
+		</update>  
+		
+		<update id="updateCosthl" parameterType="String">
+	 		update  Cost set userId =11 where id=#{id}
+		</update>  
+		
+		<update id="updateCostdb" parameterType="String">
+	 		update  Cost set userId =14 where id=#{id}
+		</update>  
+		
+		<update id="isPayment" parameterType="java.lang.Integer">
+	 		update  Cost set isPayment =1 where id=#{id}
+		</update>  
+		
+		<select id="findTotanumber" resultType="Cost">
+			SELECT totanumber FROM cost  WHERE id =#{id}
+		</select>
+		
+		<select id="findById" resultType="Cost">
+			SELECT * from cost where id =#{id}
+		</select>
+		
+		<update id="updateCostldt" parameterType="String">
+	 		update  Cost set userId =16 where id=#{id}
+		</update>  
+		
+		<update id="updateCosthkzy" parameterType="String">
+	 		update  Cost set userId =17 where id=#{id}
+		</update>  
+		
+		<update id="updateCosthdtx" parameterType="String">
+	 		update  Cost set userId =18 where id=#{id}
+		</update>  
+		
+		<update id="updateCostmg" parameterType="String">
+	 		update  Cost set userId =15 where id=#{id}
+		</update> 
+		
+		<update id="updateCostTotalTax" parameterType="Cost">
+	 		update  Cost set surplusFunds=#{surplusFunds},totalTax =#{totalTax} where id=#{id}
+		</update>  
+		
+		<select id="findBycostId" resultType="Cost">
+			SELECT * FROM Cost WHERE id = #{id}	
+		</select>
+		
+		<select id="findCostAll" resultType="Cost">
+			SELECT * FROM Cost WHERE id = #{id}	
+		</select>
+		<update id="updateCostxq" parameterType="Cost">
+	 		update  Cost set surplusFunds=#{surplusFunds},alreadyUsedFunds =#{alreadyUsedFunds} where id=#{id}
+		</update>  
+		
+		<select id="viewDetails" resultType="Cost">
+			SELECT * from Cost where isPayment = 1 and userId=#{userId}
+		</select>
+		
+	</mapper>

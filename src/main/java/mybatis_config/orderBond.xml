@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<!-- 保税保证金 -->
+<mapper namespace="com.what21.model.OrderBond">
+	<resultMap type="com.what21.model.OrderBond" id="OrderBondMap">
+		<id property="id" column="id"/>
+		<result property="userId" column="userId"/>
+		<result property="bondManey" column="bondManey"/>
+		<result property="companybm" column="companybm"/>
+		<result property="companyName" column="companyName"/>
+		<result property="surplusMamey" column="surplusMamey"/>
+		<result property="useManey" column="useManey"/>
+		<result property="frostMamey" column="frostMamey"/>
+	</resultMap>
+
+	<select id="findAll" resultType="com.what21.model.OrderBond" parameterType="java.util.Map">
+		SELECT *FROM t_order_bondMoney 
+		where userId like #{userId}
+				  LIMIT #{pStart},#{pEnd} 
+	</select>
+		
+	<select id="count" resultType="java.lang.Integer"  parameterType="java.util.Map">
+		select  count(1)  from t_order_bondMoney 
+		<where>
+				1=1
+			<if test="companybm != null and companybm !=''">
+				and companybm like '%${companybm}%'
+		    </if>
+		</where>
+	</select>
+	
+	<select id="findManey" parameterType="java.lang.String" resultType='java.lang.String'>
+		SELECT t_order_bondMoney.surplusMamey FROM t_order_bondMoney  where companybm = #{companybm}
+	</select>
+	
+	<select id="findCom" parameterType="java.lang.String" resultType="com.what21.model.OrderBond">
+		SELECT *FROM t_order_bondMoney 
+		where companybm=#{companybm}
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delete"  parameterType="int">
+		DELETE FROM t_order_bondMoney WHERE id = #{id}
+	</delete>
+	
+	<insert id="save"  parameterType="com.what21.model.OrderBond">
+		insert into t_order_bondMoney(bondManey,companybm,companyName,surplusMamey,useManey,userId,frostMamey) <!--  -->
+		values(#{bondManey},#{companybm},#{companyName},#{surplusMamey},#{useManey},#{userId},#{frostMamey})
+	</insert>
+	<!-- 充值金额 -->
+	<update id="update"  parameterType="com.what21.model.OrderBond">
+		update  t_order_bondMoney set bondManey=#{bondManey},surplusMamey=#{surplusMamey} where companybm=#{companybm}
+	</update>
+	
+	<!-- 冻结金额 -->
+	<update id="frostAndF"  parameterType="com.what21.model.OrderBond">
+		update  t_order_bondMoney set frostMamey=#{frostMamey},surplusMamey=#{surplusMamey} where companybm=#{companybm}
+	</update>
+
+	<!-- 审核 -->
+	<update id="updateSurplus"  parameterType="com.what21.model.OrderBond">
+		update  t_order_bondMoney set bondManey=#{bondManey},surplusMamey=#{surplusMamey},useManey=#{useManey}  where companybm=#{companybm}
+	</update>
+	
+	<select id="findObjectById" parameterType="java.lang.String" resultType="com.what21.model.OrderBond">
+		SELECT *FROM t_order_bondMoney 
+		where id=#{id}
+	</select>
+	
+	<select id="findSku" parameterType="java.lang.String" resultType="com.what21.model.OrderBondSku">
+		SELECT *FROM t_order_bondMoney_sku 
+		where txLogisticID=#{value}
+	</select>
+	
+	<delete id="deleteSku"  parameterType="int">
+		DELETE FROM t_order_bondMoney_sku WHERE id = ${value}
+	</delete>
+	
+		<select id="newordercx" resultType="map" parameterType="string" >
+  SELECT t.customsTax, t.merchantNum, t.payCompany,t.id,t.insureAmount,co.companytszt,t.mailNo,co.companyCode,co.companyName,co.payCompanyCode,co.logisCompanyName,t.payNumber,
+t.worth,t.txLogisticID,co.eCommerceCode,co.eCommerceName,t.receiveMan,t.receiveManPhone,t.receiveManAddress,t.itemCount,
+t.buyerName,t.carrier,ts.itemsku,it.itemName,ts.unitPrice,ts.itemCount ic,it.unitDesc,t.buyerIdNumber,it.hscode,it.country,ts.allPrice,t.insureAmount,t.feeAmount
+from t_order_bonded t,t_order_bonded_sku ts ,item it,company co where t.txLogisticID=ts.txLogisticID 
+and ts.itemsku=it.itemSKU and t.merchantNum=co.companybm 
+			and t.id in (${value})
+    </select>
+    
+    <!-- 更新状态 -->
+	<update id="updateddzt"  parameterType="com.what21.model.OrderBond">
+		update t_order_bonded set ispushdd='1' where  id in (${value})
+	</update>
+	
+	<update id="updateddzt_1" parameterType="com.what21.model.OrderBond">
+		update t_order_bonded set auditstatus='9' ,ispushtowms='2' where  txlogisticid  ='${value}' and merchantnum='DDGY'
+	</update>
+</mapper>

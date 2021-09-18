@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderOutBSDao">
+	<sql id="queryOrderOutWhere">
+		<if test="orderOutCustom!=null">
+			<where>
+				<if test="orderOutCustom.status !=null">
+					and status = ${orderOutCustom.status}
+				</if>
+				<if test="orderOutCustom.orderno !=null and orderOutCustom.orderno !=''">
+					and orderNo like '%${orderOutCustom.orderno}%'
+				</if>
+				<if test="orderOutCustom.consignee !=null and orderOutCustom.consignee !=''">
+					and consignee like '%${orderOutCustom.consignee}%'
+				</if>
+				<if test="orderOutCustom.consigneetel !=null and orderOutCustom.consigneetel !=''">
+					and consigneeTel like '%${orderOutCustom.consigneetel}%'
+				</if>
+				<if test="orderOutCustom.waybillno !=null and orderOutCustom.waybillno !=''">
+					and wayBillNo like '%${orderOutCustom.waybillno}%'
+				</if>
+				<if test="orderOutCustom.totalwaybill !=null and orderOutCustom.totalwaybill !=''">
+					and totalWayBill like '%${orderOutCustom.totalwaybill}%'
+				</if>
+				<if test="orderOutCustom.destinationcountry !=null and orderOutCustom.destinationcountry !=''">
+					and destinationCountry = #{orderOutCustom.destinationcountry}
+				</if>
+				<if test="orderOutCustom.userid !=null and orderOutCustom.userid !=''">
+					and userId = #{orderOutCustom.userid}
+				</if>
+				<if test="orderOutCustom.notEnd !=null and orderOutCustom.notEnd == 1">
+					and status not in (3,4,5,9)
+				</if>
+				<if test="orderOutCustom.notEnd !=null and orderOutCustom.notEnd == 0">
+					and status in (3,4,5,9)
+				</if>
+				<if test="orderOutCustom.stostatus !=null">
+					and stostatus = ${orderOutCustom.stostatus}
+				</if>
+
+	 		</where>
+		</if>	
+	</sql>
+	<sql id="queryOrderOutWhere2">
+		<if test="orderOutCustom!=null">
+			<where>
+				<if test="orderOutCustom.status !=null">
+					and status = ${orderOutCustom.status}
+				</if>
+				<if test="orderOutCustom.orderno !=null and orderOutCustom.orderno !=''">
+					and t.orderNo like '%${orderOutCustom.orderno}%'
+				</if>
+				<if test="orderOutCustom.consignee !=null and orderOutCustom.consignee !=''">
+					and consignee like '%${orderOutCustom.consignee}%'
+				</if>
+				<if test="orderOutCustom.consigneetel !=null and orderOutCustom.consigneetel !=''">
+					and consigneeTel like '%${orderOutCustom.consigneetel}%'
+				</if>
+				<if test="orderOutCustom.waybillno !=null and orderOutCustom.waybillno !=''">
+					and wayBillNo like '%${orderOutCustom.waybillno}%'
+				</if>
+				<if test="orderOutCustom.totalwaybill !=null and orderOutCustom.totalwaybill !=''">
+					and totalWayBill like '%${orderOutCustom.totalwaybill}%'
+				</if>
+				<if test="orderOutCustom.destinationcountry !=null and orderOutCustom.destinationcountry !=''">
+					and destinationCountry = #{orderOutCustom.destinationcountry}
+				</if>
+				<if test="orderOutCustom.userid !=null and orderOutCustom.userid !=''">
+					and userId = #{orderOutCustom.userid}
+				</if>
+				<if test="orderOutCustom.notEnd !=null and orderOutCustom.notEnd == 1">
+					and status not in (3,4,5,9)
+				</if>
+				<if test="orderOutCustom.notEnd !=null and orderOutCustom.notEnd == 0">
+					and status in (3,4,5,9)
+				</if>
+				<if test="orderOutCustom.stostatus !=null">
+					and stostatus = ${orderOutCustom.stostatus}
+				</if>
+
+	 		</where>
+		</if>	
+	</sql>
+	<sql id="queryOrderOutSkuWhere">
+		<if test="orderOutCustom!=null">
+			<where>
+				<if test="orderOutCustom.orderno !=null">
+					and orderno = #{orderOutCustom.orderno}
+				</if>				
+	 		</where>
+		</if>
+		
+	</sql>
+	<sql id="pageQuery">
+		<if test="pageQuery!=null">
+			<if test="pageQuery.startPage != null and pageQuery.endPage != ''">
+		 		LIMIT ${pageQuery.startPage},${pageQuery.endPage}
+		 	</if>
+		</if>
+	</sql>
+	<resultMap type="OrderOutBS" id="OrderOutBSResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="orderNo" property="orderno" jdbcType="VARCHAR" />
+	    <result column="shippingName" property="shippingname" jdbcType="VARCHAR" />
+	    <result column="invoiceNo" property="invoiceno" jdbcType="VARCHAR" />
+	    <result column="payTime" property="paytime" jdbcType="VARCHAR" />
+	    <result column="shippingTime" property="shippingtime" jdbcType="VARCHAR" />
+	    <result column="goodsNum" property="goodsnum" jdbcType="INTEGER" />
+	    <result column="currency" property="currency" jdbcType="VARCHAR" />
+	    <result column="rate" property="rate" jdbcType="VARCHAR" />
+	    <result column="orderTotalAmount" property="ordertotalamount" jdbcType="VARCHAR" />
+	    <result column="paypalTrade" property="paypaltrade" jdbcType="VARCHAR" />
+	    <result column="realShippingId" property="realshippingid" jdbcType="VARCHAR" />
+	    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+	    <result column="consigneeCountry" property="consigneecountry" jdbcType="VARCHAR" />
+	    <result column="consigneeAddress" property="consigneeaddress" jdbcType="VARCHAR" />
+	    <result column="consigneeTel" property="consigneetel" jdbcType="VARCHAR" />
+	    <result column="consigneeEmail" property="consigneeemail" jdbcType="VARCHAR" />
+	    <result column="wayBillNo" property="waybillno" jdbcType="VARCHAR" />
+	    <result column="destinationCountry" property="destinationcountry" jdbcType="VARCHAR" />
+	    <result column="totalPrice" property="totalprice" jdbcType="VARCHAR" />
+	    <result column="packageNo" property="packageno" jdbcType="INTEGER" />
+	    <result column="grossWeight" property="grossweight" jdbcType="VARCHAR" />
+	    <result column="postMode" property="postmode" jdbcType="VARCHAR" />
+	    <result column="netWeight" property="netweight" jdbcType="VARCHAR" />
+	    <result column="taxMode" property="taxmode" jdbcType="VARCHAR" />
+	    <result column="exchangeRate" property="exchangerate" jdbcType="VARCHAR" />
+	    <result column="totalWayBill" property="totalwaybill" jdbcType="VARCHAR" />
+	    <result column="goodsUnit" property="goodsunit" jdbcType="VARCHAR" />
+	    <result column="warehouseCode" property="warehousecode" jdbcType="VARCHAR" />
+	    <result column="warehouseName" property="warehousename" jdbcType="VARCHAR" />
+	    <result column="locationCode" property="locationcode" jdbcType="VARCHAR" />
+	    <result column="locationType" property="locationtype" jdbcType="VARCHAR" />
+	    <result column="goodsModel" property="goodsmodel" jdbcType="VARCHAR" />
+	    <result column="dutyMode" property="dutymode" jdbcType="VARCHAR" />
+	    <result column="goodsUnit1" property="goodsunit1" jdbcType="VARCHAR" />
+	    <result column="goodsAmount1" property="goodsamount1" jdbcType="VARCHAR" />
+	    <result column="goodsAmount2" property="goodsamount2" jdbcType="VARCHAR" />
+	    <result column="goodsUnit2" property="goodsunit2" jdbcType="VARCHAR" />
+	    <result column="createTime" property="createtime" jdbcType="VARCHAR" />  
+	    <result column="userId" property="userid" jdbcType="INTEGER" />
+	    <result column="itemCode" property="itemcode" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="INTEGER" />
+	    <result column="stostatus" property="stostatus" jdbcType="INTEGER" />    
+	</resultMap>
+	
+	<resultMap id="OrderOutSkuBSResultMap" type="OrderOutSkuBS" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+		<result column="orderno" property="orderno" jdbcType="VARCHAR" />
+	    <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+	    <result column="goodsNo" property="goodsno" jdbcType="VARCHAR" />
+	    <result column="weight" property="weight" jdbcType="VARCHAR" />
+	    <result column="goodsAmount" property="goodsamount" jdbcType="VARCHAR" />
+	    <result column="unitPrice" property="unitprice" jdbcType="VARCHAR" />
+	    <result column="totalPrice" property="totalprice" jdbcType="VARCHAR" />
+	    <result column="createTime" property="createtime" jdbcType="VARCHAR" />
+	    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+	 </resultMap>
+
+	
+	<select id="find" resultMap="OrderOutBSResultMap" parameterType="com.what21.model.OrderOutQueryVoBS">
+		select * from t_order_out_bs
+	   <include refid="queryOrderOutWhere"></include>
+	   order by status,stostatus,orderno desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.OrderOutQueryVoBS">
+		select count(id) from t_order_out_bs
+		<include refid="queryOrderOutWhere"></include>	
+	</select>
+	
+	
+	<insert id="insert" parameterType="OrderOutBS">
+		 insert into t_order_out_bs (id, orderNo, shippingName, 
+      invoiceNo, payTime, shippingTime, 
+      goodsNum, currency, rate, 
+      orderTotalAmount, paypalTrade, realShippingId, 
+      consignee, consigneeCountry, consigneeAddress, 
+      consigneeTel, consigneeEmail, wayBillNo, 
+      destinationCountry, totalPrice, packageNo, 
+      grossWeight, postMode, netWeight, 
+      taxMode, exchangeRate, totalWayBill, 
+      goodsUnit, warehouseCode, warehouseName, 
+      locationCode, locationType, goodsModel, 
+      dutyMode, goodsUnit1, goodsAmount1, 
+      goodsAmount2, goodsUnit2, createTime,
+      userId,itemCode,status,stostatus
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderno,jdbcType=VARCHAR}, #{shippingname,jdbcType=VARCHAR}, 
+      #{invoiceno,jdbcType=VARCHAR}, #{paytime,jdbcType=VARCHAR}, #{shippingtime,jdbcType=VARCHAR}, 
+      #{goodsnum,jdbcType=INTEGER}, #{currency,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
+      #{ordertotalamount,jdbcType=VARCHAR}, #{paypaltrade,jdbcType=VARCHAR}, #{realshippingid,jdbcType=VARCHAR}, 
+      #{consignee,jdbcType=VARCHAR}, #{consigneecountry,jdbcType=VARCHAR}, #{consigneeaddress,jdbcType=VARCHAR}, 
+      #{consigneetel,jdbcType=VARCHAR}, #{consigneeemail,jdbcType=VARCHAR}, #{waybillno,jdbcType=VARCHAR}, 
+      #{destinationcountry,jdbcType=VARCHAR}, #{totalprice,jdbcType=VARCHAR}, #{packageno,jdbcType=INTEGER}, 
+      #{grossweight,jdbcType=VARCHAR}, #{postmode,jdbcType=VARCHAR}, #{netweight,jdbcType=VARCHAR}, 
+      #{taxmode,jdbcType=VARCHAR}, #{exchangerate,jdbcType=VARCHAR}, #{totalwaybill,jdbcType=VARCHAR}, 
+      #{goodsunit,jdbcType=VARCHAR}, #{warehousecode,jdbcType=VARCHAR}, #{warehousename,jdbcType=VARCHAR}, 
+      #{locationcode,jdbcType=VARCHAR}, #{locationtype,jdbcType=VARCHAR}, #{goodsmodel,jdbcType=VARCHAR}, 
+      #{dutymode,jdbcType=VARCHAR}, #{goodsunit1,jdbcType=VARCHAR}, #{goodsamount1,jdbcType=VARCHAR}, 
+      #{goodsamount2,jdbcType=VARCHAR}, #{goodsunit2,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR},
+      #{userid,jdbcType=INTEGER}, #{itemcode,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{stostatus,jdbcType=INTEGER}
+      )
+	</insert>
+	<delete id="deleteById" parameterType="int">
+		delete from t_order_out_bs where id = ${value}
+	</delete>
+	
+	<select id="findById" resultType="OrderOutBS" parameterType="int">
+		select * from t_order_out_bs where id = ${value}
+	</select>
+	
+	<update id="update" parameterType="OrderOutBS">
+	update t_order_out_bs
+    set orderNo = #{orderno,jdbcType=VARCHAR},
+      shippingName = #{shippingname,jdbcType=VARCHAR},
+      invoiceNo = #{invoiceno,jdbcType=VARCHAR},
+      payTime = #{paytime,jdbcType=VARCHAR},
+      shippingTime = #{shippingtime,jdbcType=VARCHAR},
+      goodsNum = #{goodsnum,jdbcType=INTEGER},
+      currency = #{currency,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=VARCHAR},
+      orderTotalAmount = #{ordertotalamount,jdbcType=VARCHAR},
+      paypalTrade = #{paypaltrade,jdbcType=VARCHAR},
+      realShippingId = #{realshippingid,jdbcType=VARCHAR},
+      consignee = #{consignee,jdbcType=VARCHAR},
+      consigneeCountry = #{consigneecountry,jdbcType=VARCHAR},
+      consigneeAddress = #{consigneeaddress,jdbcType=VARCHAR},
+      consigneeTel = #{consigneetel,jdbcType=VARCHAR},
+      consigneeEmail = #{consigneeemail,jdbcType=VARCHAR},
+      wayBillNo = #{waybillno,jdbcType=VARCHAR},
+      destinationCountry = #{destinationcountry,jdbcType=VARCHAR},
+      totalPrice = #{totalprice,jdbcType=VARCHAR},
+      packageNo = #{packageno,jdbcType=INTEGER},
+      grossWeight = #{grossweight,jdbcType=VARCHAR},
+      postMode = #{postmode,jdbcType=VARCHAR},
+      netWeight = #{netweight,jdbcType=VARCHAR},
+      taxMode = #{taxmode,jdbcType=VARCHAR},
+      exchangeRate = #{exchangerate,jdbcType=VARCHAR},
+      totalWayBill = #{totalwaybill,jdbcType=VARCHAR},
+      goodsUnit = #{goodsunit,jdbcType=VARCHAR},
+      warehouseCode = #{warehousecode,jdbcType=VARCHAR},
+      warehouseName = #{warehousename,jdbcType=VARCHAR},
+      locationCode = #{locationcode,jdbcType=VARCHAR},
+      locationType = #{locationtype,jdbcType=VARCHAR},
+      goodsModel = #{goodsmodel,jdbcType=VARCHAR},
+      dutyMode = #{dutymode,jdbcType=VARCHAR},
+      goodsUnit1 = #{goodsunit1,jdbcType=VARCHAR},
+      goodsAmount1 = #{goodsamount1,jdbcType=VARCHAR},
+      goodsAmount2 = #{goodsamount2,jdbcType=VARCHAR},
+      goodsUnit2 = #{goodsunit2,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      itemCode = #{itemCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      stostatus = #{stostatus,jdbcType=INTEGER}     
+    where id = #{id,jdbcType=INTEGER}	
+	</update>
+	
+	<select id="findSku" resultMap="OrderOutSkuBSResultMap" parameterType="com.what21.model.OrderOutQueryVoBS">
+		select * from t_order_out_sku_bs
+	   <include refid="queryOrderOutSkuWhere"></include>
+	   order by totalprice,createTime desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="countSku" resultType="java.lang.Integer" parameterType="com.what21.model.OrderOutQueryVoBS">
+		select count(id) from t_order_out_sku_bs
+		<include refid="queryOrderOutSkuWhere"></include>	
+	</select>
+	
+	<insert id="insertSku" parameterType="OrderOutSkuBS">
+	insert into t_order_out_sku_bs (id, goodsName, goodsNo, 
+      weight, goodsAmount, unitPrice, 
+      totalPrice, orderno, createTime,specifications
+      )
+    values (#{id,jdbcType=INTEGER}, #{goodsname,jdbcType=VARCHAR}, #{goodsno,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=VARCHAR}, #{goodsamount,jdbcType=VARCHAR}, #{unitprice,jdbcType=VARCHAR}, 
+      #{totalprice,jdbcType=VARCHAR}, #{orderno,jdbcType=INTEGER}, #{createtime,jdbcType=VARCHAR},#{specifications,jdbcType=VARCHAR}
+      )
+	</insert>
+	
+	<delete id="deleteByOrderno" parameterType="string">
+		delete from t_order_out_sku_bs where orderno = #{orderno}
+	</delete>
+	<select id="findByOrderno" parameterType="string" resultType="OrderOut">
+		select * from t_order_out_bs where orderno = #{value}
+	</select>
+	
+	
+	<select id="findByiIds"  resultMap="OrderOutBSResultMap">
+		select * from t_order_out_bs 
+		where id in 
+		<foreach collection="array" open="(" close=")" separator="," item="id">
+			${id}
+		</foreach>
+	</select>
+	
+	
+	<update id="updateStatus1"  parameterType="int">
+		update t_order_out_bs set status=1
+		where id = ${value}
+	</update>
+	
+	<update id="updateStatus" >
+		update t_order_out_bs set status=#{0}
+		where wayBillNo = #{1}
+	</update>
+	
+	<select id="findSumPriceByOrderno" parameterType="string" resultType="string">
+		select sum(totalPrice) from t_order_out_sku_bs where outId = (select id from t_order_out_bs where orderNo =#{value})
+	</select>
+	
+	<update id="updateSumPriceByOrderno" >
+		<foreach collection="list" item="item">
+			update t_order_out_bs set orderTotalAmount = ${item.totalprice},totalPrice = ${item.totalprice},goodsNum =${item.goodsnum},packageNo =${item.goodsnum} where id = ${item.id};
+		</foreach>
+	</update>
+		
+	<select id="findNumByOrderno" parameterType="string" resultType="int">
+		select count(id) from t_order_out_sku_bs where outId = (select id from t_order_out_bs where orderNo =#{value})
+	</select>
+	
+	
+	<select id="findSkusByOrderno" parameterType="string" resultMap="OrderOutSkuBSResultMap">
+		select * from t_order_out_sku_bs where orderno = #{orderno}
+	</select>
+	
+	
+	<insert id="insertSkuBatch" >
+		insert into t_order_out_sku_bs (id, goodsName, goodsNo, 
+	      weight, goodsAmount, unitPrice, 
+	      totalPrice, orderno, createTime,specifications,netWeight
+	      )	   
+	    values 
+	     <foreach collection="list" separator="," item="orderOutSkuBS">
+	    (#{orderOutSkuBS.id,jdbcType=INTEGER}, #{orderOutSkuBS.goodsname,jdbcType=VARCHAR}, #{orderOutSkuBS.goodsno,jdbcType=VARCHAR}, 
+	      #{orderOutSkuBS.weight,jdbcType=VARCHAR}, #{orderOutSkuBS.goodsamount,jdbcType=VARCHAR}, #{orderOutSkuBS.unitprice,jdbcType=VARCHAR}, 
+	      #{orderOutSkuBS.totalprice,jdbcType=VARCHAR}, #{orderOutSkuBS.orderno,jdbcType=INTEGER}, #{orderOutSkuBS.createtime,jdbcType=VARCHAR},
+	      #{orderOutSkuBS.specifications,jdbcType=VARCHAR},#{orderOutSkuBS.netweight,jdbcType=VARCHAR}
+	      )
+	      </foreach>
+	</insert>
+	
+	<insert id="insertBatch">
+		 insert into t_order_out_bs (id, orderNo, shippingName, 
+      invoiceNo, payTime, shippingTime, 
+      goodsNum, currency, rate, 
+      orderTotalAmount, paypalTrade, realShippingId, 
+      consignee, consigneeCountry, consigneeAddress, 
+      consigneeTel, consigneeEmail, wayBillNo, 
+      destinationCountry, totalPrice, packageNo, 
+      grossWeight, postMode, netWeight, 
+      taxMode, exchangeRate, totalWayBill, 
+      goodsUnit, warehouseCode, warehouseName, 
+      locationCode, locationType, goodsModel, 
+      dutyMode, goodsUnit1, goodsAmount1, 
+      goodsAmount2, goodsUnit2, createTime,
+      userId,itemCode,status,stostatus
+      )
+    values
+     <foreach collection="list" separator="," item="orderOut">
+     (#{orderOut.id,jdbcType=INTEGER}, #{orderOut.orderno,jdbcType=VARCHAR}, #{orderOut.shippingname,jdbcType=VARCHAR}, 
+      #{orderOut.invoiceno,jdbcType=VARCHAR}, #{orderOut.paytime,jdbcType=VARCHAR}, #{orderOut.shippingtime,jdbcType=VARCHAR}, 
+      #{orderOut.goodsnum,jdbcType=INTEGER}, #{orderOut.currency,jdbcType=VARCHAR}, #{orderOut.rate,jdbcType=VARCHAR}, 
+      #{orderOut.ordertotalamount,jdbcType=VARCHAR}, #{orderOut.paypaltrade,jdbcType=VARCHAR}, #{orderOut.realshippingid,jdbcType=VARCHAR}, 
+      #{orderOut.consignee,jdbcType=VARCHAR}, #{orderOut.consigneecountry,jdbcType=VARCHAR}, #{orderOut.consigneeaddress,jdbcType=VARCHAR}, 
+      #{orderOut.consigneetel,jdbcType=VARCHAR}, #{orderOut.consigneeemail,jdbcType=VARCHAR}, #{orderOut.waybillno,jdbcType=VARCHAR}, 
+      #{orderOut.destinationcountry,jdbcType=VARCHAR}, #{orderOut.totalprice,jdbcType=VARCHAR}, #{orderOut.packageno,jdbcType=INTEGER}, 
+      #{orderOut.grossweight,jdbcType=VARCHAR}, #{orderOut.postmode,jdbcType=VARCHAR}, #{orderOut.netweight,jdbcType=VARCHAR}, 
+      #{orderOut.taxmode,jdbcType=VARCHAR}, #{orderOut.exchangerate,jdbcType=VARCHAR}, #{orderOut.totalwaybill,jdbcType=VARCHAR}, 
+      #{orderOut.goodsunit,jdbcType=VARCHAR}, #{orderOut.warehousecode,jdbcType=VARCHAR}, #{orderOut.warehousename,jdbcType=VARCHAR}, 
+      #{orderOut.locationcode,jdbcType=VARCHAR}, #{orderOut.locationtype,jdbcType=VARCHAR}, #{orderOut.goodsmodel,jdbcType=VARCHAR}, 
+      #{orderOut.dutymode,jdbcType=VARCHAR}, #{orderOut.goodsunit1,jdbcType=VARCHAR}, #{orderOut.goodsamount1,jdbcType=VARCHAR}, 
+      #{orderOut.goodsamount2,jdbcType=VARCHAR}, #{orderOut.goodsunit2,jdbcType=VARCHAR}, #{orderOut.createtime,jdbcType=VARCHAR},
+      #{orderOut.userid,jdbcType=INTEGER}, #{orderOut.itemcode,jdbcType=VARCHAR},#{orderOut.status,jdbcType=INTEGER},#{orderOut.stostatus,jdbcType=INTEGER}
+      )
+      </foreach>
+	</insert>
+	
+	
+	<select id="sumByOrderno" parameterType="string" resultType="int">
+		select count(id) from t_order_out_bs where orderno = #{value}
+	</select>
+		
+	<update id="updateEnd" >
+		update t_order_out_bs set status = 9 where id in 
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</update>
+	
+	<select id="findSkuById" parameterType="int" resultType="OrderOutSkuBS">
+		select * from t_order_out_sku_bs where id = ${value}
+	</select>
+	
+	
+	  <update id="updateSku" parameterType="OrderOutSku" >
+	    update t_order_out_sku_bs
+	    set goodsName = #{goodsname,jdbcType=VARCHAR},
+	      goodsNo = #{goodsno,jdbcType=VARCHAR},
+	      weight = #{weight,jdbcType=VARCHAR},
+	      goodsAmount = #{goodsamount,jdbcType=VARCHAR},
+	      unitPrice = #{unitprice,jdbcType=VARCHAR},
+	      totalPrice = #{totalprice,jdbcType=VARCHAR},
+	      createTime = #{createtime,jdbcType=VARCHAR},
+	      specifications = #{specifications,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findCompanycodeByUserid" parameterType="int" resultType="string">
+  	select companybm from company where userId = ${value}
+  </select>
+  
+  <update id="updateGoodsno">
+  	update t_order_out_sku_bs set goodsno = #{1} where goodsno = #{0}
+  </update>
+  
+  <select id="countSkuByGoodsno" parameterType="string" resultType="int">
+  	select count(*) from t_order_out_sku_bs where goodsno = #{goodsno}
+  </select>
+  
+  <delete id="deleteSkuByIds">
+  	  delete from t_order_out_sku_bs where orderno in
+  	  (select orderno from t_order_out_bs where id in
+  	  	<foreach collection="array" item="id" open="(" separator="," close=")">
+		${id}
+		</foreach>
+  	  )
+
+  </delete>
+  
+  <delete id="deleteByIds">
+  	delete from t_order_out_bs where id in
+  	<foreach collection="array" item="id" open="(" separator="," close=")">
+		${id}
+	</foreach>
+  </delete>
+  
+  
+    <update id="updateSto1">
+  	update t_order_out_bs set stostatus = 1 where id in
+  	<foreach collection="list" item="id" open="(" separator="," close=")">
+		${id}
+	</foreach>
+  </update>
+  
+  <update id="updateWeight">
+  	update t_order_out_bs set grossWeight = #{1},netWeight = #{2} where id = #{0}
+  </update>
+  
+  
+  <select id="findExportByIds"  resultType="com.what21.model.OrderOutForExportBS">
+		select t.orderNo,t.consignee,t.consigneeAddress,t.grossWeight,t.consigneeTel,t.totalWayBill,t.wayBillNo,t.rate,t.destinationCountry,ts.netweight,ts.weight,ts.goodsName,ts.goodsNo,ts.specifications,ts.goodsAmount,ts.unitPrice,ts.totalPrice,t.currency,t.itemCode,t.createTime from t_order_out_bs t left join t_order_out_sku_bs ts on t.orderno =ts.orderno  
+		where t.id in 
+		<foreach collection="array" open="(" close=")" separator="," item="id">
+			${id}
+		</foreach>
+		order by createtime desc,orderno
+	</select>
+	
+	
+	<select id="findExport" resultType="com.what21.model.OrderOutForExportBS" parameterType="com.what21.model.OrderOutQueryVoBS">
+		select t.orderNo,t.consignee,t.consigneeAddress,t.grossWeight,t.consigneeTel,t.totalWayBill,t.wayBillNo,t.rate,t.destinationCountry,ts.netweight,ts.weight,ts.goodsName,ts.goodsNo,ts.specifications,ts.goodsAmount,ts.unitPrice,ts.totalPrice,t.currency,t.itemCode,t.createTime from t_order_out_bs t left join t_order_out_sku_bs ts on t.orderno =ts.orderno
+	   <include refid="queryOrderOutWhere2"></include>
+	   order by createtime desc,orderno
+	   <include refid="pageQuery"></include>
+	</select>
+</mapper>

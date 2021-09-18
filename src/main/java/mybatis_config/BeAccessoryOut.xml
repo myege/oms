@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeAccessoryOutDao">
+	<sql id="query_beAccessoryOut_where">
+		<if test="beAccessoryOutCustom!=null">
+			<where>
+				<if test="beAccessoryOutCustom.lzdid !=null">
+					and lzdid =${beAccessoryOutCustom.lzdid}
+				</if>
+
+			</where>
+		</if>
+	</sql>
+
+
+	
+	<select id="findAll" resultType="com.what21.model.BeAccessoryOut" parameterType="com.what21.model.BeAccessoryOutQueryVo">
+		select * from be_accessory_out
+		<include refid="query_beAccessoryOut_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="countAll" resultType="java.lang.Integer" parameterType="com.what21.model.BeAccessoryOutQueryVo">
+		select count(1) from be_accessory_out
+		<include refid="query_beAccessoryOut_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.BeAccessoryOut" >
+       insert into be_accessory_out (id, itemname, resfilename, 
+      tarfilename, lzdid, createtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{itemname,jdbcType=VARCHAR}, #{resfilename,jdbcType=VARCHAR}, 
+      #{tarfilename,jdbcType=VARCHAR}, #{lzdid,jdbcType=INTEGER}, #{createtime,jdbcType=VARCHAR}
+      )
+  	</insert>
+
+	<delete id="deleteByIds" >
+		delete from be_accessory_out where id in
+		<foreach collection="array" close=")" open="(" separator="," item="item">
+		 ${item}
+		</foreach>		
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.what21.model.BeAccessoryOut">
+		select * from be_accessory_out where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="com.what21.model.BeAccessoryOut">
+  update be_accessory_out
+    set itemname = #{itemname,jdbcType=VARCHAR},
+      resfilename = #{resfilename,jdbcType=VARCHAR},
+      tarfilename = #{tarfilename,jdbcType=VARCHAR},
+      lzdid = #{lzdid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  	<select id="countByItemname" resultType="java.lang.Integer">
+		select count(*) from be_accessory_out where lzdid = #{0} and itemname = #{1}	
+	</select>
+	
+	
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_accessory_out where id = ${value}
+	</delete>
+  
+</mapper>

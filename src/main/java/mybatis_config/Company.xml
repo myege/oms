@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CompanyDao">
+	<resultMap type="Company" id="CompanyResultMap">
+		<id property="id" column="id"/>
+		<result property="companytszt" column="companytszt"/>
+		<result property="companybm" column="companybm"/>
+		<result property="companyName" column="companyName"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="payCompanyCode" column="payCompanyCode"/>
+		<result property="eCommerceName" column="eCommerceName"/>
+		<result property="eCommerceCode" column="eCommerceCode"/>
+		<result property="logisCompanyName" column="logisCompanyName"/>
+		<result property="logisCompanyCode" column="logisCompanyCode"/>
+		<result property="declareCompanyName" column="declareCompanyName"/>
+		<result property="declareCompanyCode" column="declareCompanyCode"/>
+		<result property="applicationFormNo" column="applicationFormNo"/>
+		<result property="internalAreaCompanyNo" column="internalAreaCompanyNo"/>
+		<result property="internalAreaCompanyName" column="internalAreaCompanyName"/>
+		<result property="assureCode" column="assureCode"/>
+		<result property="customsField" column="customsField"/>
+		<result property="declPort" column="declPort"/>
+		<result property="accountBookNo" column="accountBookNo"/>
+		<result property="country" column="country"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendTel" column="sendTel"/>
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="userId" column="userId"/>
+		<result property="isauto" column="isauto"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, companytszt, companybm, companyName, companyCode, payCompanyCode, eCommerceName, 
+    eCommerceCode, logisCompanyName, logisCompanyCode, declareCompanyName, declareCompanyCode, 
+    applicationFormNo, internalAreaCompanyNo, internalAreaCompanyName, assureCode, customsField, 
+    declPort, accountBookNo, country, sendName, sendTel, sendAddress, userId, isauto
+  </sql>
+	<sql id="whereCompany">
+		<if test="company != null">
+			<where>
+				<if test="company.companybm != null">
+					and companybm like '%${company.companybm}%'
+				</if>
+			</where>
+		</if> 
+	</sql>
+	<select id="findAll" parameterType="com.what21.model.CompanyQueryVo" resultType="com.what21.model.Company">
+	select * from company
+	<include refid="whereCompany" />
+	<if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count" parameterType="com.what21.model.CompanyQueryVo" resultType="int">
+	select count(id) from company 
+	<include refid="whereCompany" />
+	</select>
+	<select id="findByCompanyBm" resultMap="CompanyResultMap">
+		select * from company where companybm = #{companybm}
+	</select>
+	
+	<select id="findByCompany" resultMap="CompanyResultMap">
+		select * from company 
+	</select>
+	 <insert id="save" parameterType="com.what21.model.Company">
+    insert into company (id, companytszt, companybm, 
+      companyName, companyCode, payCompanyCode, 
+      eCommerceName, eCommerceCode, logisCompanyName, 
+      logisCompanyCode, declareCompanyName, declareCompanyCode, 
+      applicationFormNo, internalAreaCompanyNo, 
+      internalAreaCompanyName, assureCode, customsField, 
+      declPort, accountBookNo, country, 
+      sendName, sendTel, sendAddress, 
+      userId)
+    values (#{id,jdbcType=INTEGER}, #{companytszt,jdbcType=VARCHAR}, #{companybm,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{payCompanyCode,jdbcType=VARCHAR}, 
+      #{eCommerceName,jdbcType=VARCHAR}, #{eCommerceCode,jdbcType=VARCHAR}, #{logisCompanyName,jdbcType=VARCHAR}, 
+      #{logisCompanyCode,jdbcType=VARCHAR}, #{declareCompanyName,jdbcType=VARCHAR}, #{declareCompanyCode,jdbcType=VARCHAR}, 
+      #{applicationFormNo,jdbcType=VARCHAR}, #{internalAreaCompanyNo,jdbcType=VARCHAR}, 
+      #{internalAreaCompanyName,jdbcType=VARCHAR}, #{assureCode,jdbcType=VARCHAR}, #{customsField,jdbcType=VARCHAR}, 
+      #{declPort,jdbcType=VARCHAR}, #{accountBookNo,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{sendName,jdbcType=VARCHAR}, #{sendTel,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateById" parameterType="com.what21.model.Company">
+    update company set
+      companytszt = #{companytszt,jdbcType=VARCHAR},
+      companybm = #{companybm,jdbcType=VARCHAR},
+      companyName = #{companyName,jdbcType=VARCHAR},
+      companyCode = #{companyCode,jdbcType=VARCHAR},
+      payCompanyCode = #{payCompanyCode,jdbcType=VARCHAR},
+      eCommerceName = #{eCommerceName,jdbcType=VARCHAR},
+      eCommerceCode = #{eCommerceCode,jdbcType=VARCHAR},
+      logisCompanyName = #{logisCompanyName,jdbcType=VARCHAR},
+      logisCompanyCode = #{logisCompanyCode,jdbcType=VARCHAR},
+      declareCompanyName = #{declareCompanyName,jdbcType=VARCHAR},
+      declareCompanyCode = #{declareCompanyCode,jdbcType=VARCHAR},
+      applicationFormNo = #{applicationFormNo,jdbcType=VARCHAR},
+      internalAreaCompanyNo = #{internalAreaCompanyNo,jdbcType=VARCHAR},
+      internalAreaCompanyName = #{internalAreaCompanyName,jdbcType=VARCHAR},
+      assureCode = #{assureCode,jdbcType=VARCHAR},
+      customsField = #{customsField,jdbcType=VARCHAR},
+      declPort = #{declPort,jdbcType=VARCHAR},
+      accountBookNo = #{accountBookNo,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      sendName = #{sendName,jdbcType=VARCHAR},
+      sendTel = #{sendTel,jdbcType=VARCHAR},
+      sendAddress = #{sendAddress,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=INTEGER},
+      isauto = #{isauto,jdbcType=INTEGER} where id =#{id}
+  </update>
+  <select id="findById" parameterType="Integer" resultType="com.what21.model.Company">
+  select * from company where id=#{value}
+  </select>
+  
+  <update id="changeAuto" parameterType="com.what21.model.Company">
+  update company set isauto = #{isauto,jdbcType=INTEGER}  where id =#{id}
+  </update>
+  <delete id="deleteCompanyByIds" parameterType="String">
+  	DELETE FROM company WHERE id in (
+  	<foreach collection="array" item="id" separator=",">
+  	#{id} 
+  	</foreach>
+  	)
+  </delete>
+  <select id="findCompanybmAndName" resultType="com.what21.model.Company">
+  SELECT companybm,companyName from company
+  </select>
+  <select id="findCompanyNameByCompanybm" resultType="com.what21.model.Company">
+  select companyName from company where companybm=#{value}
+  </select>
+</mapper>

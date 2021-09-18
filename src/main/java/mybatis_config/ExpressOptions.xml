@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.ExpressOptionsDao">
+	<resultMap id="BaseResultMap"
+		type="com.what21.model.ExpressOptions">
+		<id column="optionName" jdbcType="VARCHAR" property="optionName" />
+		<result column="optionValue" jdbcType="VARCHAR"
+			property="optionValue" />
+	</resultMap>
+	
+	<select id="findByKey" parameterType="String" resultType="com.what21.model.ExpressOptions">
+	select * from express_options where optionName=#{value}
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.ExpressOptions">
+	INSERT INTO express_options (optionName, optionValue) 
+	VALUES (#{optionName}, #{optionValue})
+	</insert>
+	
+	<update id="updateByKey" parameterType="com.what21.model.ExpressOptions">
+	UPDATE express_options SET  optionValue=#{optionValue} WHERE optionName=#{optionName}
+	</update>
+	<select id="selectList" resultType="com.what21.model.ExpressOptions">
+	select * from express_options
+	</select>
+</mapper>

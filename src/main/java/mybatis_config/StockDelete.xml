@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.StockDeleteDao">
+	<resultMap type="StockDelete" id="StockDeleteResultMap">
+		<id property="id" column="id"/>
+		<result property="stockDeleteId" column="stockDeleteId"/>
+		<result property="manualId" column="manualId"/>
+		<result property="customsCode" column="customsCode"/>
+		<result property="roleCode" column="roleCode"/>
+		<result property="companyCode" column="companyCode"/>
+		
+		<result property="inOutFlag" column="inOutFlag"/>
+		<result property="reason" column="reason"/>
+		<result property="datatime" column="datatime"/>
+		<result property="flag" column="flag"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	<sql id="whereFindAll">
+	<where>
+		1=1
+		<if test="stockDeleteCustom.userId != null and stockDeleteCustom.userId != 0">
+			and userId = #{stockDeleteCustom.userId}
+		</if>
+		<if test="stockDeleteCustom.stockDeleteId !=null and stockDeleteCustom.stockDeleteId !=''">
+			and stockDeleteId like '%${stockDeleteCustom.stockDeleteId}%'
+		</if>
+		<if test="stockDeleteCustom.manualId !=null and stockDeleteCustom.manualId !=''">
+			and manualId like '%${stockDeleteCustom.manualId}%'
+		</if>
+		<if test="stockDeleteCustom.companyCode !=null and stockDeleteCustom.companyCode !=''">
+			and companyCode like '%${stockDeleteCustom.companyCode}%'
+		</if>
+	</where>
+</sql>
+	<select id="findAll2" parameterType="com.what21.model.StockDeleteCustom" resultType="com.what21.model.StockDeleteCustom">
+	select * from wms_stock_delete
+	<include refid="whereFindAll"></include>
+	 <if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="count2" parameterType="com.what21.model.StockDeleteCustom" resultType="int">
+	select count(1) from wms_stock_delete
+	<include refid="whereFindAll"></include>
+	</select>
+	
+	
+	<select id="findAll" resultMap="StockDeleteResultMap" parameterType="java.util.Map">
+		select * from wms_stock_delete where 1=1
+		
+		<if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+		
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<delete id = "delete" parameterType="String">
+		DELETE wms_stock_delete ,wms_stock_delete_sku from wms_stock_delete 
+		
+		LEFT JOIN wms_stock_delete_sku ON wms_stock_delete.stockDeleteId=wms_stock_delete_sku.stockDeleteId
+		
+		WHERE wms_stock_delete.stockDeleteId=#{stockDeleteId}
+	</delete>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_stock_delete
+		<where>
+			1=1
+		    <if test="type == 1">
+				and stockDeleteId like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and manualId like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and companyCode like '%${paramValue}%'
+			</if> 
+			 
+		</where>
+	</select>
+	
+	<select id="sd" resultMap="StockDeleteResultMap" parameterType="java.util.Map">
+	
+		select * from wms_stock_delete where 1=1
+		<if test="type == 1 ">
+			and stockDeleteId like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and manualId like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and companyCode like '%${paramValue}%'
+		</if>
+		
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<insert id="insert"  parameterType="StockDelete">
+	
+	insert into wms_stock_delete(stockDeleteId,manualId,customsCode,roleCode,companyCode,inOutFlag,reason,datatime,flag,userId)
+	
+	values(#{stockDeleteId},#{manualId},#{customsCode},#{roleCode},#{companyCode},#{inOutFlag},#{reason},#{datatime},#{flag},#{userId})
+	
+	</insert>
+	
+	<select id="findByStockDeleteId" resultType="StockDelete">
+		select * from wms_stock_delete where stockDeleteId = #{stockDeleteId}
+	</select>
+	
+	<select id="findByIdToSD" resultType="StockDelete">
+		select * from wms_stock_delete where id = #{id}
+	</select>
+	
+	<update id="insertFlagSD"  parameterType="StockDelete">
+	
+	 <![CDATA[update wms_stock_delete_sku s,wms_stock_delete w set s.flag=#{flag},w.flag=#{flag}
+	 where s.stockDeleteId=#{stockDeleteId} and w.stockDeleteId=#{stockDeleteId}]]>
+	
+	</update>
+	
+	<update id="updateFlag"  parameterType="StockDelete">
+		update wms_stock_delete set flag = #{flag} 
+		where stockDeleteId = #{stockDeleteId} 
+	</update>
+</mapper>

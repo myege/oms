@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CollectDao">
+	<sql id="queryCollectWhere">
+		<if test="collectCustom!=null">
+			<where>
+			 <if test="collectCustom.tydh != null and collectCustom.tydh != ''">
+		 		and tydh like '%${collectCustom.tydh}%' 
+		    </if>
+		    <if test="collectCustom.startDate != null and collectCustom.startDate">
+		 		and sj &gt;=#{collectCustom.startDate}
+		    </if>
+		    <if test=" collectCustom.endDate !=null and collectCustom.endDate !=''">
+		 		 and sj &lt;=#{collectCustom.endDate}
+		    </if>
+			<if test="collectCustom.minSf != null and collectCustom.minSf != ''">
+		 		and sf &gt;=${collectCustom.minSf}
+		 	</if>
+		 	<if test="collectCustom.minQgf != null and collectCustom.minQgf != ''">
+		 		and qgf &gt;=${collectCustom.minQgf}
+		 	</if>
+		 	<if test="collectCustom.minHcf != null and collectCustom.minHcf != ''">
+		 		and hcf &gt;=${collectCustom.minHcf}
+		 	</if>
+		 	<if test="collectCustom.minYf != null and collectCustom.minYf != ''">
+		 		and yf &gt;=${collectCustom.minYf}
+		 	</if>
+		 	<if test="collectCustom.minPttsf != null and collectCustom.minPttsf != ''">
+		 		and pttsf &gt;=${collectCustom.minPttsf}
+		 	</if>
+		 	<if test="collectCustom.maxSf != null and collectCustom.maxSf != ''">
+		 		and sf &lt;=${collectCustom.maxSf}
+		 	</if>
+		 	<if test="collectCustom.maxQgf != null and collectCustom.maxQgf != ''">
+		 		and qgf &lt;=${collectCustom.maxQgf}
+		 	</if>
+		 	<if test="collectCustom.maxHcf != null and collectCustom.maxHcf != ''">
+		 		and hcf &lt;=${collectCustom.maxHcf}
+		 	</if>
+		 	<if test="collectCustom.maxYf != null and collectCustom.maxYf != ''">
+		 		and yf &lt;=${collectCustom.maxYf}
+		 	</if>
+		 	<if test="collectCustom.maxPttsf != null and collectCustom.maxPttsf != ''">
+		 		and pttsf &lt;=${collectCustom.maxPttsf}
+		 	</if>
+		 	<if test="collectCustom.zt != null and collectCustom.zt != ''">
+		 		and zt like '%${collectCustom.zt}%'
+		 	</if>
+		 	<if test="collectCustom.bsflag != null and collectCustom.bsflag == 1">
+		 		and bsflag =1
+		 	</if>
+		 	<if test="collectCustom.zyflag != null and collectCustom.zyflag == 1">
+		 		and ywbh like '%Z-%'
+		 	</if>
+		 	<if test="collectCustom.sj2 != null and collectCustom.sj2 !=''">
+		 		and sj2 like '%${collectCustom.sj2}%'
+		 	</if>
+	 	</where>
+		</if>
+		
+	</sql>
+	<sql id="pageQuery">
+		<if test="pageQuery!=null">
+			<if test="pageQuery.startPage != null and pageQuery.endPage != ''">
+		 		LIMIT ${pageQuery.startPage},${pageQuery.endPage}
+		 	</if>
+		</if>
+	</sql>
+	<resultMap type="Collect" id="CollectResultMap">
+<id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tydh" jdbcType="VARCHAR" property="tydh" />
+    <result column="sj" jdbcType="VARCHAR" property="sj" />
+    <result column="sf" jdbcType="VARCHAR" property="sf" />
+    <result column="qgf" jdbcType="VARCHAR" property="qgf" />
+    <result column="hcf" jdbcType="VARCHAR" property="hcf" />
+    <result column="yf" jdbcType="VARCHAR" property="yf" />
+    <result column="pttsf" jdbcType="VARCHAR" property="pttsf" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="fdh" jdbcType="VARCHAR" property="fdh" />
+    <result column="ywbh" jdbcType="VARCHAR" property="ywbh" />
+    <result column="js" jdbcType="INTEGER" property="js" />
+    <result column="tj" jdbcType="VARCHAR" property="tj" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="mz" jdbcType="VARCHAR" property="mz" />
+    <result column="sj2" jdbcType="VARCHAR" property="sj2" />
+    <result column="jjzl" jdbcType="VARCHAR" property="jjzl" />
+    <result column="bh" jdbcType="VARCHAR" property="bh" />
+    <result column="wtrq" jdbcType="DATE" property="wtrq" />
+    <result column="mdg" jdbcType="VARCHAR" property="mdg" />
+    <result column="ds" jdbcType="VARCHAR" property="ds" />
+    <result column="tpcc" jdbcType="VARCHAR" property="tpcc" />
+    <result column="hj" jdbcType="VARCHAR" property="hj" />
+    <result column="bsflag" jdbcType="INTEGER" property="bsflag" />		
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />		  
+	</resultMap>
+
+	
+	<select id="findAll" resultMap="CollectResultMap" parameterType="com.what21.model.CollectQueryVo">
+		select * from be_hz
+	   <include refid="queryCollectWhere"></include>
+	   order by sj desc
+	   <include refid="pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.CollectQueryVo">
+		select count(1) from be_hz
+		<include refid="queryCollectWhere"></include>	
+	</select>
+	
+	
+	<insert id="insert" parameterType="Collect">
+	insert into be_hz (id, tydh, sj, 
+      sf, qgf, hcf, yf, 
+      pttsf, zt, fdh, ywbh, 
+      js, tj, bz, mz, 
+      sj2, jjzl, bh, wtrq,mdg,hj,ds,tpcc,
+      bsflag,kssj,jssj
+      )
+    values (#{id,jdbcType=INTEGER}, #{tydh,jdbcType=VARCHAR}, #{sj,jdbcType=VARCHAR}, 
+      #{sf,jdbcType=VARCHAR}, #{qgf,jdbcType=VARCHAR}, #{hcf,jdbcType=VARCHAR}, #{yf,jdbcType=VARCHAR}, 
+      #{pttsf,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}, #{fdh,jdbcType=VARCHAR}, #{ywbh,jdbcType=VARCHAR}, 
+      #{js,jdbcType=INTEGER}, #{tj,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{mz,jdbcType=VARCHAR}, 
+      #{sj2,jdbcType=VARCHAR}, #{jjzl,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR}, #{wtrq,jdbcType=DATE},
+      #{mdg,jdbcType=VARCHAR},#{hj,jdbcType=VARCHAR},#{ds,jdbcType=VARCHAR},#{tpcc,jdbcType=VARCHAR},
+      #{bsflag,jdbcType=INTEGER},#{kssj,jdbcType=VARCHAR},#{jssj,jdbcType=VARCHAR}
+      )
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from be_hz where id = ${value}
+	</delete>
+	
+	<select id="findById" resultType="Collect" parameterType="int">
+		select * from be_hz where id = ${value}
+	</select>
+
+	<select id="countByTydh" resultType="int" parameterType="string">
+		select count(*) from t_order_mail where totalMailNo = #{value}
+	</select>
+	
+	<update id="update" parameterType="Collect">
+	update be_hz
+    set tydh = #{tydh,jdbcType=VARCHAR},
+      sj = #{sj,jdbcType=TIMESTAMP},
+      sf = #{sf,jdbcType=VARCHAR},
+      qgf = #{qgf,jdbcType=VARCHAR},
+      hcf = #{hcf,jdbcType=VARCHAR},
+      yf = #{yf,jdbcType=VARCHAR},
+      pttsf = #{pttsf,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR},
+      fdh = #{fdh,jdbcType=VARCHAR},
+      ywbh = #{ywbh,jdbcType=VARCHAR},
+      js = #{js,jdbcType=INTEGER},
+      tj = #{tj,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      mz = #{mz,jdbcType=VARCHAR},
+      sj2 = #{sj2,jdbcType=VARCHAR},
+      jjzl = #{jjzl,jdbcType=VARCHAR},
+      bh = #{bh,jdbcType=VARCHAR},
+      wtrq = #{wtrq,jdbcType=DATE},
+      mdg = #{mdg,jdbcType=VARCHAR},
+      hj = #{hj,jdbcType=VARCHAR},
+      ds = #{ds,jdbcType=VARCHAR},
+      tpcc = #{tpcc,jdbcType=VARCHAR},
+      bsflag = #{bsflag,jdbcType=INTEGER},
+      kssj = #{kssj,jdbcType=VARCHAR},
+      jssj = #{jssj,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+	
+	</update>
+	
+	<select id="findByTydh" resultType="Collect" parameterType="string">
+		select * from be_hz where tydh = #{tydh}
+	</select>
+	
+	<select id="findAllBs" resultMap="CollectResultMap" parameterType="com.what21.model.CollectQueryVo">
+		select * from be_hz where 
+		<include refid="queryCollectWhere"></include>
+	   	order by jssj desc
+	   	<include refid="pageQuery"></include>
+	</select>
+	
+	<select id="countBs" resultType="java.lang.Integer" parameterType="com.what21.model.CollectQueryVo">
+		select count(1) from be_hz
+		<include refid="queryCollectWhere"></include>	
+	</select>
+	
+	<select id="findByYwbh" resultType="Collect" parameterType="string">
+		select * from be_hz where ywbh = #{ywbh}
+	</select>
+	
+	<select id="findBySjAndSj2" resultMap="CollectResultMap" parameterType="Collect">
+		select * from be_hz where sj between #{kssj} and #{jssj} and sj2 = #{sj2} and kssj is null and jssj is null and ywbh like 'B-%'
+	</select>
+	
+	<select id="countBySjAndSj2" resultType="int" parameterType="Collect">
+		select count(*) from be_hz where sj between #{kssj} and #{jssj} and sj2 = #{sj2} and kssj is null and jssj is null and ywbh like 'B-%'
+	</select>
+</mapper>

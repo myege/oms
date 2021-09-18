@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.SzqgOrderSkuDao">
+	<resultMap type="SzqgOrderSku" id="SzqgOrderSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="itemNo" column="itemNo"/>
+		<result property="itemName" column="itemName"/>
+		<result property="gModel" column="gModel"/>
+		<result property="itemDescribe" column="itemDescribe"/>
+		<result property="barCode" column="barCode"/>
+		<result property="unit" column="unit"/>
+		<result property="qty" column="qty"/>
+		<result property="price" column="price"/>
+		<result property="totalPrice" column="totalPrice"/>
+		<result property="currency" column="currency"/>
+		<result property="country" column="country"/>
+		<result property="note" column="note"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="HScode" column="HScode"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="OrderBondedSku">
+		INSERT INTO t_order_bonded_sku (txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz)
+		VALUES(#{txLogisticID},#{itemsku},#{itemName},#{itemWeight},#{itemCount},#{unitPrice},#{allPrice},#{hz});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="SzqgOrderSku">
+		INSERT INTO szqg_order_sku (HScode,totalPrice,createDateTime,itemDescribe,gModel,codeTs,secondCount,firstCount,secondUnit,firstUnit,netWeight,grossWeight,country,currency,unit,barCode,orderNo,itemNo,qty,price,itemName)
+		VALUES
+		<foreach collection="list" item="SzqgOrderSku" separator="," >
+  		(#{SzqgOrderSku.HScode},#{SzqgOrderSku.totalPrice},now(),#{SzqgOrderSku.itemDescribe},#{SzqgOrderSku.gModel},
+  		#{SzqgOrderSku.codeTs},#{SzqgOrderSku.secondCount},#{SzqgOrderSku.firstCount},#{SzqgOrderSku.secondUnit},#{SzqgOrderSku.firstUnit},#{SzqgOrderSku.netWeight},#{SzqgOrderSku.grossWeight},#{SzqgOrderSku.country},
+  			'142',#{SzqgOrderSku.unit},#{SzqgOrderSku.barCode},#{SzqgOrderSku.orderNo},#{SzqgOrderSku.itemNo},#{SzqgOrderSku.qty},#{SzqgOrderSku.price},#{SzqgOrderSku.itemName}
+		)
+  		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_bonded_sku WHERE txLogisticID = #{txLogisticID}
+	</delete>
+	
+	
+		
+	<select id="findById" resultMap="SzqgOrderSkuResultMap" parameterType="String">
+		select * from szqg_order_sku where orderNo = #{txLogisticID}
+	</select>
+	
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from t_order_bonded_sku where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<update id="update"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set itemName=#{itemName},internalNumber=#{internalNumber},pc=#{pc} where id = #{id}
+	</update>
+	
+
+	
+	<update id="updods"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set txLogisticID=#{txLogisticID} where id =#{id}
+	</update>
+	
+	<update id="updodpc"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set pc=#{pc} where id = #{id}
+	</update>
+	
+	<update id="batchUpdate"  parameterType="OrderBondedSku">
+	<foreach collection="list" item="orderBondedSku" separator="," >
+	update szqg_order_sku s, (SELECT  goodsDesc ,goodsmodel,barCode,goodsUnit,goodsFrom,hsCode,grossWeight,netWeight,firstUnit,secondUnit from szqg_item where skucode=#{itemNo} ) t set s.secondUnit=t.secondUnit, s.firstUnit=t.firstUnit, s.netWeight=t.netWeight, s.grossWeight=t.grossWeight, s.HScode=t.hsCode, s.country=t.goodsFrom, s.unit=t.goodsUnit, s.barCode=t.barCode, s.itemDescribe=t.goodsDesc ,s.gmodel=t.goodsmodel  where s.id=#{id} 
+	
+	</foreach>
+	</update>
+	
+</mapper> 

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderBondedSkuDao">
+	<resultMap type="OrderBondedSku" id="OrderBondedSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemsku" column="itemsku"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="unitPrice" column="unitPrice"/>
+		<result property="allPrice" column="allPrice"/>
+		<result property="hz" column="hz"/>
+		<result property="internalNumber" column="internalNumber"/>
+		
+		<result property="gcode" column="gcode"/>
+		<result property="hsCode" column="hsCode"/>
+		<result property="gmodel" column="gmodel"/>
+		<result property="barCode" column="barCode"/>
+		<result property="country" column="country"/>
+		<result property="unit" column="unit"/>
+		<result property="unit1" column="unit1"/>
+		<result property="unit2" column="unit2"/>
+		<result property="qty1" column="qty1"/>
+		<result property="qty2" column="qty2"/>
+		
+	</resultMap>
+	<resultMap type="OrderBondedPushSku" id="OrderBondedPushSkuResultMap">
+		<result property="goodsNumber" column="itemCount"/>
+		<result property="goodsPrice" column="unitPrice"/>
+		<result property="goodsSn" column="itemsku"/>
+		<result property="itemNameZi" column="itemName"/>
+	</resultMap>
+	
+	<resultMap type="Item" id="ItemResultMap">
+		<id property="id" column="id"/>
+		<result property="itemSKU" column="itemSKU"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemSpec" column="itemSpec"/>
+		<result property="unitWeight" column="unitWeight"/>
+		<result property="unitDesc" column="unitDesc"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="hscode" column="hscode"/>
+		<result property="oneUnitDesc" column="oneUnitDesc"/>
+		<result property="twoUnitDesc" column="twoUnitDesc"/>
+		<result property="country" column="country"/>
+		<result property="countryOfOrigin" column="countryOfOrigin"/>
+		<result property="listPrice" column="listPrice"/>
+		<result property="costPrice" column="costPrice"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="vendorItemCode" column="vendorItemCode"/>
+		<result property="remark" column="remark"/>
+		<result property="xz" column="xz"/>
+		<result property="xh" column="xh"/>
+		<result property="userId" column="userId"/>
+		<result property="internalNumber" column="internalNumber"/>
+		<result property="taxRate" column="taxRate"/>
+		<result property="firstCount" column="firstCount"/>
+		<result property="secondCount" column="secondCount"/>
+		<result property="productRecordNo" column="productRecordNo"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="OrderBondedSku">
+		INSERT INTO t_order_bonded_sku (txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz)
+		VALUES(#{txLogisticID},#{itemsku},#{itemName},#{itemWeight},#{itemCount},#{unitPrice},#{allPrice},#{hz});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="OrderBondedSku">
+		INSERT INTO t_order_bonded_sku (txLogisticID,itemsku,itemName,itemWeight,itemCount,unitPrice,allPrice,hz,
+		itemNo,gcode,hsCode,gmodel,barCode,country,unit1,unit,unit2,qty1,qty2,internalNumber
+		)
+		VALUES
+		<foreach collection="list" item="orderBondedSku" separator="," >
+  		(
+			#{orderBondedSku.txLogisticID},#{orderBondedSku.itemsku},#{orderBondedSku.itemName},#{orderBondedSku.itemWeight},
+			#{orderBondedSku.itemCount},#{orderBondedSku.unitPrice},#{orderBondedSku.allPrice},#{orderBondedSku.hz},
+			#{orderBondedSku.itemNo},#{orderBondedSku.gcode},#{orderBondedSku.hsCode},#{orderBondedSku.gmodel},
+			#{orderBondedSku.barCode},#{orderBondedSku.country},#{orderBondedSku.unit1},#{orderBondedSku.unit},
+			#{orderBondedSku.unit2},#{orderBondedSku.qty1},#{orderBondedSku.qty2},#{orderBondedSku.internalNumber}
+		)
+  		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM t_order_bonded_sku WHERE txLogisticID = #{txLogisticID}
+	</delete>
+	
+	<select id="findByTxLogisticID" resultMap="OrderBondedPushSkuResultMap" parameterType="String">
+		select * from t_order_bonded_sku where txLogisticID = #{txLogisticID}
+	</select>
+		
+	<select id="findById" resultMap="OrderBondedSkuResultMap" parameterType="String">
+		select * from t_order_bonded_sku where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<select id="Detailed" resultMap="OrderBondedSkuResultMap" parameterType="java.util.Map">
+		select * FROM t_order_bonded_sku WHERE txLogisticID = #{txLogisticID} LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(1) from t_order_bonded_sku where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<update id="update"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set itemName=#{itemName},internalNumber=#{internalNumber},pc=#{pc} where id = #{id}
+	</update>
+	
+	<select id="findItem" resultMap="ItemResultMap" parameterType="String">
+	     select * from item where itemSKU=#{itemSku} LIMIT 1
+	</select>
+	
+	
+	<select id="skuupd" resultMap="OrderBondedSkuResultMap"  parameterType="OrderBondedSku">
+		select id from t_order_bonded_sku where txLogisticID =#{txLogisticID}
+	</select>
+	<update id="updods"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set txLogisticID=#{txLogisticID} where id =#{id}
+	</update>
+	
+	<update id="updodpc"  parameterType="OrderBondedSku">
+		update t_order_bonded_sku set pc=#{pc} where id = #{id}
+	</update>
+	
+	<select id="findByTidList" resultMap="OrderBondedSkuResultMap" parameterType="OrderBondedSku">
+		select * from t_order_bonded_sku 
+		where txLogisticID in 
+		<foreach collection="list" item="orderBonded" open="(" separator="," close=")">
+			#{orderBonded.txLogisticID}
+		</foreach>
+	</select>
+	
+</mapper> 

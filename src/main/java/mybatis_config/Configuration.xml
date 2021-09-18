@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+	
+		<setting name="cacheEnabled" value="true"/>  
+		<setting name="lazyLoadingEnabled" value="true"/>  
+		<setting name="multipleResultSetsEnabled" value="true"/>  
+		<setting name="useColumnLabel" value="true"/>  
+		<setting name="useGeneratedKeys" value="true"/>  
+		<setting name="defaultExecutorType" value="SIMPLE"/>  
+		<setting name="defaultStatementTimeout" value="25000"/>  
+		
+	</settings>
+	<typeAliases>
+	
+		<typeAlias type="com.what21.model.OrderMailSkuAll" alias="OrderMailSkuAllHZ" /> 
+		<typeAlias type="com.what21.model.ItemForGk" alias="ItemForGk" />
+		<typeAlias type="com.what21.model.FindBytxLogisticIDForYtoExcel" alias="FindBytxLogisticIDForYtoExcel" />
+		<typeAlias type="com.what21.model.CompanyZyAndOrderMail" alias="CompanyZyAndOrderMail" />
+		<typeAlias type="com.what21.model.Users" alias="Users" />
+		<typeAlias type="com.what21.model.OrderPush" alias="OrderPush" />
+		<typeAlias type="com.what21.model.GoodsPush" alias="GoodsPush" />
+		<typeAlias type="com.what21.model.OrderAccept" alias="OrderAccept" />
+		<typeAlias type="com.what21.model.GoodsAccept" alias="GoodsAccept" />
+		<typeAlias type="com.what21.model.OrderBonded" alias="OrderBonded" />
+		<typeAlias type="com.what21.model.OrderBondedSku" alias="OrderBondedSku" />
+		<typeAlias type="com.what21.model.OrderBondedPush" alias="OrderBondedPush" />
+		<typeAlias type="com.what21.model.OrderBondedPushSku" alias="OrderBondedPushSku" />
+		<typeAlias type="com.what21.model.OrderMail" alias="OrderMail" />
+		<typeAlias type="com.what21.model.OrderMailSku" alias="OrderMailSku" />
+		<typeAlias type="com.what21.model.OrderMailPush" alias="OrderMailPush" />
+		<typeAlias type="com.what21.model.OrderMailPushSku" alias="OrderMailPushSku" />
+		<typeAlias type="com.what21.model.Tinventory" alias="Tinventory" />
+		<typeAlias type="com.what21.model.Waybill" alias="Waybill" />
+		<typeAlias type="com.what21.model.Item" alias="Item" />
+		<typeAlias type="com.what21.model.OnlineRecordingParamTo" alias="Ijdxn" />
+		<typeAlias type="com.what21.model.Ijdcgd" alias="Ijdcgd" />
+		<typeAlias type="com.what21.model.Ijdcgditem" alias="Ijdcgditem" />
+		<typeAlias type="com.what21.model.Ijdcgdys" alias="Ijdcgdys" />
+		<typeAlias type="com.what21.model.Ijdtd" alias="Ijdtd" />
+		<typeAlias type="com.what21.model.Ijdtditem" alias="Ijdtditem" />
+		<typeAlias type="com.what21.model.Ijdlhd" alias="Ijdlhd" />
+		<typeAlias type="com.what21.model.Godownentry" alias="Godownentry" />
+		<typeAlias type="com.what21.model.Log_inventory" alias="Log_inventory" />
+		<typeAlias type="com.what21.model.NuclearRelease" alias="NuclearRelease" />
+		<typeAlias type="com.what21.model.OrderCheck" alias="OrderCheck" />
+		<typeAlias type="com.what21.model.GodownEntrySku" alias="GodownEntrySku" />
+		<typeAlias type="com.what21.model.NuclearReleaseSku" alias="NuclearReleaseSku" />
+		<typeAlias type="com.what21.model.OrderCheckSku" alias="OrderCheckSku" />
+		<typeAlias type="com.what21.model.Materiel" alias="Materiel" />
+		<typeAlias type="com.what21.model.Merger" alias="Merger" />
+		<typeAlias type="com.what21.model.Inout" alias="Inout" />
+		<typeAlias type="com.what21.model.Actualreceive" alias="Actualreceive" />
+		<typeAlias type="com.what21.model.ActualreceiveSku" alias="ActualreceiveSku" />
+		<typeAlias type="com.what21.model.Winventory" alias="Winventory" />
+		<typeAlias type="com.what21.model.PlaningReceipts" alias="PlaningReceipts" />
+		<typeAlias type="com.what21.model.PlaningReceiptsSku" alias="PlaningReceiptsSku" />
+		<typeAlias type="com.what21.model.StockDelete" alias="StockDelete" />
+		<typeAlias type="com.what21.model.StockDeleteSku" alias="StockDeleteSku" />
+		<typeAlias type="com.what21.model.Log_inventory_action" alias="Log_inventory_action" />
+		<typeAlias type="com.what21.model.Taxes" alias="Taxes" />
+		<typeAlias type="com.what21.model.ItemForZy" alias="ItemForZy" />
+		<typeAlias type="com.what21.model.Cost" alias="Cost" />
+		<typeAlias type="com.what21.model.CostSku" alias="CostSku" />
+		<typeAlias type="com.what21.model.Company" alias="Company" />
+		<typeAlias type="com.what21.model.GodownEntryCheck" alias="GodownEntryCheck" />
+		<typeAlias type="com.what21.model.GodownEntryCheckSku" alias="GodownEntryCheckSku" />
+		<typeAlias type="com.what21.model.ItemForZy" alias="ItemForZy" />
+		<typeAlias type="com.what21.model.ChangeOdd" alias="ChangeOdd" />
+		<typeAlias type="com.what21.model.OrderCommoditie" alias="OrderCommoditie" />
+		<typeAlias type="com.what21.model.OutPc" alias="OutPc" />
+		<typeAlias type="com.what21.model.OutEntryBillList" alias="OutEntryBillList" />
+		<typeAlias type="com.what21.model.OutEntryBillHead" alias="OutEntryBillHead" />
+		<typeAlias type="com.what21.model.ItemForSj" alias="ItemForSj" />
+		<typeAlias type="com.what21.model.GoodsChangeodd" alias="GoodsChangeodd" />
+		<typeAlias type="com.what21.model.OrderBatch" alias="OrderBatch" />
+		<typeAlias type="com.what21.model.Bond" alias="Bond" />
+		<typeAlias type="com.what21.model.LogFile" alias="LogFile" />
+		<typeAlias type="com.what21.model.ReceiveHghzData" alias="ReceiveHghzData" />
+		<typeAlias type="com.what21.model.ReceiveHtData" alias="ReceiveHtData" />
+		<typeAlias type="com.what21.model.CirculaTion" alias="CirculaTion" />
+		<typeAlias type="com.what21.model.GylFinance" alias="GylFinance" />
+		<typeAlias type="com.what21.model.Collect" alias="Collect" />
+		<typeAlias type="com.what21.model.BeSF" alias="BeSF" />
+		<typeAlias type="com.what21.model.BeQgf" alias="BeQgf" />
+		<typeAlias type="com.what21.model.BeHc" alias="BeHc" />
+		<typeAlias type="com.what21.model.BeYf" alias="BeYf" />
+		<typeAlias type="com.what21.model.BePttsf" alias="BePttsf" />
+		<typeAlias type="com.what21.model.BfbModel" alias="Bfb" />
+		
+		<typeAlias type="com.what21.model.OrderPh" alias="OrderPh" />
+		<typeAlias type="com.what21.model.OrderPhSku" alias="OrderPhSku" />
+		<typeAlias type="com.what21.model.OrderPhPush" alias="OrderPhPush" />
+		<typeAlias type="com.what21.model.OrderPhPushSku" alias="OrderPhPushSku" />
+
+		<typeAlias type="com.what21.model.BeLzd" alias="BeLzd" />
+		<typeAlias type="com.what21.model.BeCategory" alias="BeCategory" />
+		<typeAlias type="com.what21.model.BeAccessory" alias="BeAccessory" />
+		<typeAlias type="com.what21.model.BeUpload" alias="BeUpload" />
+		
+		<typeAlias type="com.what21.model.OrderOut" alias="OrderOut" />
+		<typeAlias type="com.what21.model.OrderOutSku" alias="OrderOutSku" />
+		<typeAlias type="com.what21.model.OrderOutLog" alias="OrderOutLog" />
+		
+		<typeAlias type="com.what21.model.OrderOutBS" alias="OrderOutBS" />
+		<typeAlias type="com.what21.model.OrderOutSkuBS" alias="OrderOutSkuBS" />
+		
+		
+		<typeAlias type="com.what21.model.Address" alias="Address"/>
+
+		<typeAlias type="com.what21.model.WmsInoutForzt" alias="WmsInoutForzt" />
+		
+		<typeAlias type="com.what21.model.Webzu" alias="Webzu" />
+		
+		<typeAlias type="com.what21.model.ItemForCk" alias="ItemForCk" />
+		<typeAlias type="com.what21.model.YtoBill" alias="YtoBill" />
+		<typeAlias type="com.what21.model.YtoBillEx" alias="YtoBillEx" />
+		<typeAlias type="com.what21.model.YTOBillSku" alias="YtoBillSku" />
+		<typeAlias type="com.what21.model.IdCard" alias="IdCard" />
+		
+		<typeAlias type="com.what21.model.Outshiptosku" alias="OutshiptoSku" />
+		<typeAlias type="com.what21.model.Outshipto" alias="Outshipto" />
+			<typeAlias type="com.what21.model.WebUi" alias="WebUi" />
+		<typeAlias type="com.what21.model.ExpressOptions" alias="ExpressOptions" />
+		<typeAlias type="com.what21.model.AutoCheckList" alias="AutoCheckList" />
+		 <typeAlias type="com.what21.model.OrderDs" alias="OrderDs" />
+		  <typeAlias type="com.what21.model.JjDelivery" alias="JjDelivery" />
+		    <typeAlias type="com.what21.model.JjPicking" alias="JjPicking" />
+		   <typeAlias type="com.what21.model.JjPickingSku" alias="JjPickingSku" />
+		   <typeAlias type="com.what21.model.JjUser" alias="JjUser" />
+		    <typeAlias type="com.what21.model.Annotation" alias="Annotation" />
+		   <typeAlias type="com.what21.model.AnnotationSku" alias="AnnotationSku" />
+		    <typeAlias type="com.what21.model.SzqgAgent" alias="SzqgAgent" />
+		     <typeAlias type="com.what21.model.SzqgMerchants" alias="SzqgMerchants" />
+		     <typeAlias type="com.what21.model.SzqgItem" alias="SzqgItem" />
+		     <typeAlias type="com.what21.model.SzqgOrder" alias="SzqgOrder" />
+		      <typeAlias type="com.what21.model.SzqgAgreement" alias="SzqgAgreement" />
+		      <typeAlias type="com.what21.model.Idcheck" alias="Idcheck" />
+		      <typeAlias type="com.what21.model.SzqgOrderSku" alias="SzqgOrderSku" />
+		      <typeAlias type="com.what21.model.SzqgStrategy" alias="SzqgStrategy" />
+		      <typeAlias type="com.what21.model.SzqgwlGj" alias="SzqgwlGj" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="/mybatis_config/WebUi.xml"/>
+		<mapper resource="/mybatis_config/Outshipto.xml"/>
+		<mapper resource="/mybatis_config/ItemForGK.xml"/>
+		<mapper resource="/mybatis_config/Webzu.xml"/>
+		<mapper resource="/mybatis_config/TimedTask.xml"/>
+		<mapper resource="/mybatis_config/Companforexpress.xml"/>
+		<mapper resource="/mybatis_config/Companyforzy.xml"/>
+		<mapper resource="/mybatis_config/OrderPh.xml"/>
+		<mapper resource="/mybatis_config/OrderPhSku.xml"/>
+		<mapper resource="/mybatis_config/orderBond.xml"/>
+		<mapper resource="/mybatis_config/OrderBondSku.xml"/>
+		<mapper resource="/mybatis_config/CountRule.xml"/>
+		<mapper resource="/mybatis_config/CountOrder.xml"/>
+		<mapper resource="/mybatis_config/countSku.xml"/>
+		<mapper resource="/mybatis_config/Users.xml"/>
+		<mapper resource="/mybatis_config/OrderPush.xml"/>
+		<mapper resource="/mybatis_config/GoodsPush.xml"/>
+		<mapper resource="/mybatis_config/OrderAccept.xml"/>
+		<mapper resource="/mybatis_config/GoodsAccept.xml"/>
+		<mapper resource="/mybatis_config/OrderBonded.xml"/>
+		<mapper resource="/mybatis_config/OrderBondedSku.xml"/>
+		<mapper resource="/mybatis_config/OrderMail.xml"/>
+		<mapper resource="/mybatis_config/OrderMailSku.xml"/>
+		<mapper resource="/mybatis_config/Tinventory.xml"/>
+		<mapper resource="/mybatis_config/Tinventory_Sku.xml"/>
+		<mapper resource="/mybatis_config/Waybill.xml"/>
+		<mapper resource="/mybatis_config/Item.xml"/>
+		<mapper resource="/mybatis_config/Ijdxn.xml"/>
+		<mapper resource="/mybatis_config/Ijdcgd.xml"/>
+		<mapper resource="/mybatis_config/Ijdcgditem.xml"/>
+		<mapper resource="/mybatis_config/Ijdcgdys.xml"/>
+		<mapper resource="/mybatis_config/Ijdtd.xml"/>
+		<mapper resource="/mybatis_config/Ijdtditem.xml"/>
+		<mapper resource="/mybatis_config/Ijdlhd.xml"/>
+		<mapper resource="/mybatis_config/Godownentry.xml"/>
+		<mapper resource="/mybatis_config/Log_inventory.xml"/>
+		<mapper resource="/mybatis_config/NuclearRelease.xml"/>
+		<mapper resource="/mybatis_config/OrderCheck.xml"/>
+		<mapper resource="/mybatis_config/GodownEntrySku.xml"/>
+		<mapper resource="/mybatis_config/OrderCheckSku.xml"/>
+		<mapper resource="/mybatis_config/NuclearReleaseSku.xml"/>
+		<mapper resource="/mybatis_config/Materiel.xml"/>
+		<mapper resource="/mybatis_config/Merger.xml"/>
+		<mapper resource="/mybatis_config/Inout.xml"/>
+		<mapper resource="/mybatis_config/Actualreceive.xml"/>
+		<mapper resource="/mybatis_config/Winventory.xml"/>
+		<mapper resource="/mybatis_config/PlaningReceipts.xml"/>
+		<mapper resource="/mybatis_config/PlaningReceiptsSku.xml"/>
+		<mapper resource="/mybatis_config/StockDelete.xml"/>
+		<mapper resource="/mybatis_config/StockDeleteSku.xml"/>
+		<mapper resource="/mybatis_config/Log_inventory_action.xml"/>
+		<mapper resource="/mybatis_config/Taxes.xml"/>
+		<mapper resource="/mybatis_config/ActualreceiveSku.xml"/>
+		<mapper resource="/mybatis_config/Cost.xml"/>
+		<mapper resource="/mybatis_config/CostSku.xml"/>
+		<mapper resource="/mybatis_config/Company.xml"/>
+		<mapper resource="/mybatis_config/Companyforzy_1.xml"/>
+		<mapper resource="/mybatis_config/GodownEntryCheck.xml"/>
+		<mapper resource="/mybatis_config/GodownEntryCheckSku.xml"/>
+		<mapper resource="/mybatis_config/ItemForZy.xml"/> 
+		<mapper resource="/mybatis_config/ChangeOdd.xml"/> 
+		<mapper resource="/mybatis_config/OrderCommoditie.xml"/> 
+		<mapper resource="/mybatis_config/OutPc.xml"/>
+		<mapper resource="/mybatis_config/OutEntryBillList.xml"/>
+		<mapper resource="/mybatis_config/OutEntryBillHead.xml"/>
+		<mapper resource="/mybatis_config/ItemForSj.xml"/>
+		<mapper resource="/mybatis_config/OrderBatch.xml"/>
+		<mapper resource="/mybatis_config/Bond.xml"/>
+		<mapper resource="/mybatis_config/GoodsChangeodd.xml"/>
+		<mapper resource="/mybatis_config/LogFile.xml"/>
+		<mapper resource="/mybatis_config/LogFileSku.xml"/>
+		<mapper resource="/mybatis_config/ReceiveHghzData.xml"/>
+		<mapper resource="/mybatis_config/ReceiveHtData.xml"/>
+		<mapper resource="/mybatis_config/CirculaTion.xml"/>
+		<mapper resource="/mybatis_config/GylFinance.xml"/>
+		<mapper resource="/mybatis_config/endCompany.xml"/>
+		<mapper resource="/mybatis_config/end_waybill.xml"/>
+		<mapper resource="/mybatis_config/endHeade.xml"/>
+		<mapper resource="/mybatis_config/Collect.xml"/>
+		<mapper resource="/mybatis_config/BeSF.xml"/>
+		<mapper resource="/mybatis_config/BeQgf.xml"/>
+		<mapper resource="/mybatis_config/BeHc.xml"/>
+		<mapper resource="/mybatis_config/BeYf.xml"/>
+		<mapper resource="/mybatis_config/BePttsf.xml"/>
+		<mapper resource="/mybatis_config/BaseMapper.xml"/>
+		<mapper resource="/mybatis_config/BeLzd.xml"/>
+		<mapper resource="/mybatis_config/BeCategory.xml"/>
+		<mapper resource="/mybatis_config/BeAccessory.xml"/>
+		<mapper resource="/mybatis_config/BeUpload.xml"/>
+		<mapper resource="/mybatis_config/IndentState.xml"/>
+		<mapper resource="/mybatis_config/OrderOut.xml"/>
+		<mapper resource="/mybatis_config/CompanyForOut.xml"/>
+		<mapper resource="/mybatis_config/Stojs.xml"/>
+		<mapper resource="/mybatis_config/OrderOutLog.xml"/>
+		<mapper resource="/mybatis_config/YtoBill.xml"/>
+		<mapper resource="/mybatis_config/YtoBillSku.xml"/>
+		<mapper resource="/mybatis_config/Address.xml"/>
+
+		<mapper resource="/mybatis_config/InoutForztMapper.xml"/>
+		<mapper resource="/mybatis_config/ItemForCk.xml"/>
+		<mapper resource="/mybatis_config/BeLzdOut.xml"/>
+		<mapper resource="/mybatis_config/BeAccessoryOut.xml"/>
+		
+		<mapper resource="/mybatis_config/CustomsDeposit.xml"/>
+		<mapper resource="/mybatis_config/CustomsDepositSku.xml"/>
+		<mapper resource="/mybatis_config/CustomsParam.xml"/>
+		
+		<mapper resource="/mybatis_config/OrderOutSTO.xml"/>
+		<mapper resource="/mybatis_config/CompanyForOutSTO.xml"/>
+		<mapper resource="/mybatis_config/OrderBondedRule.xml"/>
+		<mapper resource="/mybatis_config/OrderOutRule.xml"/>
+		<mapper resource="/mybatis_config/BuyerLimit.xml"/>
+		<mapper resource="/mybatis_config/CarrierMailno.xml"/>
+		
+		<mapper resource="/mybatis_config/OrderOutBS.xml"/>
+		<mapper resource="/mybatis_config/OrderOutSTOBS.xml"/>
+		<mapper resource="/mybatis_config/CompanyForOutBS.xml"/>
+
+		<mapper resource="/mybatis_config/ExpressOptions.xml"/>
+		<mapper resource="/mybatis_config/autoCheckList.xml"/>
+		
+		<mapper resource="/mybatis_config/OrderDs.xml"/>
+		<mapper resource="/mybatis_config/Consignment.xml"/>
+		<mapper resource="/mybatis_config/JjPicking.xml"/>
+		<mapper resource="/mybatis_config/JjPickingSku.xml"/>
+		<mapper resource="/mybatis_config/jjUser.xml"/>
+		
+		<mapper resource="/mybatis_config/Annotation.xml"/>
+		<mapper resource="/mybatis_config/AnnotationSku.xml"/>
+		<mapper resource="/mybatis_config/SzqgAgent.xml"/>
+		<mapper resource="/mybatis_config/SzqgMerchants.xml"/>
+		<mapper resource="/mybatis_config/SzqgItem.xml"/>
+		<mapper resource="/mybatis_config/SzqgOrder.xml"/>
+        <mapper resource="/mybatis_config/SzqgAgreement.xml"/>
+        <mapper resource="/mybatis_config/Idcheck.xml"/>
+        <mapper resource="/mybatis_config/SzqgOrderSku.xml"/>
+        <mapper resource="/mybatis_config/SzqgStrategy.xml"/>
+        <mapper resource="/mybatis_config/SzqgWlgj.xml"/>
+	</mappers>
+</configuration>

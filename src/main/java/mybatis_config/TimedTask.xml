@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.model.TimedTask">
+	<resultMap type="com.what21.model.TimedTask" id="TimedTask">
+		<id property="id" column="id"/>
+		<result property="company" column="company"/>
+		<result property="shenPi" column="shenPi"/>
+		<result property="chuku" column="chuku"/>
+		<result property="getlshao" column="getlshao"/>
+		<result property="yund" column="yund"/>
+		<result property="dind" column="dind"/>
+		<result property="qind" column="qind"/>
+		<result property="isPushToWms" column="isPushToWms"/>
+		<result property="getYun" column="getYun"/>
+	</resultMap>
+	<resultMap type="com.what21.model.OrderPush3" id="OrderPush3">
+		<id property="id" column="id"/>
+		<result property="yund" column="yund"/>
+		<result property="dind" column="dind"/>
+		<result property="qind" column="qind"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="com.what21.model.TimedTask" parameterType="map">
+		select *from timedTask  
+		<if test="pStart!=null">
+			limit ${pStart},${pEnd} 
+		</if>
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from timedTask
+	</select>
+	
+	<insert id="add" parameterType="com.what21.model.TimedTask">
+		insert into timedTask(company,shenPi,chuku,getlshao,yund,dind,qind,isPushToWms,getYun)
+		values
+		(#{company},#{shenPi},#{chuku},#{getlshao},#{yund},#{dind},#{qind},#{isPushToWms},#{getYun})
+	</insert>
+	
+	<update id="update" parameterType="com.what21.model.TimedTask">
+		UPDATE timedTask SET company =#{company},shenPi=#{shenPi}
+		,chuku =#{chuku},getlshao=#{getlshao},isPushToWms=#{isPushToWms},getYun=#{getYun}
+		,yund =#{yund} ,dind =#{dind} ,qind =#{qind} WHERE id =#{id}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM timedTask WHERE id =#{_parameter}
+	</delete>
+	
+	<!-- 定时条件 （保税）-->
+	<select id="findTimeTj" parameterType="map" statementType="STATEMENT" resultType="java.util.HashMap">
+		SELECT t2.id,t2.mailNo,t2.txLogisticID,t2.itemCount,t2.merchantNum,t2.worth
+		 FROM timedTask t1,${tab} t2
+		 WHERE t2.auditstatus = ${auditstatus}
+		 <if test="tab == 't_order_bonded'">
+			 and  t2.merchantNum = t1.company 
+		</if>	 
+		<if test="kucstate!=null and kucstate!=''"><!-- auditstatus == 9  -->	
+			and  (t2.kucstate =  0 OR t2.kucstate IS NULL ) and t1.chuku=1
+		</if>
+		<!-- 匹配运单 -->
+ 		<if test="isCustoms!=null and isCustoms!=''">
+			AND (t2.isCustoms =  0 OR t2.isCustoms IS NULL )  and t1.yund = 1
+		</if>
+		<!-- 匹配清单 -->
+		<if test="isPushQd!=null and isPushQd!=''">
+			and	(t2.isPushQd =  0 OR t2.isPushQd IS NULL ) and t1.qind =1
+		</if>
+		<!--匹配订单  -->
+		<if test="isPushDd != null and isPushDd!=''">
+			and	(t2.isPushDd =  0 OR t2.isPushDd IS NULL ) and t2.payNumber  is not null  and t1.dind = 1
+		</if>
+		<!-- 推wms -->
+		<if test="isPushToWms !=null and isPushToWms !=''">
+			and (t2.isPushToWms =  0 OR t2.isPushToWms IS NULL ) and t1.isPushToWms = 1 
+		</if>
+		<if test="ispost!=null and ispost!=''">
+			and	t2.ispost = ${ispost} 
+		</if>
+		<!-- 匹配流水号 -->
+		<if test="Getlshao==1">
+			and	(t2.payNumber =  '' or t2.payNumber is null) and t1.getlshao = 1
+		</if>
+		<!-- 匹配运单 -->
+		<if test="getYun!=null and getYun!=''">
+			and	t2.carrier = "HTO" and ( t2.mailno IS NULL OR t2.mailno = "")and t1.getyun = 1
+		</if>
+	</select>
+	
+	<select id="findPush3" parameterType="string" resultType="com.what21.model.OrderPush3">
+		SELECT t1.id,t2.dind,t2.qind,t2.yund  FROM t_order_bonded t1, timedtask t2  WHERE  t1.merchantNum= t2.company AND  t1.id IN
+		<foreach collection="array" item="item" open="(" close=")" separator=",">
+		(#{item}) 
+		</foreach>
+		
+	</select>
+	
+</mapper>

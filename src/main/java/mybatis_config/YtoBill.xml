@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.YTOBillDao">
+	<resultMap type="YtoBill" id="YtoBillMap">
+		<id property="id" column="id"/>
+		<result property="waybillNo" column="waybillNo"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="shipperName" column="shipperName"/>
+		<result property="shipperTel" column="shipperTel"/>
+		<result property="shipperAddress" column="shipperAddress"/>
+		<result property="consigneeName" column="consigneeName"/>
+		<result property="consigneeTel" column="consigneeTel"/>
+		<result property="consigneeAddress" column="consigneeAddress"/>
+		<result property="isSigned" column="isSigned"/>
+		<result property="deliveryTime" column="deliveryTime"/>
+		<result property="createTime" column="createTime"/>
+		<result property="signTime" column="signTime"/>
+	</resultMap>
+	<resultMap type="YTOBillSku" id="YtoBillSkuMap">
+		<id property="id" column="id"/>
+		<result property="waybillNo" column="waybillNo"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="eventCode" column="eventCode"/>
+		<result property="eventDetail" column="eventDetail"/>
+		<result property="eventLocation" column="eventLocation"/>
+		<result property="eventOperater" column="eventOperater"/>
+		<result property="eventOperaterPhone" column="eventOperaterPhone"/>
+		<result property="city" column="city"/>
+		<result property="nextCity" column="nextCity"/>
+		<result property="eventTime" column="eventTime"/>
+		<result property="createTime" column="createTime"/>
+		<result property="isPushed" column="isPushed"/>
+	</resultMap>
+	<resultMap type="YtoBillEx" id="YtoBillExMap">
+		<id property="id" column="id"/>
+		<result property="waybillNo" column="waybillNo"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="shipperName" column="shipperName"/>
+		<result property="shipperTel" column="shipperTel"/>
+		<result property="shipperAddress" column="shipperAddress"/>
+		<result property="consigneeName" column="consigneeName"/>
+		<result property="consigneeTel" column="consigneeTel"/>
+		<result property="consigneeAddress" column="consigneeAddress"/>
+		<result property="deliveryTime" column="deliveryTime"/>
+		<result property="eventCode" column="eventCode"/>
+		<result property="eventDetail" column="eventDetail"/>
+		<result property="eventLocation" column="eventLocation"/>
+		<result property="eventOperater" column="eventOperater"/>
+		<result property="eventOperaterPhone" column="eventOperaterPhone"/>
+		<result property="city" column="city"/>
+		<result property="nextCity" column="nextCity"/>
+		<result property="eventTime" column="eventTime"/>
+	</resultMap>
+	<insert id="insertYTO" parameterType="YtoBill">
+		insert into t_ytogj_tracking
+		(waybillNo,orderNo,shipperName,shipperTel,shipperAddress,consigneeName,consigneeTel,consigneeAddress,isSigned,deliveryTime,createTime,signTime)
+		values
+		(#{waybillNo},#{orderNo},#{shipperName},#{shipperTel},
+		 #{shipperAddress},#{consigneeName},#{consigneeTel},
+		 #{consigneeAddress},#{isSigned},#{deliveryTime},#{createTime},#{signTime})
+	</insert>
+	
+	<insert id="insertYtoBatch">
+		insert into t_ytogj_tracking
+		(waybillNo,orderNo,shipperName,shipperTel,shipperAddress,consigneeName,consigneeTel,consigneeAddress,isSigned,deliveryTime,createTime,signTime)
+		values
+		<foreach collection="list" separator="," item="YtoBill">
+		 (#{YtoBill.waybillNo,jdbcType=VARCHAR}
+		 ,#{YtoBill.orderNo,jdbcType=VARCHAR}
+		 ,#{YtoBill.shipperName,jdbcType=VARCHAR}
+		 ,#{YtoBill.shipperTel,jdbcType=VARCHAR}
+		 ,#{YtoBill.shipperAddress,jdbcType=VARCHAR}
+		 ,#{YtoBill.consigneeName,jdbcType=VARCHAR}
+		 ,#{YtoBill.consigneeTel,jdbcType=VARCHAR}
+		 ,#{YtoBill.consigneeAddress,jdbcType=VARCHAR}
+		 ,#{YtoBill.isSigned,jdbcType=VARCHAR}
+		 ,#{YtoBill.deliveryTime,jdbcType=VARCHAR}
+		 ,#{YtoBill.createTime,jdbcType=VARCHAR}
+		 ,#{YtoBill.signTime,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	
+	<select id="findByIdsForSku" resultMap="YtoBillSkuMap">
+		select * from t_ytogj_tracking_sku where waybillNo in (
+		<foreach collection="list" item="YtoBill"  separator=",">
+		   '${YtoBill.waybillNo}'
+		</foreach>
+		)ORDER BY eventTime asc
+	</select>
+	
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from t_ytogj_tracking where isSigned=#{isSigned}
+	</select>
+	
+	<select id="findByOrderNo" resultMap="YtoBillMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking where 1=1
+		<if test="waybillNo != null and waybillNo != ''">and waybillNo = #{waybillNo}</if>
+		<if test="orderNo != null and orderNo != ''">and orderNo = #{orderNo}</if>
+		<if test="isSigned != null and isSigned != ''">and isSigned = #{isSigned}</if>
+	</select>
+	
+	<select id="findByWay_1" resultMap="YtoBillMap" parameterType="java.util.Map">
+		SELECT * FROM t_ytogj_tracking WHERE waybillNo = #{waybillNo} AND isSigned = #{isSigned}
+	</select>
+	
+	<select id="findAllOfYTO" resultMap="YtoBillMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking where isSigned=#{isSigned}
+		order by waybillNo
+		LIMIT
+		#{startPage},#{endPage}
+	</select>
+	
+	<!-- 根据运单号 -->
+	<select id="findByWaybillNo" resultMap="YtoBillMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking  where 1=1 and isSigned=${isSigned}
+		<if test="paramName == 'waybillNo' ">
+			and waybillNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'orderNo' ">
+			and orderNo like '%${paramValue}%'
+		</if>
+		<if test="time2 !='' and time2 !=null and time1 !='' and time1 != null">
+	      <![CDATA[and signTime >=  '${time1}'  and  signTime <= '${time2}']]> 
+	   </if>
+	   
+	   <if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	      <![CDATA[ and signTime >='${time1}']]> 
+	   </if>
+	   <if test="  time2 !='' and time2 != null and  (time1 =='' or time1 ==null)">
+	      <![CDATA[ and signTime <='${time2}']]> 
+	   </if>
+		<if test="name=='kong'"> </if>
+	</select>
+	
+	<select id="findByWaybillNo_createTime" resultMap="YtoBillMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking  where 1=1 and isSigned=${isSigned}
+		<if test="paramName == 'waybillNo' ">
+			and waybillNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'orderNo' ">
+			and orderNo like '%${paramValue}%'
+		</if>
+		<if test="time2 !='' and time2 !=null and time1 !='' and time1 != null">
+	      <![CDATA[and createTime >=  '${time1}'  and  createTime <= '${time2}']]> 
+	   </if>
+	   
+	   <if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	      <![CDATA[ and createTime >='${time1}']]> 
+	   </if>
+	   <if test="  time2 !='' and time2 != null and  (time1 =='' or time1 ==null)">
+	      <![CDATA[ and createTime <='${time2}']]> 
+	   </if>
+		<if test="name=='kong'"> </if>
+	</select>
+	
+	<select id="findByWaybillNo_deliveryTime" resultMap="YtoBillMap" parameterType="java.util.Map">
+		select * from t_ytogj_tracking  where 1=1 and isSigned=${isSigned}
+		<if test="paramName == 'waybillNo' ">
+			and waybillNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'orderNo' ">
+			and orderNo like '%${paramValue}%'
+		</if>
+		<if test="time2 !='' and time2 !=null and time1 !='' and time1 != null">
+	      <![CDATA[and deliveryTime >=  '${time1}'  and  deliveryTime <= '${time2}']]> 
+	   </if>
+	   
+	   <if test="  time1 !='' and time1 != null and  (time2 =='' or time2 ==null)">
+	      <![CDATA[ and deliveryTime >='${time1}']]> 
+	   </if>
+	   <if test="  time2 !='' and time2 != null and  (time1 =='' or time1 ==null)">
+	      <![CDATA[ and deliveryTime <='${time2}']]> 
+	   </if>
+		<if test="name=='kong'"> </if>
+	</select>
+	
+	<delete id="delete">
+		delete from t_ytogj_tracking where id in 
+		     <foreach collection="array" item="id" open="(" separator="," close=")">
+		     	${id}
+		     </foreach>		
+	</delete>
+	
+	<delete id="deleteAll">
+		delete from t_ytogj_tracking where isSigned=#{isSigned}
+	</delete>
+	
+	<select id="findById" resultMap="YtoBillMap">
+		
+		select waybillNo from t_ytogj_tracking where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")" >
+			${id}
+		</foreach>
+		
+	</select>
+	
+		<update id="updateForIs">
+		update t_ytogj_tracking set signTime = #{signTime} ,isSigned = #{isSigned} where id=#{id}
+	</update>
+	
+	<update id="updateByID" parameterType="YtoBill">
+		update t_ytogj_tracking set
+		shipperName 	= #{shipperName},
+		shipperTel  	= #{shipperTel},
+		shipperAddress	= #{shipperAddress},
+		consigneeName   = #{consigneeName},
+		consigneeTel   = #{consigneeTel},
+		consigneeAddress   = #{consigneeAddress},
+		signTime		= #{signTime},
+		deliveryTime    = #{deliveryTime}
+		where id = #{id}
+	</update>
+	
+	<select id="leftJoin" resultMap="YtoBillExMap">
+	SELECT t_ytogj_tracking.waybillNo
+	      ,t_ytogj_tracking.orderNo
+	      ,t_ytogj_tracking.shipperName
+	      ,t_ytogj_tracking.shipperTel
+	      ,t_ytogj_tracking.shipperAddress
+	      ,t_ytogj_tracking.consigneeName
+	      ,t_ytogj_tracking.consigneeTel
+	      ,t_ytogj_tracking.consigneeAddress
+	      ,t_ytogj_tracking.deliveryTime
+		  ,t_ytogj_tracking_sku.eventCode 
+		  ,t_ytogj_tracking_sku.eventDetail
+		  ,t_ytogj_tracking_sku.eventLocation 
+		  ,t_ytogj_tracking_sku.eventOperater 
+		  ,t_ytogj_tracking_sku.eventOperaterPhone 
+		  ,t_ytogj_tracking_sku.city 
+		  ,t_ytogj_tracking_sku.nextCity
+		  ,t_ytogj_tracking_sku.eventTime		  
+	FROM t_ytogj_tracking
+		 LEFT JOIN
+	t_ytogj_tracking_sku
+		  ON 
+	t_ytogj_tracking.waybillNo=t_ytogj_tracking_sku.waybillNo
+		  WHERE  t_ytogj_tracking.id in
+		 <foreach collection="array" item="id" open="(" close=")" separator=",">
+			${id}
+		</foreach>
+		order by eventTime desc,waybillNo 
+	</select>
+	
+	<select id="findExport" resultMap="YtoBillExMap">
+		SELECT t_ytogj_tracking.waybillNo
+	      ,t_ytogj_tracking.orderNo
+	      ,t_ytogj_tracking.shipperName
+	      ,t_ytogj_tracking.shipperTel
+	      ,t_ytogj_tracking.shipperAddress
+	      ,t_ytogj_tracking.consigneeName
+	      ,t_ytogj_tracking.consigneeTel
+	      ,t_ytogj_tracking.consigneeAddress
+	      ,t_ytogj_tracking.deliveryTime
+		  ,t_ytogj_tracking_sku.eventCode 
+		  ,t_ytogj_tracking_sku.eventDetail
+		  ,t_ytogj_tracking_sku.eventLocation 
+		  ,t_ytogj_tracking_sku.eventOperater 
+		  ,t_ytogj_tracking_sku.eventOperaterPhone 
+		  ,t_ytogj_tracking_sku.city 
+		  ,t_ytogj_tracking_sku.nextCity
+		  ,t_ytogj_tracking_sku.eventTime		  
+	FROM t_ytogj_tracking
+		 LEFT JOIN
+	t_ytogj_tracking_sku
+		  ON 
+	t_ytogj_tracking.waybillNo=t_ytogj_tracking_sku.waybillNo
+		order by eventTime desc,waybillNo
+	</select>
+	
+	
+	<sql id="pageQuery">
+		<if test="pageQuery!=null">
+			<if test="pageQuery.startPage != null and pageQuery.endPage != ''">
+		 		LIMIT ${pageQuery.startPage},${pageQuery.endPage}
+		 	</if>
+		</if>
+	</sql>
+</mapper>

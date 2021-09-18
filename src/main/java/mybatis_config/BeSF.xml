@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeSFDao">
+	<sql id="queryBeSFWhere">
+		<where>
+			<if test="pramid!=null and pramid != ''">
+				and pramid = ${pramid}
+			</if>
+	 	</where>
+	</sql>
+	<resultMap type="BeSF" id="BeSFResultMap">
+		<id property="id" column="id"/>
+		<result property="xh" column="xh"/>
+		<result property="sbdh" column="sbdh"/>
+		<result property="sbsj" column="sbsj"/>
+		<result property="fydh" column="fydh"/>
+		<result property="sdbh" column="sdbh"/>
+		<result property="fxsj" column="fxsj"/>
+		<result property="zfrzjh" column="zfrzjh"/>
+		<result property="zfrxm" column="zfrxm"/>	
+		<result property="zzs" column="zzs"/>
+		<result property="dsptmc" column="dsptmc"/>
+		<result property="dsqymc" column="dsqymc"/>
+		<result property="ddh" column="ddh"/>
+		<result property="sjbm" column="sjbm"/>
+		<result property="drsj" column="drsj"/>
+		<result property="pramid" column="pramid"/>
+		<result property="sbje" column="sbje"/>
+		<result property="bscjsj" column="bscjsj"/>
+		
+		
+	</resultMap>
+	
+	<select id="findAll" resultMap="BeSFResultMap" parameterType="java.util.Map">
+		select * from be_sf
+	   <include refid="queryBeSFWhere"></include>
+	   order by (zzs+0)
+	   <include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_sf
+		<include refid="queryBeSFWhere"></include>	
+	</select>
+	
+	<insert id="insert" parameterType="BeSF">
+		insert into be_sf (id, xh, sbdh, 
+      sbsj, fydh, sdbh, 
+      fxsj, zfrzjh, zfrxm, 
+      zzs, dsptmc, dsqymc, 
+      ddh, sjbm, drsj, 
+      pramid,sbje,bscjsj)
+    values (#{id,jdbcType=INTEGER}, #{xh,jdbcType=INTEGER}, #{sbdh,jdbcType=VARCHAR}, 
+      #{sbsj,jdbcType=TIMESTAMP}, #{fydh,jdbcType=VARCHAR}, #{sdbh,jdbcType=VARCHAR}, 
+      #{fxsj,jdbcType=TIMESTAMP}, #{zfrzjh,jdbcType=VARCHAR}, #{zfrxm,jdbcType=VARCHAR}, 
+      #{zzs,jdbcType=VARCHAR}, #{dsptmc,jdbcType=VARCHAR}, #{dsqymc,jdbcType=VARCHAR}, 
+      #{ddh,jdbcType=VARCHAR}, #{sjbm,jdbcType=VARCHAR}, #{drsj,jdbcType=VARCHAR}, 
+      #{pramid,jdbcType=INTEGER},#{sbje,jdbcType=VARCHAR}, #{bscjsj,jdbcType=TIMESTAMP})
+	</insert>
+	<delete id="deleteById" parameterType="int">
+		delete from be_sf where id = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="int" resultType="BeSF">
+		select * from be_sf where id = ${value}	
+	</select>
+	
+	<select id="findByPramid" parameterType="java.util.Map" resultMap="BeSFResultMap">
+		select * from be_sf 
+		<include refid="queryBeSFWhere"></include>	
+		order by (zzs+0)
+		<include refid="com.what21.dao.BaseMapper.page"></include>
+	</select>
+	
+	<select id="countByPramid" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from be_sf where pramid = ${pramid}	
+	</select>
+	
+	<update id="update" parameterType="BeSF">
+	    update be_sf
+    set xh = #{xh,jdbcType=INTEGER},
+      sbdh = #{sbdh,jdbcType=VARCHAR},
+      sbsj = #{sbsj,jdbcType=TIMESTAMP},
+      fydh = #{fydh,jdbcType=VARCHAR},
+      sdbh = #{sdbh,jdbcType=VARCHAR},
+      fxsj = #{fxsj,jdbcType=TIMESTAMP},
+      zfrzjh = #{zfrzjh,jdbcType=VARCHAR},
+      zfrxm = #{zfrxm,jdbcType=VARCHAR},
+      zzs = #{zzs,jdbcType=VARCHAR},
+      dsptmc = #{dsptmc,jdbcType=VARCHAR},
+      dsqymc = #{dsqymc,jdbcType=VARCHAR},
+      ddh = #{ddh,jdbcType=VARCHAR},
+      sjbm = #{sjbm,jdbcType=VARCHAR},
+      drsj = #{drsj,jdbcType=VARCHAR},
+      pramid = #{pramid,jdbcType=INTEGER},
+      sbje = #{sbje,jdbcType=VARCHAR},
+      bscjsj = #{bscjsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+	</update>
+		<delete id="deleteByPramid" parameterType="java.util.Map">
+		delete from be_sf where pramid = ${pramid}	
+	</delete>
+</mapper>

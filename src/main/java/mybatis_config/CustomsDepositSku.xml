@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CustomsDepositSkuDao">
+	<sql id="query_customsDepositSku_where">
+		<if test="customsDepositSkuCustom!=null">
+			<where>
+				<if test="customsDepositSkuCustom.orderno !=null">
+					and orderNo like '%${customsDepositSkuCustom.orderno}%'
+				</if>
+				<if test="customsDepositSkuCustom.mailno !=null">
+					and mailNo like '%${customsDepositSkuCustom.mailno}%'
+				</if>
+				<if test="customsDepositSkuCustom.startTime !=null">
+					and createTime &gt;= #{customsDepositSkuCustom.startTime}
+				</if>
+				<if test="customsDepositSkuCustom.endTime !=null">
+					and createTime &lt;= #{customsDepositSkuCustom.endTime}
+				</if>
+				<if test="customsDepositSkuCustom.companycode !=null">
+					and companycode like '%{customsDepositSkuCustom.companycode}%'
+				</if>
+			</where>
+		</if>
+	</sql>
+	<sql id="query_customsDepositSkuByPid_where">
+		<if test="customsDepositSkuCustom!=null">
+			<where>
+				<if test="customsDepositSkuCustom.pid !=null">
+					and companycode = (select companycode from t_customs_deposit where id = ${customsDepositSkuCustom.pid})
+				</if>
+			</where>
+		</if>
+	</sql>
+
+
+	
+	<select id="find" resultType="com.what21.model.CustomsDepositSkuCustom" parameterType="com.what21.model.CustomsDepositSkuQueryVo">
+		select * from t_customs_deposit_sku
+		<include refid="query_customsDepositSku_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.CustomsDepositSkuQueryVo">
+		select count(id) from t_customs_deposit_sku
+		<include refid="query_customsDepositSku_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.TCustomsDepositSku" >
+    insert into t_customs_deposit_sku (id, orderNo, mailNo, 
+      totalMoney, tax, createTime, 
+      companyCode)
+    values (#{id,jdbcType=INTEGER}, #{orderno,jdbcType=VARCHAR}, #{mailno,jdbcType=VARCHAR}, 
+      #{totalmoney,jdbcType=VARCHAR}, #{tax,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{companycode,jdbcType=VARCHAR})
+  	</insert>
+
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.what21.model.CustomsDepositSkuCustom">
+		select * from t_customs_deposit_sku where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="com.what21.model.TCustomsDepositSku">
+update t_customs_deposit_sku
+    set orderNo = #{orderno,jdbcType=VARCHAR},
+      mailNo = #{mailno,jdbcType=VARCHAR},
+      totalMoney = #{totalmoney,jdbcType=VARCHAR},
+      tax = #{tax,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      companyCode = #{companycode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findByPid" resultType="com.what21.model.CustomsDepositSkuCustom" parameterType="com.what21.model.CustomsDepositSkuQueryVo">
+		select * from t_customs_deposit_sku
+		<include refid="query_customsDepositSkuByPid_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="countByPid" resultType="java.lang.Integer" parameterType="com.what21.model.CustomsDepositSkuQueryVo">
+		select count(id) from t_customs_deposit_sku
+		<include refid="query_customsDepositSkuByPid_where"></include>
+	</select>
+	
+	  <select id="findByIds" resultType="com.what21.model.CustomsDepositSkuCustom" >
+		select * from t_customs_deposit_sku
+		where id in 
+		<foreach collection="array" close=")" item="item" open="(" separator=",">
+			${item}
+		</foreach>
+		order by id desc
+	</select>
+</mapper>

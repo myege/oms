@@ -1,0 +1,40 @@
+{
+"platform":"OTHER",
+"allocated_auto":"0",
+"warehouse_code":"HRBW",
+"shipping_method":"F4",
+"reference_no":"ref_1399867101",
+"order_desc":"\u8ba2\u5355\u63cf\u8ff0",
+"country_code":"RU",
+"province":"province",
+"city":"city",
+"address1":"address1",
+"address2":"address2",
+"address3":"address3",
+"zipcode":"142970",
+"doorplate":"doorplate",
+"company":"company",
+"name":"name",
+"phone":"phone",
+"cell_phone":"cell_phone",
+"email":"email",
+"order_cod_price":"99",
+"order_cod_currency":"RMB",
+"order_age_limit":"22",
+"is_signature":"0",
+"is_insurance":"0",
+"insurance_value":"0",
+"items":[
+    {
+        "product_sku":"EA140509201610",
+        "product_name_en":"Product Name",
+        "product_declared_value":"5.000",
+        "quantity":"1"
+    }
+],
+"tracking_no":"123",
+"label":{
+    "file_type":"png",
+    "file_data":"hVJPjUP4+yHjvKErt5PuFfvRhd..."
+}
+                }

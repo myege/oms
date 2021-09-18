@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.BeLzdDao">
+	<sql id="query_beLzd_where">
+		<if test="beLzdCustom!=null">
+			<where>
+				<if test="beLzdCustom.ywlx !=null and beLzdCustom.ywlx == 1">
+					and ywbh like 'Z-%'
+				</if>
+				<if test="beLzdCustom.ywlx !=null and beLzdCustom.ywlx == 2">
+					and ywbh like 'B-%'
+				</if>
+				<if test="beLzdCustom.qysjStart != null and beLzdCustom.qysjStart != ''">
+					and qysj &gt;= #{beLzdCustom.qysjStart}
+				</if>
+				<if test="beLzdCustom.qysjEnd != null and beLzdCustom.qysjEnd != ''">
+					and qysj &lt;= #{beLzdCustom.qysjEnd}
+				</if>
+				<if test="beLzdCustom.sjdhsjStart != null and beLzdCustom.sjdhsjStart != ''">
+					and sjdhsj &gt;= #{beLzdCustom.sjdhsjStart}
+				</if>
+				<if test="beLzdCustom.sjdhsjEnd != null and beLzdCustom.sjdhsjEnd != ''">
+					and sjdhsj &lt;= #{beLzdCustom.sjdhsjEnd}
+				</if>
+				<if test="beLzdCustom.tdh != null and beLzdCustom.tdh != ''">
+					and tdh like '%${beLzdCustom.tdh}%'
+				</if>
+				<if test="beLzdCustom.flag != null ">
+					and flag =#{beLzdCustom.flag}
+				</if>
+			</where>
+		</if>
+	</sql>
+	<resultMap id="BeLzdResultMap" type="Belzd">
+	 <result column="id" property="id" jdbcType="INTEGER" />
+	    <result column="khmc" property="khmc" jdbcType="VARCHAR" />
+    <result column="ddka" property="ddka" jdbcType="VARCHAR" />
+    <result column="tdh" property="tdh" jdbcType="VARCHAR" />
+    <result column="js" property="js" jdbcType="INTEGER" />
+    <result column="ds" property="ds" jdbcType="INTEGER" />
+    <result column="tdsj" property="tdsj" jdbcType="VARCHAR" />
+    <result column="qysj" property="qysj" jdbcType="VARCHAR" />
+    <result column="sjdhsj" property="sjdhsj" jdbcType="VARCHAR" />
+    <result column="zgsj" property="zgsj" jdbcType="VARCHAR" />
+    <result column="qgsj" property="qgsj" jdbcType="VARCHAR" />
+    <result column="wjsj" property="qgsj" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="fjmc" property="fjmc" jdbcType="VARCHAR" />
+    <result column="qdbglj" property="qdbglj" jdbcType="VARCHAR" />
+    <result column="lhbglj" property="lhbglj" jdbcType="VARCHAR" />
+    <result column="chbglj" property="chbglj" jdbcType="VARCHAR" />
+    <result column="fjlj" property="fjlj" jdbcType="VARCHAR" />
+    <result column="qdbgmc" property="qdbgmc" jdbcType="VARCHAR" />
+    <result column="lhbgmc" property="lhbgmc" jdbcType="VARCHAR" />
+    <result column="chbgmc" property="chbgmc" jdbcType="VARCHAR" />
+    <result column="zl" property="zl" jdbcType="VARCHAR" />
+    <result column="tpcc" property="tpcc" jdbcType="VARCHAR" />
+    <result column="clxx" property="clxx" jdbcType="VARCHAR" />
+    <result column="ywbh" property="ywbh" jdbcType="VARCHAR" />
+    <result column="fdh" property="fdh" jdbcType="VARCHAR" />
+    <result column="bgbgmc" property="bgbgmc" jdbcType="VARCHAR" />
+    <result column="chsj" property="chsj" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	
+	<select id="findAll" resultMap="BeLzdResultMap" parameterType="com.what21.model.BeLzdQueryVo">
+	select id,khmc,ddka,tdh,js,ds,tdsj,qysj,sjdhsj,zgsj,qgsj,wjsj,flag,
+		if((select count(*) from be_accessory where itemName='accessory' and lzdId=be_lzd.id)>0,'uploaded',null) fjmc,
+		if((select count(*) from be_accessory where itemName='inventory' and lzdId=be_lzd.id)>0,'uploaded',null) qdbgmc,
+		if((select count(*) from be_accessory where itemName='tallying' and lzdId=be_lzd.id)>0,'uploaded',null) lhbgmc,
+		if((select count(*) from be_accessory where itemName='customs' and lzdId=be_lzd.id)>0,'uploaded',null) bgbgmc,
+		zl,clxx,ywbh,fdh,chsj from be_lzd
+		<include refid="query_beLzd_where"></include>
+		order by flag desc, ddka desc,createTime desc ,substring(ywbh,2) desc
+	   <include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+		
+	</select>
+	
+	<select id="countAll" resultType="java.lang.Integer" parameterType="com.what21.model.BeLzdQueryVo">
+		select count(1) from be_lzd
+		<include refid="query_beLzd_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="BeLzd" >
+	    insert into be_lzd (id, khmc, ddka, 
+      tdh, js, ds, tdsj, 
+      qysj, sjdhsj, zgsj, 
+      qgsj, wjsj,flag, fjmc, qdbglj, 
+      lhbglj, chbglj, fjlj, 
+      qdbgmc, lhbgmc, chbgmc,
+      zl,tpcc,clxx,ywbh,fdh,bgbgmc,chsj,createTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{khmc,jdbcType=VARCHAR}, #{ddka,jdbcType=VARCHAR}, 
+      #{tdh,jdbcType=VARCHAR}, #{js,jdbcType=INTEGER}, #{ds,jdbcType=INTEGER}, #{tdsj,jdbcType=VARCHAR}, 
+      #{qysj,jdbcType=VARCHAR}, #{sjdhsj,jdbcType=VARCHAR}, #{zgsj,jdbcType=VARCHAR}, 
+      #{qgsj,jdbcType=VARCHAR},  #{wjsj,jdbcType=VARCHAR},#{flag,jdbcType=INTEGER}, #{fjmc,jdbcType=VARCHAR}, #{qdbglj,jdbcType=VARCHAR}, 
+      #{lhbglj,jdbcType=VARCHAR}, #{chbglj,jdbcType=VARCHAR}, #{fjlj,jdbcType=VARCHAR}, 
+      #{qdbgmc,jdbcType=VARCHAR}, #{lhbgmc,jdbcType=VARCHAR}, #{chbgmc,jdbcType=VARCHAR},
+      #{zl,jdbcType=VARCHAR}, #{tpcc,jdbcType=VARCHAR}, #{clxx,jdbcType=VARCHAR},#{ywbh,jdbcType=VARCHAR},
+      #{fdh,jdbcType=VARCHAR},#{bgbgmc,jdbcType=VARCHAR},#{chsj,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR}
+      )
+  	</insert>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from be_lzd where id = ${value}
+	</delete>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="BeLzd">
+		select * from be_lzd where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="BeLzd">
+    update be_lzd
+    set khmc = #{khmc,jdbcType=VARCHAR},
+      ddka = #{ddka,jdbcType=VARCHAR},
+      tdh = #{tdh,jdbcType=VARCHAR},
+      js = #{js,jdbcType=INTEGER},
+      ds = #{ds,jdbcType=INTEGER},
+      tdsj = #{tdsj,jdbcType=VARCHAR},
+      qysj = #{qysj,jdbcType=VARCHAR},
+      sjdhsj = #{sjdhsj,jdbcType=VARCHAR},
+      zgsj = #{zgsj,jdbcType=VARCHAR},
+      qgsj = #{qgsj,jdbcType=VARCHAR},
+      wjsj = #{wjsj,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      fjmc = #{fjmc,jdbcType=VARCHAR},
+      qdbglj = #{qdbglj,jdbcType=VARCHAR},
+      lhbglj = #{lhbglj,jdbcType=VARCHAR},
+      chbglj = #{chbglj,jdbcType=VARCHAR},
+      fjlj = #{fjlj,jdbcType=VARCHAR},
+      qdbgmc = #{qdbgmc,jdbcType=VARCHAR},
+      lhbgmc = #{lhbgmc,jdbcType=VARCHAR},
+      chbgmc = #{chbgmc,jdbcType=VARCHAR},
+      zl = #{zl,jdbcType=VARCHAR},
+      tpcc = #{tpcc,jdbcType=VARCHAR},
+      clxx = #{clxx,jdbcType=VARCHAR},
+      ywbh = #{ywbh,jdbcType=VARCHAR},
+      fdh = #{fdh,jdbcType=VARCHAR},
+      bgbgmc = #{bgbgmc,jdbcType=VARCHAR},
+      chsj = #{chsj,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+	
+	<select id="getMaxYwbh" parameterType="string" resultType="string">
+		select max(ywbh) from be_lzd where ywbh like '${value}%' 
+	</select>
+	
+	<select id="findByTydh" parameterType="string" resultType="BeLzd">
+		select * from be_lzd where tdh = #{tdh}
+	</select>
+</mapper>

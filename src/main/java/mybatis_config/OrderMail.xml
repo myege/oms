@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderMailDao">
+	<resultMap type="OrderMail" id="OrderMailResultMap">
+		<id property="id" column="id"/>
+		<result property="receiveMan" column="receiveMan"/>
+		<result property="receiveManPhone" column="receiveManPhone"/>
+		<result property="receiveManAddress" column="receiveManAddress"/>
+		<result property="receiveProvince" column="receiveProvince"/>
+		<result property="receiveCity" column="receiveCity"/>
+		<result property="receiveCounty" column="receiveCounty"/>
+		<result property="txLogisticID" column="txLogisticID"/>
+		<result property="itemName" column="itemName"/>
+		<result property="itemWeight" column="itemWeight"/>
+		<result property="itemCount" column="itemCount"/>
+		<result property="carrier" column="carrier"/>
+		<result property="mailNo" column="mailNo"/>
+		<result property="markDestination" column="markDestination"/>
+		<result property="billProvideSiteName" column="billProvideSiteName"/>
+		<result property="billProvideSiteCode" column="billProvideSiteCode"/>
+		<result property="worth" column="worth"/>
+		<result property="preEntryNumber" column="preEntryNumber"/>
+		<result property="tradeCountry" column="tradeCountry"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="feeAmount" column="feeAmount"/>
+		<result property="insureAmount" column="insureAmount"/>
+		<result property="payNumber" column="payNumber"/>
+		<result property="ordercode" column="ordercode"/>
+		<result property="pc" column="pc"/>
+		<result property="ispost" column="ispost"/>
+		<result property="isPushCz" column="isPushCz"/>
+		<result property="isCustoms" column="isCustoms"/>
+		<result property="auditstatus" column="auditstatus"/>
+		<result property="userId" column="userId"/>
+		<result property="sendWarehouse" column="sendWarehouse"/>
+		<result property="merchantNum" column="merchantNum"/>
+		<result property="sendName" column="sendName"/>
+		<result property="sendTel" column="sendTel"/>
+		<result property="sendAddress" column="sendAddress"/>
+		<result property="totalMailNo" column="totalMailNo"/>
+		<result property="fightNumber" column="fightNumber"/>
+		<result property="status" column="status"/>
+		<result property="statusname" column="statusname"/>
+		<result property="receivecode" column="receivecode"/>
+		<result property="receiveCountr" column="receiveCountr"/>
+		<result property="classname" column="classname"/>
+		<result property="unitname" column="unitname"/>
+		<result property="parcelnumber" column="parcelnumber"/>
+		<result property="hs" column="hs"/>
+		<result property="standard" column="standard"/>
+		<result property="isPushDd" column="isPushDd"/>
+		<result property="isPushQd" column="isPushQd"/>
+		<result property="exs" column="exs"/>
+		<result property="vas" column="vas"/>
+		<result property="cons" column="cons"/>
+		<result property="allp" column="allp"/>
+		<result property="icount" column="icount"/>
+		<result property="itcount" column="itcount"/>
+		<result property="allPrice" column="allPrice"/>
+		<result property="excise" column="excise"/>
+		<result property="vat" column="vat"/>
+		<result property="consolidatedTax" column="consolidatedTax"/>
+		<result property="batchNumber" column="batchNumber"/>
+		<result property="itemWeightorder" column="itemWeightorder"/>
+		<result property="itemCountorder" column="itemCountorder"/>
+		<result property="unitPriceorder" column="unitPriceorder"/>
+		<result property="allPriceorder" column="allPriceorder"/>
+		<result property="si" column="si"/>
+		<result property="itemnamexq" column="itemnamexq"/>
+		<result property="itemWeightorders" column="itemWeightorders"/>
+		<result property="itemCountorders" column="itemCountorders"/>
+		<result property="unitPriceorders" column="unitPriceorders"/>
+		<result property="allPriceorders" column="allPriceorders"/>
+		<result property="sis" column="sis"/>
+		<result property="itemnamexqs" column="itemnamexqs"/>
+		<result property="it" column="it"/>
+		<result property="dy" column="dy"/>
+		<result property="xy" column="xy"/>
+		<result property="ohr" column="ohr"/>
+		<result property="ojr" column="ojr"/>
+		<result property="createTime" column="createTime"/>
+		<result property="invtNo" column="invtNo"/>
+		<result property="customsTax" column="customsTax"/>
+		<result property="valueAddedTax" column="valueAddedTax"/>
+		<result property="consumptionTax" column="consumptionTax"/>
+		<result property="isPrint" column="isPrint"/>
+		<result property="returncode" column="returncode"/>
+		<result property="returnInfo" column="returnInfo"/>
+<!-- 		<result property="declareAtCustomsLS" column="declareAtCustomsLS"/> -->
+	</resultMap>
+	<resultMap type="OrderMailPush" id="OrderMailPushResultMap">
+		<result property="address" column="receiveManAddress"/>
+		<result property="buyerIdNumber" column="buyerIdNumber"/>
+		<result property="buyerName" column="buyerName"/>
+		<result property="company" column="sendWarehouse"/>
+		<result property="consignee" column="receiveMan"/>
+		<result property="invoiceNo" column="mailNo"/>
+		<result property="kdId" column="carrier"/>
+		<result property="ordeAmount" column="worth"/>
+		<result property="orderSn" column="txLogisticID"/>
+		<result property="purchaserTelNumber" column="receiveManPhone"/>
+		<result property="signBuilding" column="buyerIdNumber"/>
+		<result property="tel" column="receiveManPhone"/>
+		<result property="voyageNo" column="fightNumber"/>
+		<result property="billNo" column="totalMailNo"/>
+		<result property="destinationPort" column="destinationPort"/>
+		<result property="createTime" column="createTime"/>
+	</resultMap>
+
+	<resultMap type="FindBytxLogisticIDForYtoExcel" id="FindBytxLogisticIDForYtoExcel">
+		<result property="itemName" column="itemName" />
+		<result property="tradeCountry" column="tradeCountry" />
+		<result property="standard" column="standard" />
+		<result property="unitname" column="unitname" />
+		<result property="unitPrice" column="unitPrice" />
+		<result property="itemCount" column="itemCount" />
+		<result property="allPrice" column="allPrice" />
+	</resultMap>
+	
+	
+	
+	<select id="findAll" resultMap="OrderMailResultMap" parameterType="java.util.Map">
+		select * from t_order_Mail where 1=1
+		<if test="returncode==2">
+			and returncode = 2
+		</if>
+		<if test="returncode==9">
+			and returncode != 2
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9 and auditstatus !=7">
+			and auditstatus !=9 and auditstatus !=7
+		</if>
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+	  <!--   <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if> -->
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'totalMailNo' and paramValue !='' and paramValue !=null">
+			and totalMailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'fightNumber' and paramValue !='' and paramValue !=null">
+			and fightNumber like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		<if test="txLogisticID != null">
+			and txLogisticID  like '%${txLogisticID}%'
+		</if>
+		<if test="receiveMan != null">
+			and receiveMan like '%${receiveMan}%'
+		</if>
+		<if test="mailNo != null">
+			and mailNo like '%${mailNo}%'
+		</if>
+		<if test="totalMailNo != null">
+			and totalMailNo like '%${totalMailNo}%'
+		</if>
+		<if test="fightNumber != null">
+			and fightNumber like '%${fightNumber}%'
+		</if>
+		<if test="payNumber != null">
+			and payNumber like '%${payNumber}%'
+		</if>
+		order by auditstatus,returncode, ispost, isPushDd, isPushQd, isCustoms, isPrint, paynumber, createTime desc, txLogisticID    
+		LIMIT #{startPage},#{endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from t_order_Mail where 1=1
+		<if test="returncode==2">
+			and returncode = 2
+		</if>
+		<if test="returncode==9">
+			and returncode != 2
+		</if>
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if>
+		<if test="auditstatus != 9 and auditstatus !=7">
+			and auditstatus !=9 and auditstatus !=7
+		</if>
+		<if test="auditstatus == 7">
+			and auditstatus=7
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	    <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'totalMailNo' and paramValue !='' and paramValue !=null">
+			and totalMailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'fightNumber' and paramValue !='' and paramValue !=null">
+			and fightNumber like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		 <if test=" time1 !='' and time1 != null and  (time2 !='' or time2 !=null)">
+				and createTime &gt;='${time1}' and createTime &lt;='${time2}'
+			</if>
+				<if test="txLogisticID != null">
+			and txLogisticID  like '%${txLogisticID}%'
+		</if>
+		<if test="receiveMan != null">
+			and receiveMan like '%${receiveMan}%'
+		</if>
+		<if test="mailNo != null">
+			and mailNo like '%${mailNo}%'
+		</if>
+		<if test="totalMailNo != null">
+			and totalMailNo like '%${totalMailNo}%'
+		</if>
+		<if test="fightNumber != null">
+			and fightNumber like '%${fightNumber}%'
+		</if>
+		<if test="payNumber != null">
+			and payNumber like '%${payNumber}%'
+		</if>
+	</select>
+	
+	<update id="updateSerialNumber" >
+		<foreach collection="list" item="item" separator=";">
+			update t_order_Mail
+			set payNumber = #{item.serialNumber} where id = #{item.id}
+		</foreach>
+	</update>
+	
+	<select id="odmdateTime" resultMap="OrderMailResultMap" parameterType="java.util.Map">
+	 	SELECT * from t_order_Mail
+	<where>
+			1=1
+		<if test="auditstatus == 9">
+			and auditstatus=9
+		</if> 
+		<if test="auditstatus != 9">
+			and auditstatus !=9
+		</if>
+	    <if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	     <if test="paramName == 'receiveMan' and paramValue !='' and paramValue !=null">
+			and receiveMan like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'txLogisticID' and paramValue !='' and paramValue !=null">
+			and txLogisticID like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'mailNo' and paramValue !='' and paramValue !=null">
+			and mailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'totalMailNo' and paramValue !='' and paramValue !=null">
+			and totalMailNo like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'fightNumber' and paramValue !='' and paramValue !=null">
+			and fightNumber like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'carrier' and paramValue !='' and paramValue !=null">
+			and carrier like '%${paramValue}%'
+		</if>
+		<if test="paramName == 'payNumber' and paramValue !='' and paramValue !=null">
+			and payNumber like '%${paramValue}%'
+		</if>
+		 <if test=" time1 !='' and time1 != null and  (time2 !='' or time2 !=null)">
+				and createTime &gt;='${time1}' and createTime &lt;='${time2}'
+			</if>
+		</where>
+				order by createTime
+				LIMIT #{startPage},#{endPage}
+	</select>
+	
+	
+	<select id="findByTxLogisticID" resultType="OrderMail">
+		select * from t_order_Mail where txLogisticID = #{txLogisticID}
+	</select>
+	
+	<select id="findById" resultMap="OrderMailPushResultMap">
+		select * from t_order_Mail where id = #{id}
+	</select>
+	
+	<select id="findByIds" resultMap="OrderMailResultMap">
+		select * from t_order_Mail where id in
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</select>
+	
+		
+	<select id="findtxLogisticID" resultMap="OrderMailResultMap">
+		select * from t_order_Mail where id in (
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		) 
+	</select>
+	
+	<select id="findByIdToBG" resultMap="OrderMailResultMap">
+		select * from t_order_Mail where id = #{id}
+	</select>
+	
+	<select id="findByIdToWJ" resultMap="OrderMailResultMap">
+		select ob.*, c.sendName,c.sendTel,c.sendAddress from t_order_Mail ob
+		left join company c on ob.merchantNum = c.companybm  
+		where ob.id = #{id}
+	</select>
+	
+	<select id="findByMailNo" resultType="OrderMail" parameterType="OrderMail"  >
+		select * from t_order_Mail where mailNo = #{mailNo} and totalMailNo = #{totalMailNo}
+	</select>
+	
+	<select id="findByTotalMailNo" resultType="OrderMail">
+		select id, mailNo, status from t_order_Mail where totalMailNo = #{totalMailNo}
+	</select>
+	
+	<select id="findMailNo" resultMap="OrderMailResultMap" parameterType="java.util.Map"  >
+		select * from t_order_Mail where mailNo = #{mailNo} and totalMailNo = #{totalMailNo}
+	</select>
+	
+	<insert id="insert" parameterType="OrderMail">
+		INSERT INTO t_order_Mail (receiveMan,receiveManPhone,receiveManAddress, 
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight, 
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode, 
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount, 
+			payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,sendWarehouse,merchantNum, 
+			createTime,totalMailNo,fightNumber,status,statusname,receivecode,receiveCountr,classname,
+			unitname,parcelnumber,hs,standard,destinationPort)
+		VALUES(#{receiveMan},#{receiveManPhone},#{receiveManAddress},#{receiveProvince},
+			#{receiveCity},#{receiveCounty},#{txLogisticID},#{itemName},#{itemWeight},#{itemCount},
+			#{carrier},#{mailNo},#{markDestination},#{billProvideSiteName},#{billProvideSiteCode},
+			#{worth},#{preEntryNumber},#{tradeCountry},#{buyerIdNumber},#{buyerName},#{feeAmount},
+			#{insureAmount},#{payNumber},#{ordercode},#{pc},#{ispost},#{isCustoms},#{auditstatus},
+			#{userId},#{sendWarehouse},#{merchantNum},now(),#{totalMailNo},#{fightNumber},#{status},
+			#{statusname},#{receivecode},#{receiveCountr},#{classname},#{unitname},#{parcelnumber},
+			#{hs},#{standard},#{destinationPort});
+	</insert>	
+	
+	<insert id="batchInsert" parameterType="OrderMail">
+		INSERT INTO t_order_Mail (receiveMan,receiveManPhone,receiveManAddress, 
+			receiveProvince,receiveCity,receiveCounty,txLogisticID,itemName,itemWeight, 
+			itemCount,carrier,mailNo,markDestination,billProvideSiteName,billProvideSiteCode, 
+			worth,preEntryNumber,tradeCountry,buyerIdNumber,buyerName,feeAmount,insureAmount, 
+			payNumber,ordercode,pc,ispost,isCustoms,auditstatus,userId,sendWarehouse,merchantNum, 
+			createTime,totalMailNo,fightNumber,status,statusname,receivecode,receiveCountr,classname,
+			unitname,parcelnumber,hs,standard,destinationPort,batchNumber)
+		VALUES
+		<foreach collection="array" item="orderMail" separator="," >
+		(
+			#{orderMail.receiveMan},#{orderMail.receiveManPhone},#{orderMail.receiveManAddress},#{orderMail.receiveProvince},
+			#{orderMail.receiveCity},#{orderMail.receiveCounty},#{orderMail.txLogisticID},#{orderMail.itemName},#{orderMail.itemWeight},#{orderMail.itemCount},
+			#{orderMail.carrier},#{orderMail.mailNo},#{orderMail.markDestination},#{orderMail.billProvideSiteName},#{orderMail.billProvideSiteCode},
+			#{orderMail.worth},#{orderMail.preEntryNumber},#{orderMail.tradeCountry},#{orderMail.buyerIdNumber},#{orderMail.buyerName},#{orderMail.feeAmount},
+			#{orderMail.insureAmount},#{orderMail.payNumber},#{orderMail.ordercode},#{orderMail.pc},#{orderMail.ispost},#{orderMail.isCustoms},#{orderMail.auditstatus},
+			#{orderMail.userId},#{orderMail.sendWarehouse},#{orderMail.merchantNum},now(),#{orderMail.totalMailNo},#{orderMail.fightNumber},#{orderMail.status},
+			#{orderMail.statusname},#{orderMail.receivecode},#{orderMail.receiveCountr},#{orderMail.classname},#{orderMail.unitname},#{orderMail.parcelnumber},
+			#{orderMail.hs},#{orderMail.standard},#{orderMail.destinationPort},#{orderMail.batchNumber}
+		)
+		</foreach>
+	</insert>
+	
+	<delete id="delete">
+		delete td,ts from t_order_Mail as td LEFT OUTER JOIN t_order_Mail_sku as ts on td.txLogisticID =ts.txLogisticID 
+		where td.id in 
+		<foreach item="ids" collection="array" open="(" separator="," close=")">  
+        	#{ids}  
+        </foreach>
+	</delete>
+	
+	<delete id="deleteMailNos" parameterType="String">
+	DELETE FROM t_order_Mail WHERE totalMailNo in 
+	<foreach collection="array" item="item" close=")"  open="(" separator=",">
+		#{item}
+	</foreach>
+	
+	 
+	</delete>
+	
+	<update id="updateAuditstatus" parameterType="OrderMail">
+		update t_order_Mail set auditstatus = #{auditstatus}, status = #{status} where id = #{id}
+	</update>
+	
+	<update id="updateAuditstatus2" parameterType="OrderMail">
+		update t_order_Mail set auditstatus = #{auditstatus}, status = #{status}, returncode = ${returncode},returnInfo = #{returnInfo} where id = #{id}
+	</update>
+		
+	<update id="updateExpressParam" parameterType="OrderMail">
+		update t_order_Mail set mailNo = #{mailNo}, markDestination = #{markDestination}, 
+		billProvideSiteName = #{billProvideSiteName}, billProvideSiteCode = #{billProvideSiteCode}, 
+		auditstatus = #{auditstatus} 
+		where id = #{id} 
+	</update>
+	
+	<update id="updateIsPushDd" parameterType="OrderMail">
+		update t_order_Mail set auditstatus = #{auditstatus} where id = #{id}
+	</update>
+	
+	<update id="updateIsPushQd" parameterType="OrderMail">
+		update t_order_Mail set isPushQd = #{isPushQd} where id = #{id}
+	</update>
+	
+	<update id="updateIspost" parameterType="OrderMail">
+		update t_order_Mail set ispost = #{ispost} where id = #{id}
+	</update>
+			
+	<update id="updateIsCustoms" parameterType="OrderMail">
+		update t_order_Mail set isCustoms = #{isCustoms} where id = #{id}
+	</update>
+	
+	<update id="updateCountAndWeight" parameterType="OrderMail">
+		update t_order_Mail set itemCount = #{itemCount}, itemWeight = #{itemWeight}, worth = #{worth} where id = #{id}
+	</update>
+	
+	<update id="updateIsPushCz" parameterType="OrderMail">
+		update t_order_Mail set isPushCz = 1 where id = #{id}
+	</update>
+	
+	<update id="updateIsMailNo" parameterType="OrderMail">
+		update t_order_Mail set mailNo=#{mailNo},billProvideSiteCode=#{billProvideSiteCode} where id = #{id}
+	</update>
+	
+	<update id="updateToal" parameterType="OrderMail">
+		update t_order_Mail set fightNumber=#{fightNumber},totalMailNo=#{totalMailNoNew},pc=#{pc} where totalMailNo=#{totalMailNo}
+	</update>
+	
+	<update id="updateByIds">
+		update t_order_Mail set isPrint = 1 where id in
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</update>
+	
+	
+	<update id="payNumber" parameterType="OrderMail">
+		update t_order_Mail set 
+		payNumber = #{payNumber}, 
+		buyerName = #{buyerName}, 
+		buyerIdNumber = #{buyerIdNumber}, 
+		receiveManPhone = #{receiveManPhone} 
+		where txLogisticID = #{txLogisticID} 
+	</update>
+	
+	<select id="findTxLogisticID" resultMap="OrderMailResultMap"  >
+		<![CDATA[select * from t_order_Mail where payNumber is null or payNumber = ""]]>
+	</select>
+	
+	<select id="findAllmx" resultMap="OrderMailResultMap"  >
+		 SELECT ts.itemCount AS itcount,ts.unitPrice as prices,ts.allPrice as allp, t.*,excise AS exs,vat AS vas,consolidatedTax AS cons FROM cost co INNER JOIN  t_order_mail t  ON co.totanumber =t.totalMailNo  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID WHERE co.Id =#{id}
+	</select>
+	
+	<select id="countmx" resultType="java.lang.Integer" >
+			SELECT COUNT(1),t.*,excise AS ex,vat AS va,consolidatedTax AS con FROM cost co INNER JOIN  t_order_mail t  ON co.totanumber =t.totalMailNo  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID WHERE co.Id =#{id}
+	</select>
+	
+	
+	<select id="findeXport" resultMap="OrderMailResultMap" parameterType="java.util.Map">
+		 SELECT ts.unitPrice as prices,ts.itemCount AS it,ts.allPrice as allp, t.*,excise AS exs,vat AS vas,consolidatedTax AS cons FROM cost co INNER JOIN  t_order_mail t  ON co.totanumber =t.totalMailNo  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID WHERE co.userId =#{userId} AND co.id=#{id}
+	</select>
+	
+	<select id="findeXportId" resultMap="OrderMailResultMap" >
+		 SELECT  ts.unitPrice as prices,ts.allPrice as allp, t.*,excise AS exs,vat AS vas,consolidatedTax AS cons FROM cost co INNER JOIN  t_order_mail t  ON co.totanumber =t.totalMailNo  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID WHERE t.id=#{id}
+	</select>
+	
+	<select id="exportMoil" resultType="com.what21.model.OrderMailForExport" parameterType="java.util.Map" >
+            SELECT *,ts.itemClass,ts.itemCount itemCount2,ts.itemName itemName2,ts.itemWeight itemWeight2 FROM  t_order_mail t  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID 
+            where 1=1 
+            <if test="returncode==2">
+				and returncode = 2
+			</if>
+			<if test="returncode==9">
+				and returncode != 2
+			</if>
+			<if test="auditstatus == 9">
+				and auditstatus=9
+			</if>
+			<if test="auditstatus != 9 and auditstatus !=7">
+				and auditstatus !=9 and auditstatus !=7
+			</if>
+			<if test="auditstatus == 7">
+				and auditstatus=7
+			</if>
+			<!-- <if test="userId != null and userId != 0">
+	 		     and t.userId = #{userId} 
+		    </if> -->
+		    <if test="name == 'receiveMan' and value !='' and value !=null">
+				and t.receiveMan like '%${value}%'
+			</if>
+			<if test="name == 'txLogisticID' and value !='' and value !=null">
+				and t.txLogisticID like '%${value}%'
+			</if>
+			<if test="name == 'mailNo' and value !='' and value !=null">
+				and t.mailNo like '%${value}%'
+			</if>
+			<if test="name == 'totalMailNo' and value !='' and value !=null">
+				and t.totalMailNo like '%${value}%'
+			</if>
+			<if test="name == 'fightNumber' and value !='' and value !=null">
+				and t.fightNumber like '%${value}%'
+			</if>
+			<if test="name == 'carrier' and value !='' and value !=null">
+				and t.carrier like '%${value}%'
+			</if>
+			<if test="name == 'payNumber' and value !='' and value !=null">
+				and t.payNumber like '%${value}%'
+			</if>
+			<if test="time1 !='' and time1 !=null">
+				and t.createTime >= '${time1}'
+			</if>
+			<if test="time2 !='' and time2 !=null">
+				and t.createTime &lt;= '${time2}'
+			</if>
+	</select>
+	
+	<select id="exportMailByIds" resultType="com.what21.model.OrderMailForExport" parameterType="string" >
+            SELECT *,ts.itemClass,ts.itemCount itemCount2,ts.itemName itemName2,ts.itemWeight itemWeight2 FROM  t_order_mail t  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID 
+            where t.id in (${value})
+    </select>
+	<select id="exportMoilid" resultMap="OrderMailResultMap"  >
+            SELECT * FROM  t_order_mail t  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID 
+            where 1=1 and t.id=#{id}
+	</select>
+	
+	<select id="getTax" resultType="OrderMail" parameterType="OrderMail">
+		select SUM(oms.allPrice) as allPrice, SUM(oms.excise) as excise, 
+		SUM(oms.vat) as vat, SUM(oms.consolidatedTax) as consolidatedTax 
+		from t_order_mail om
+		left join t_order_mail_sku oms on om.txLogisticID = oms.txLogisticID
+		where om.auditstatus = #{auditstatus} 
+		<if test="userId != null and userId != 0">
+	 		and userId = #{userId} 
+	    </if>
+	</select>
+	
+	<select id="findBybatchNumber" resultMap="OrderMailResultMap">
+		select tm.*,tms.allPrice AS allPriceorder,tms.itemCount AS itemCountorder,tms.itemWeight AS itemWeightorder, tms.unitPrice AS unitPriceorder,(tms.allPrice * 0.119) AS si,tms.itemName AS itemnamexq  from t_order_mail tm INNER JOIN t_order_mail_sku tms ON tm.txLogisticID = tms.txLogisticID AND tm.batchNumber =tms.batchNumber  where tm.batchNumber =#{batchNumber}	
+	</select>
+	<select id="conbatchNumber" resultType="java.lang.Integer"  parameterType="String">
+		select COUNT(1) from t_order_mail where batchNumber = #{batchNumber}
+	</select>
+	
+	<select id="deriveddetail" resultType="OrderMail" parameterType="String">
+		select tm.*,tms.allPrice AS allPriceorders,tms.itemCount AS itemCountorders,tms.itemWeight AS itemWeightorders, tms.unitPrice AS unitPriceorders,(tms.allPrice * 0.119) AS sis,tms.itemName AS itemnamexqs  from t_order_mail tm INNER JOIN t_order_mail_sku tms ON tm.txLogisticID = tms.txLogisticID AND tm.batchNumber =tms.batchNumber  where tm.batchNumber =#{batchNumber}	
+	</select>
+	
+	<select id="findTxLogisticIDByTotalMailNo" resultMap="OrderMailResultMap">
+		select SUM(worth) AS ojr from t_order_mail where totalMailNo = #{totalMailNo}
+	</select> 
+	
+	<select id="findOrderMailDy" resultType="OrderMail">
+		SELECT SUM(worth*0.01) as ohr, COUNT(1) as dy FROM t_order_mail  WHERE totalMailNo =#{totalMailNo} AND worth &gt;=300
+	</select>
+	
+	<select id="findOrderMailXy" resultType="OrderMail">
+		SELECT COUNT(1) as xy FROM t_order_mail  WHERE totalMailNo =#{totalMailNo} AND worth &lt;300
+	</select>
+	
+	<select id="findOrderMai" resultType="OrderMail">
+		SELECT * FROM t_order_mail  WHERE totalMailNo =#{totalMailNo}
+	</select>
+	
+	<select id="storageOrderMai" resultType="OrderMail">
+		SELECT * FROM t_order_mail  WHERE totalMailNo =#{totalMailNo}
+	</select>
+	
+	<update id="editIdN" parameterType="OrderMail">
+			update  t_order_Mail set buyerIdNumber=#{buyerIdNumber}, buyerName=#{buyerName},receiveMan=#{receiveMan} where id=#{id}
+	</update>
+	
+	<update id="updateInvtno" parameterType="OrderMail">
+		update t_order_mail set invtNo = #{invtNo},customsTax = #{customsTax},valueAddedTax = #{valueAddedTax},consumptionTax = #{consumptionTax} where id = #{id}
+	</update>
+	
+	<select id="findOneById" parameterType="int" resultType="OrderMail"> 
+		select * from t_order_mail where id= #{id}
+	</select>
+
+	<select id="countByTydh" parameterType="string" resultType="int">
+		select count(1) from t_order_mail where totalMailNo = #{tydh}
+	</select>
+	
+	<update id="updateValueAddedTax" parameterType="OrderMail" >
+		update t_order_mail set valueAddedTax = #{valueAddedTax} where id =${id}
+	</update>
+	
+	<select id="findByTydh" resultMap="OrderMailResultMap" parameterType="java.util.Map">
+		select * from t_order_mail where totalMailNo = #{tydh} 
+	</select>
+	
+	<update id="inztsf" parameterType="OrderMail" >
+		update t_order_mail set mailNo = #{mailNo}, billProvideSiteCode = #{billProvideSiteCode}, markDestination=#{markDestination} where id =#{id}
+	</update>
+	
+	<update id="updateIsPrint" parameterType="OrderMail" >
+		update t_order_mail set isPrint = #{isPrint} where id =#{id}
+	</update>
+	
+	<update id="editMatterm" parameterType="OrderMail" >
+		update t_order_mail set 
+		receiveMan = #{receiveMan},
+		receiveManPhone = #{receiveManPhone},
+		receiveManAddress = #{receiveManAddress},
+		txLogisticID = #{txLogisticID},
+		mailNo = #{mailNo},
+		tradeCountry = #{tradeCountry},
+		totalMailNo = #{totalMailNo},
+		fightNumber = #{fightNumber},
+		destinationPort = #{destinationPort},
+		buyerName = #{buyerName},
+		tradeCountry = #{tradeCountry},
+		receiveProvince = #{receiveProvince},
+		receiveCity = #{receiveCity},
+		receiveCounty = #{receiveCounty},
+		buyerIdNumber = #{buyerIdNumber}
+		 where id =#{id}
+	</update>
+	
+	<update id="updateMailNoById" parameterType="OrderMail" >
+		update t_order_mail set mailNo = #{mailNo} where id =#{id}
+	</update>
+	
+	<select id="findByTotalMailNoS" resultType="map" parameterType="OrderMail"  >
+		select count(0),sum(worth) from t_order_Mail where  totalMailNo = #{totalMailNo}
+	</select>
+	
+	<select id="findByOmArr" resultMap="OrderMailResultMap" parameterType="OrderMail">
+		select txLogisticID, mailNo from t_order_Mail 
+		where txLogisticID in 
+		<foreach collection="array" item="orderMail" open="(" separator="," close=")">
+			#{orderMail.txLogisticID}
+		</foreach>
+	</select>
+	
+	<select id="findByIdArrToCz" resultMap="OrderMailResultMap" parameterType="String">
+		select * from t_order_Mail 
+		where txLogisticID in 
+		<foreach collection="array" item="idArr" open="(" separator="," close=")">
+			#{idArr}
+		</foreach>
+	</select>
+	
+	<select id="findByTotalMailNoToCz" resultMap="OrderMailResultMap" parameterType="String">
+		SELECT * FROM t_order_mail  WHERE totalMailNo = #{totalMailNo} and isPushCz = 0
+	</select>
+	
+	<select id="findReturnCode" resultMap="OrderMailResultMap" parameterType="String">
+		SELECT txLogisticID, mailNo, returncode FROM t_order_mail  WHERE totalMailNo = #{totalMailNo}
+	</select>
+	
+	<update id="batchUpdateIsPushCz" parameterType="OrderMail" >
+		update t_order_mail set isPushCz = 1 where id in 
+		<foreach collection="list" item="orderMail" open="(" separator="," close=")">
+			#{orderMail.id}
+		</foreach>
+	</update>
+	
+	<select id="findBytxLogisticIDForYtoExcels" resultMap="FindBytxLogisticIDForYtoExcel">
+		select  t_order_mail.mailNo
+			   ,t_order_mail.tradeCountry
+			   ,t_order_mail_sku.itemName
+			   ,t_order_mail_sku.standard,t_order_mail_sku.unitname
+			   ,t_order_mail_sku.unitPrice,t_order_mail_sku.itemCount
+			   ,t_order_mail_sku.allPrice
+		from t_order_mail left join t_order_mail_sku
+		on t_order_mail.txLogisticID =t_order_mail_sku.txLogisticID
+		where t_order_mail.totalMailNo = #{value}
+	</select>
+	
+	<select id="findBytxLogisticIDForYtoExcelById" resultMap="FindBytxLogisticIDForYtoExcel">
+		select  t_order_mail.mailNo
+			   ,t_order_mail.tradeCountry
+			   ,t_order_mail_sku.itemName
+			   ,t_order_mail_sku.standard,t_order_mail_sku.unitname
+			   ,t_order_mail_sku.unitPrice,t_order_mail_sku.itemCount
+			   ,t_order_mail_sku.allPrice
+		from t_order_mail left join t_order_mail_sku
+		on t_order_mail.txLogisticID =t_order_mail_sku.txLogisticID
+		where t_order_mail.id in (
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</select>
+	
+	<select id="findByIdToalOrderMailNo" resultType="int">
+		select count(*) from t_order_mail where totalMailNo = #{totalMailNo}
+	</select>
+	
+	
+	<select id="findByIdArr" resultMap="OrderMailResultMap" parameterType="String">
+		select * from t_order_mail 
+		where id in 
+		<foreach collection="array" item="idArr" open="(" separator="," close=")">
+			#{idArr}
+		</foreach>
+	</select>
+	
+	<update id="updateIspostForYF" parameterType="OrderMail">
+		update t_order_mail set ispost = #{ispost}, payNumber = #{payNumber} where id = #{id}
+	</update>
+	
+	<update id="updateReturnCode" parameterType="OrderMail">
+		update t_order_Mail set returncode = #{returncode} where id = #{id}
+	</update>
+	
+	<update id="transferExcep" parameterType="int">
+		update t_order_mail set auditstatus = 7 where id = ${value}
+	</update>
+		
+	<select id="findException" resultType="int">
+		select count(id) from t_order_mail where auditstatus = 7
+	</select>	
+	
+	<update id="updateAuditstatus0" >
+		update t_order_mail set auditStatus = 0 where id in
+		<foreach collection="array" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</update>
+	
+	<update id="updateByBfb"  parameterType="OrderBonded">
+		update t_order_mail set payNumber = ${payNumber} where id=${id}
+	</update>
+	
+	    <select id="pushBfb" resultType="com.what21.model.BfbModel"  parameterType="string">
+    	select t.buyerName as payerName,
+    		   t.buyerIdNumber as payerNumber,
+    		   t.txLogisticID as subOrderNo,
+    		   t.worth as subRmbPayAmount,
+    		   t.worth  as payGoodsAmt,
+    		   t.tj_sj  as payTaxAmt,
+    		   t.feeAmount  as payFreightAmt,
+    		   c.companyCode as platSupplierNo,
+    		   c.companyName as platSupplierName
+ 			from t_order_mail t LEFT JOIN companyforzy c 
+  				on
+    				t.merchantNum = c.companybm
+						where t.id = ${value};
+    </select>
+
+
+	<select id="findOrderToday" resultType="int">
+		SELECT IFNULL(SUM(a),0) FROM(
+		select COUNT(*) a from t_order_mail where to_days(createTime) =
+		to_days(now()) UNION ALL SELECT COUNT(*) a FROM t_order_bonded where
+		to_days(createTime) = to_days(now())
+		) as aa
+	</select>
+	<select id="findOrderYear" resultType="int">
+		SELECT IFNULL(count(*),0) FROM(
+		select id from t_order_mail where YEAR(createTime) = YEAR(now())
+		UNION ALL SELECT id FROM t_order_bonded where YEAR(createTime)
+		= YEAR(now())
+		) as aa
+
+	</select>
+	<select id="findExceptionOrderYear" resultType="int">
+		SELECT IFNULL(COUNT(*),0) FROM(
+		select id from t_order_mail where YEAR(createTime) = YEAR(now()) AND auditstatus=7 
+		UNION ALL SELECT id FROM t_order_bonded where YEAR(createTime) = YEAR(now()) AND auditstatus=7
+		) as aa
+	</select>
+	<select id="findTotalSumYear" resultType="string">
+	SELECT IFNULL(SUM(a),0)+"" FROM(
+	select SUM(worth) a from t_order_mail where YEAR(createTime) = YEAR(now())
+	UNION ALL SELECT SUM(worth) a FROM t_order_bonded where
+	YEAR(createTime) = YEAR(now())
+	) as aa
+	</select>
+	<select id="findLastYearOrderNumber" resultType="int">
+	SELECT IFNULL(COUNT(*),0) FROM(
+	SELECT id,createTime FROM t_order_bonded UNION ALL SELECT id ,createTime FROM t_order_mail) as aa 
+	WHERE DATE_SUB(NOW(),INTERVAL 1 year) &lt;=DATE(aa.createTime)
+	</select>
+	<select id="findLastMonthOrderNumber" resultType="Integer">
+	SELECT SUM(a) FROM(
+	SELECT COUNT(*) a,createTime from t_order_mail WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) 
+	UNION ALL SELECT COUNT(*) a,createTime FROM t_order_bonded WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	) as aa
+	</select>
+	<select id="findLastMonthTotalSum" resultType="string">
+SELECT SUM(CASE WHEN a  is null THEN 0 ELSE a END) FROM(
+	SELECT SUM(worth) a,createTime from t_order_mail WHERE DATE_FORMAT(
+	createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	UNION ALL SELECT SUM(worth) a,createTime FROM t_order_bonded WHERE
+	DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	) as aa
+	</select>
+	<select id="findbonded" resultType="com.what21.model.EchattsBonded">
+	SELECT date(dday) ddate,count(*) - 1 AS num FROM (SELECT datelist AS
+	dday FROM
+	calendar WHERE DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(datelist)
+	&amp;&amp; date(datelist) &lt;= CURDATE()
+	UNION ALL SELECT createTime FROM t_order_bonded WHERE
+	DATE_SUB(NOW(),INTERVAL 1 MONTH) &lt;=DATE(createTime)) a GROUP BY
+	ddate
+	</select>
+	<select id="findMail" resultType="com.what21.model.EchattsBonded">
+		SELECT date(dday) ddate,count(*) - 1 AS num FROM (SELECT datelist AS dday
+		FROM
+		calendar WHERE DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(datelist)
+		&amp;&amp; date(datelist) &lt;= CURDATE()
+		UNION ALL SELECT createTime FROM t_order_mail WHERE DATE_SUB(NOW(),INTERVAL
+		1 MONTH) &lt;=DATE(createTime)) a GROUP BY ddate
+	</select>
+	  <select id="neworderzycx" resultType="map" parameterType="string" >
+ SELECT t.id,t.mailNo,t.payNumber,
+t.worth,t.txLogisticID,t.receiveMan,t.receiveManPhone,t.receiveManAddress,t.itemCount,
+t.buyerName,t.carrier,ts.itemsku,ts.itemName,ts.itemClass,ts.unitPrice,ts.standard,ts.itemCount ic,it.unitDesc,t.buyerIdNumber,it.hscode,it.country,ts.allPrice,t.feeAmount,ts.batchnumber
+from t_order_mail t,t_order_mail_sku ts ,item_forzy it where t.txLogisticID=ts.txLogisticID 
+and ts.itemsku=it.itemSKU
+			and t.id in (${value}) ORDER BY ts.batchnumber
+    </select>
+	 <!-- 更新状态订单 -->
+	<update id="updateddzt_2"  parameterType="OrderMail">
+		update t_order_mail set ispushdd='1' where  id in (${value})
+	</update>
+	   <!-- 更新状态平台 -->
+	<update id="updateptzt_2"  parameterType="OrderMail">
+		update t_order_mail set ispost='1' where  id in (${value})
+	</update>
+	 <!-- 更新直邮回执订单状态 -->
+	<update id="updateddhzzt_1"  parameterType="OrderMail">
+		update t_order_mail set auditstatus='9' where  txlogisticid = '${value}'
+	</update>
+	<select id="exportGD" parameterType="com.what21.model.OrderMail" resultType="com.what21.model.OrderMailForExport">
+		select tm.*,
+			tms.itemsku,
+			tms.itemClass,
+			i.productRecordNo,
+			i.country,
+			i.oneUnitDesc,
+			i.twoUnitDesc,
+			i.firstCount,
+			i.secondCount,
+			tms.unitname,
+			tms.unitPrice,
+			tms.allPrice
+		from t_order_mail tm 
+		LEFT JOIN 
+			t_order_mail_sku tms
+ 		on 
+			tm.txLogisticID = tms.txLogisticID
+		LEFT JOIN
+			item i
+		on
+			tms.itemsku = i.itemSku
+		where
+		tm.totalMailNo = #{totalMailNo}
+		order by tms.batchNumber desc
+	</select>
+	
+	<update id="goBackOrder">
+		update t_order_mail set auditstatus = 2 where id in(
+		<foreach collection="array" item="ids" separator=",">
+			#{ids}
+		</foreach>
+		)
+	</update>
+</mapper>

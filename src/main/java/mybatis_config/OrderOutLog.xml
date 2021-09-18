@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.OrderOutLogDao">
+
+	<insert id="insert" parameterType="com.what21.model.OrderOutLog" >
+    insert into t_order_out_log (id, wayBillNo, approveResult, 
+      approveComment, createTime)
+    values (#{id,jdbcType=INTEGER}, #{waybillno,jdbcType=VARCHAR}, #{approveresult,jdbcType=VARCHAR}, 
+      #{approvecomment,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="findLogByWaybillno" parameterType="string" resultType="com.what21.model.OrderOutLog">
+  	select * from t_order_out_log where waybillno = #{waybillno} order by createTime desc limit 0,1
+  </select>
+</mapper>

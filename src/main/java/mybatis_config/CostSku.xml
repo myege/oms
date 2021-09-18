@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.CostSkuDao">
+		<resultMap type="CostSku" id="CostSkuResultMap">
+			<id property="id" column="id"/>
+			<result property="costId" column="costId"/>
+			<result property="freightPrice" column="freightPrice"/>
+			<result property="freightNumber" column="freightNumber"/>
+			<result property="freightMoney" column="freightMoney"/>
+			<result property="freightRemark" column="freightRemark"/>
+			<result property="operationPrice" column="operationPrice"/>
+			<result property="operationNumber" column="operationNumber"/>
+			<result property="operationMoney" column="operationMoney"/>
+			<result property="operationRemark" column="operationRemark"/>
+			<result property="groundPrice" column="groundPrice"/>
+			<result property="groundNumber" column="groundNumber"/>
+			<result property="groundMoney" column="groundMoney"/>
+			<result property="groundRemark" column="groundRemark"/>
+			<result property="taxRemark" column="taxRemark"/>
+			<result property="platformRemark" column="platformRemark"/>
+			<result property="total" column="total"/>
+			<result property="exs" column="exs"/>
+			<result property="vas" column="vas"/>
+			<result property="cons" column="cons"/>
+			<result property="wh" column="wh"/>
+			<result property="icount1" column="icount1"/>
+			<result property="icount2" column="icount2"/>
+		</resultMap>
+
+		<insert id="addCostSku" parameterType="CostSku">
+			INSERT INTO  cost_sku (costId,freightPrice,freightNumber,freightMoney,freightRemark,operationPrice,operationNumber,
+			operationMoney,operationRemark,groundPrice,groundNumber,groundMoney,groundRemark,taxRemark,platformRemark,total) 
+			VALUES (#{costId}, #{freightPrice}, #{freightNumber},#{freightMoney},#{freightRemark},#{operationPrice},
+			#{operationNumber}, #{operationMoney}, #{operationRemark},#{groundPrice},#{groundNumber},#{groundMoney},#{groundRemark},#{taxRemark},#{platformRemark},#{total}) 
+		</insert>
+		
+		<select id="findCostSku" resultMap="CostSkuResultMap" parameterType="java.util.Map">
+			SELECT freightPrice AS fp,freightNumber AS fn,freightMoney AS fm,freightRemark AS fr,operationprice AS op,operationNumber AS opn,operationMoney AS om ,operationRemark AS opr,groundprice AS gp,groundNumber AS gn,groundMoney AS gm ,groundRemark AS gr,taxprice AS tp,taxNumber AS tn,taxMoney AS tm,
+			taxRemark AS tr,platformprice AS pp,platformnumber AS pn,platformMoney AS pm,platformRemark AS pr,total AS tt FROM cost_sku WHERE costId =#{costId}
+		</select>
+		
+		<update id="updateCostSku" parameterType="CostSku">
+	 		update  cost_sku set freightPrice=#{freightPrice},freightNumber=#{freightNumber},freightMoney=#{freightMoney},freightRemark=#{freightRemark},operationPrice=#{operationPrice},operationNumber=#{operationNumber},
+			operationMoney=#{operationMoney},operationRemark=#{operationRemark},groundPrice=#{groundPrice},groundNumber=#{groundNumber},groundMoney=#{groundMoney},groundRemark=#{groundRemark},
+			taxRemark=#{taxRemark},platformPrice=#{platformPrice},platformNumber=#{platformNumber},platformMoney=#{platformMoney},platformRemark=#{platformRemark},total=#{total} where costId=#{costId}
+		</update>  
+		
+		<delete id="deleteCostSku" parameterType="String">
+			DELETE FROM cost_sku WHERE costId = #{costId} 
+		</delete>
+		
+		<select id="findById" resultType="CostSku">
+			SELECT co.id,SUM(ts.allPrice) AS wh,SUM(excise) AS exs,SUM(vat) AS vas,SUM(consolidatedTax) AS cons FROM cost co INNER JOIN  t_order_mail t  ON co.totanumber =t.totalMailNo  INNER JOIN t_order_mail_sku ts ON t.txLogisticID =ts.txLogisticID WHERE co.Id =#{id}	
+		</select>
+
+	</mapper>	
+	
+	

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CarrierMailnoDao">
+	 <insert id="insert" parameterType="com.what21.model.TCarrierMailno" >
+    insert into t_carrier_mailno (id, carrier, mailNo, 
+      createTime, num)
+    values (#{id,jdbcType=INTEGER}, #{carrier,jdbcType=VARCHAR}, #{mailno,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{num,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

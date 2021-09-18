@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.InoutDao">
+	<resultMap type="Inout" id="InoutResultMap">
+		<id property="id" column="id"/>
+		<result property="inOutSeq" column="inOutSeq"/>
+		<result property="inOutNo" column="inOutNo"/>
+		<result property="manualId" column="manualId"/>
+		<result property="sourceNo" column="sourceNo"/>
+		<result property="itemType" column="itemType"/>
+		<result property="inOutFlag" column="inOutFlag"/>
+		<result property="inOutAmount" column="inOutAmount"/>
+		<result property="inOutTime" column="inOutTime"/>
+		<result property="wayBillNo" column="wayBillNo"/>
+		<result property="jobFormId" column="jobFormId"/>
+		<result property="datatime" column="datatime"/>
+		<result property="flag" column="flag"/>
+		<result property="userId" column="userId"/>
+		
+	</resultMap>
+	<sql id="whereFindAll">
+	 	<where>
+	 		1=1 
+	 		<if test="inoutCustom.flag == 3">
+              and flag='处理失败'
+             </if>
+        	<if test="inoutCustom.flag == 2 or inoutCustom.flag == '' ">
+              and flag is null
+             </if>
+             <if test="inoutCustom.flag == 1">
+              and flag='success'
+             </if> 
+		<if test="inoutCustom.inOutNo !=null and inoutCustom.inOutNo != '' ">
+			and inOutNo like '%${inoutCustom.inOutNo}%'
+		</if>
+		<if test="inoutCustom.inOutFlag !=null and inoutCustom.inOutFlag != ''">
+			and inOutFlag like '%${inoutCustom.inOutFlag}%'
+		</if>
+		<if test="inoutCustom.jobFormId !=null and inoutCustom.jobFormId !=''">
+			and jobFormId like '%${inoutCustom.jobFormId}%'
+		</if>
+		<if test="inoutCustom.sourceNo !=null and inoutCustom.sourceNo !=''">
+			and sourceNo like '%${inoutCustom.sourceNo}%'
+		</if>
+	 
+	 </where>
+	
+	</sql>
+	<select id="findAll2" resultType="com.what21.model.InoutCustom" parameterType="com.what21.model.InoutCustom">
+		select * from wms_inout 
+		<include refid="whereFindAll"></include>
+		 order by  flag, datatime desc 
+		  <if test="pageQuery!=null">
+			limit ${pageQuery.startPage},${pageQuery.endPage}
+		</if>
+	</select>
+	<select id="findByPageQuery" parameterType="com.what21.model.InoutCustom" resultType="com.what21.model.Inout">
+	select * from wms_inout
+      	<include refid="whereFindAll"></include>
+	</select>
+	
+	<select id="count2" resultType="java.lang.Integer" parameterType="com.what21.model.InoutCustom">
+		select count(1) from wms_inout  
+		<include refid="whereFindAll"></include>
+	</select>
+	
+	<select id="findAll" resultMap="InoutResultMap" parameterType="java.util.Map">
+		select * from wms_inout where flag is null order by  flag, datatime desc LIMIT #{startPage},#{endPage} 
+	</select>
+	<delete id = "indelete" parameterType="String">
+		DELETE FROM wms_inout WHERE id = #{id}
+	</delete>
+	<select id="findin" resultMap="InoutResultMap" parameterType="java.util.Map">
+		select * from wms_inout where 1=1
+		 	<if test="flag==3">
+              and flag='处理失败'
+             </if>
+        <if test="flag==2">
+              and flag is null
+             </if>
+             <if test="flag==1">
+              and flag='success'
+             </if> 
+		<if test="type == 1 ">
+			and inOutNo like '%${paramValue}%'
+		</if>
+		<if test="type == 2 ">
+			and inOutFlag like '%${paramValue}%'
+		</if>
+		<if test="type == 3">
+			and jobFormId like '%${paramValue}%'
+		</if>
+		<if test="type == 4">
+			and sourceNo like '%${paramValue}%'
+		</if>
+
+		order by jobFormId, inOutNo 
+		LIMIT #{startPage},#{endPage}
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from wms_inout 
+		<where>
+			1=1
+ 	<if test="flag==3">
+              and flag='处理失败'
+             </if>
+        <if test="flag==2">
+              and flag is null
+             </if>
+             <if test="flag==1">
+              and flag='success'
+             </if> 
+			<if test="type == 1">
+				and inOutNo like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and inOutFlag like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and jobFormId like '%${paramValue}%'
+			</if>
+			<if test="type == 4">
+				and sourceNo like '%${paramValue}%'
+			</if>
+      
+		</where>
+	</select>
+	
+	<select id="findByI" resultType="Inout">
+		select * from wms_inout where id = #{id}
+	</select>
+	<insert id="inserti" parameterType="Inout">
+		INSERT INTO wms_inout (inOutSeq,inOutNo,manualId,sourceNo,itemType,inOutFlag,inOutAmount,inOutTime,wayBillNo,jobFormId,flag,datatime,userId)
+		VALUES(#{inOutSeq},#{inOutNo},#{manualId},#{sourceNo},#{itemType},#{inOutFlag},#{inOutAmount},#{inOutTime},#{wayBillNo},#{jobFormId},#{flag},#{datatime},#{userId});
+	</insert>
+	
+	<select id="inadd"  resultMap="InoutResultMap" parameterType="java.util.Map">
+		<!-- select * from wms_inout where id = #{id} -->
+		<![CDATA[select * from wms_inout where flag is null or flag = '处理失败'  LIMIT 0,500]]> 
+	</select>
+	
+	
+	<update id="inflag" parameterType="Inout">
+		update wms_inout set flag = #{flag}   where id in (${ids})
+	</update>
+	
+	<select id="findinId" resultType="Inout">
+		select * from wms_inout where jobFormId = #{jobFormId}
+	</select>
+	
+	<select id="findByIds" resultMap="InoutResultMap">
+	select * from wms_inout where 1=1
+      	<if test="flag==3">
+              and flag='处理失败'
+             </if>
+        <if test="flag==2">
+              and flag is null
+             </if>
+             <if test="flag==1">
+              and flag='success'
+             </if> 
+			<if test="type == 1">
+				and inOutNo like '%${paramValue}%'
+			</if>
+			<if test="type == 2">
+				and inOutFlag like '%${paramValue}%'
+			</if>
+			<if test="type == 3">
+				and jobFormId like '%${paramValue}%'
+			</if>
+			<if test="type == 4">
+				and sourceNo like '%${paramValue}%'
+			</if>
+	</select>
+	
+	<select id="findBySelect" resultMap="InoutResultMap">
+	select * from wms_inout where id=#{id}
+	</select>
+	
+	<insert id="insertLog" parameterType="com.what21.model.LogInout">
+		INSERT INTO log_wms_inout (userId, content, createTime)
+		VALUES(#{userId}, #{content}, now());
+	</insert>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.what21.dao.GodownEntryCheckSkuDao">
+	<resultMap type="GodownEntryCheckSku" id="GodownEntryCheckSkuResultMap">
+		<id property="id" column="id"/>
+		<result property="pc" column="pc"/>
+		<result property="totalMailNo" column="totalMailNo"/>
+		<result property="billcode" column="billcode"/>
+		<result property="createdatatime" column="createdatatime"/>
+		<result property="status" column="status"/>
+		<result property="mailStatus" column="mailStatus"/>
+	</resultMap>
+	
+	<select id="findBySku" resultMap="GodownEntryCheckSkuResultMap" parameterType="java.util.Map">
+		select * from cz_godownentry_check_sku where totalMailNo = #{totalMailNo} and pc = #{pc} 
+		order by createdatatime desc 
+		limit ${startPage},${endPage}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_godownentry_check_sku where totalMailNo = #{totalMailNo} and pc = #{pc} 
+		
+	</select>
+	
+	<select id="passCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from cz_godownentry_check_sku where totalMailNo = #{totalMailNo} and pc = #{pc} and status = #{status}
+		
+	</select>
+	
+	<select id="findByTotalMailNo" resultType="GodownEntryCheckSku" parameterType="GodownEntryCheckSku"  >
+		select * from cz_godownentry_check_sku where billcode = #{billcode} and totalMailNo = #{totalMailNo} and pc = #{pc}
+	</select>
+	
+	<select id="findByMailNo" resultMap="GodownEntryCheckSkuResultMap" parameterType="GodownEntryCheckSku"  >
+		select * from cz_godownentry_check_sku where billcode = #{billcode} and totalMailNo = #{totalMailNo} and pc = #{pc}
+	</select>
+	
+	<insert id="add" parameterType="GodownEntryCheckSku">
+		insert into cz_godownentry_check_sku (billcode,status,mailStatus,totalMailNo,pc,createdatatime,inflag,outflag)
+		values(#{billcode},#{status},#{mailStatus},#{totalMailNo},#{pc},#{createdatatime},#{inflag},#{outflag})
+	</insert>
+	
+	<insert id="batchInsert" parameterType="GodownEntryCheckSku">
+		INSERT INTO cz_godownentry_check_sku 
+			(billcode,status,mailStatus,totalMailNo,pc,createdatatime,inflag,outflag)
+		VALUES
+		<foreach collection="list" item="gecs" separator="," >
+  		(
+			#{gecs.billcode},#{gecs.status},#{gecs.mailStatus},#{gecs.totalMailNo}, 
+			#{gecs.pc},#{gecs.createdatatime},#{gecs.inflag},#{gecs.outflag}
+		)
+  		</foreach>
+	</insert>
+	
+	<update id="updateByMailNo" parameterType="GodownEntryCheckSku">
+		update cz_godownentry_check_sku set status = #{status}, createdatatime = #{createdatatime} where billcode = #{billcode} and totalMailNo = #{totalMailNo} and pc = #{pc}
+	</update>
+	
+	<select id="findAll" resultMap="GodownEntryCheckSkuResultMap" parameterType="java.util.Map">
+		select billcode,status from cz_godownentry_check_sku where totalMailNo = #{totalMailNo} and pc = #{pc}
+	</select>
+	
+	<select id="findByBill" resultMap="GodownEntryCheckSkuResultMap" parameterType="String">
+		select billcode,status from cz_godownentry_check_sku where billcode = #{billcode}
+	</select>
+	
+	<delete id="delete" parameterType="GodownEntryCheckSku">
+		DELETE FROM cz_godownentry_check_sku WHERE totalMailNo = #{totalMailNo} and pc = #{pc}
+	</delete>
+	
+	</mapper>

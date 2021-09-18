@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CustomsDepositDao">
+	<sql id="query_customsDeposit_where">
+		<if test="customsDepositCustom!=null">
+			<where>
+				<if test="customsDepositCustom.companycode !=null">
+					and companycode like '%${customsDepositCustom.companycode}%'
+				</if>
+			</where>
+		</if>
+	</sql>
+
+
+	
+	<select id="find" resultType="com.what21.model.CustomsDepositCustom" parameterType="com.what21.model.CustomsDepositQueryVo">
+		select * from t_customs_deposit
+		<include refid="query_customsDeposit_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.CustomsDepositQueryVo">
+		select count(id) from t_customs_deposit
+		<include refid="query_customsDeposit_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.TCustomsDeposit" >
+    insert into t_customs_deposit (id, companyName, companyCode, 
+      totalMoney, surplusMoney, usedMoney, 
+      createTime)
+    values (#{id,jdbcType=INTEGER}, #{companyname,jdbcType=VARCHAR}, #{companycode,jdbcType=VARCHAR}, 
+      #{totalmoney,jdbcType=VARCHAR}, #{surplusmoney,jdbcType=VARCHAR}, #{usedmoney,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  	</insert>
+
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.what21.model.CustomsDepositCustom">
+		select * from t_customs_deposit where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="com.what21.model.TCustomsDeposit">
+    update t_customs_deposit
+    set companyName = #{companyname,jdbcType=VARCHAR},
+      companyCode = #{companycode,jdbcType=VARCHAR},
+      totalMoney = #{totalmoney,jdbcType=VARCHAR},
+      surplusMoney = #{surplusmoney,jdbcType=VARCHAR},
+      usedMoney = #{usedmoney,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="countByCompanycode" resultType="int" parameterType="string">
+  	select count(id) from t_customs_deposit where companycode = #{string}
+  </select>
+
+  <select id="findWarning" resultType="com.what21.model.CustomsDepositCustom" parameterType="int">
+  	select * from t_customs_deposit where surplusMoney &lt;= ${value}
+  </select>
+</mapper>

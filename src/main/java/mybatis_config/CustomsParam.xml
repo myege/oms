@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.what21.dao.CustomsParamDao">
+	<sql id="query_customsParam_where">
+		<if test="customsParamCustom!=null">
+			<where>
+				<if test="customsParamCustom.hscode !=null">
+					and hscode like '%${customsParamCustom.hscode}%'
+				</if>
+				<if test="customsParamCustom.name !=null">
+					and name like '%${customsParamCustom.name}%'
+				</if>
+			</where>
+		</if>
+	</sql>
+
+
+	
+	<select id="find" resultType="com.what21.model.CustomsParamCustom" parameterType="com.what21.model.CustomsParamQueryVo">
+		select * from t_customs_param
+		<include refid="query_customsParam_where"></include>
+		order by id desc
+		<include refid="com.what21.dao.BaseMapper.pageQuery"></include>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="com.what21.model.CustomsParamQueryVo">
+		select count(id) from t_customs_param
+		<include refid="query_customsParam_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.what21.model.TCustomsParam" >
+    insert into t_customs_param (id, hscode, name, 
+      licenceCode, ordinaryRate, preferentialRate, 
+      remark, exportRate, consumptionRate, 
+      valueAddedRate, oneUnitDesc, twoUnitDesc, 
+      createTime)
+    values (#{id,jdbcType=INTEGER}, #{hscode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{licencecode,jdbcType=VARCHAR}, #{ordinaryrate,jdbcType=VARCHAR}, #{preferentialrate,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{exportrate,jdbcType=VARCHAR}, #{consumptionrate,jdbcType=VARCHAR}, 
+      #{valueaddedrate,jdbcType=VARCHAR}, #{oneunitdesc,jdbcType=VARCHAR}, #{twounitdesc,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  	</insert>
+
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.what21.model.CustomsParamCustom">
+		select * from t_customs_param where id = ${value}	
+	</select>
+	
+	<update id="update" parameterType="com.what21.model.TCustomsParam">
+update t_customs_param
+    set hscode = #{hscode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      licenceCode = #{licencecode,jdbcType=VARCHAR},
+      ordinaryRate = #{ordinaryrate,jdbcType=VARCHAR},
+      preferentialRate = #{preferentialrate,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      exportRate = #{exportrate,jdbcType=VARCHAR},
+      consumptionRate = #{consumptionrate,jdbcType=VARCHAR},
+      valueAddedRate = #{valueaddedrate,jdbcType=VARCHAR},
+      oneUnitDesc = #{oneunitdesc,jdbcType=VARCHAR},
+      twoUnitDesc = #{twounitdesc,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  	<insert id="insertBatch" >
+    insert into t_customs_param (id, hscode, name, 
+      licenceCode, ordinaryRate, preferentialRate, 
+      remark, exportRate, consumptionRate, 
+      valueAddedRate, oneUnitDesc, twoUnitDesc, 
+      createTime)
+    values
+    	<foreach collection="list" separator="," item="item">
+     (#{item.id,jdbcType=INTEGER}, #{item.hscode,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+      #{item.licencecode,jdbcType=VARCHAR}, #{item.ordinaryrate,jdbcType=VARCHAR}, #{item.preferentialrate,jdbcType=VARCHAR}, 
+      #{item.remark,jdbcType=VARCHAR}, #{item.exportrate,jdbcType=VARCHAR}, #{item.consumptionrate,jdbcType=VARCHAR}, 
+      #{item.valueaddedrate,jdbcType=VARCHAR}, #{item.oneunitdesc,jdbcType=VARCHAR}, #{item.twounitdesc,jdbcType=VARCHAR}, 
+      #{item.createtime,jdbcType=TIMESTAMP})
+      </foreach>
+  	</insert>
+  	
+  	<delete id="deleteByIds" >
+  		delete from t_customs_param where id in
+  		<foreach collection="array" separator="," item="item" open="(" close=")">
+  			${item}
+  		</foreach>
+  	</delete>
+  
+  	<select id="countByHscode" parameterType="string" resultType="int">
+		select count(id) from t_customs_param where hscode = #{value}	
+	</select>
+
+
+  
+</mapper>
